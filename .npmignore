@@ -1,0 +1,7 @@
+src
+.travis.yml
+.codeclimate.yml
+.editorconfig
+.nvmrc
+test
+

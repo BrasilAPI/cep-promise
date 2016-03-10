@@ -1,0 +1,10 @@
+language: node_js
+node_js:
+  - "stable"
+  - "5.0"
+  - "4.2"
+  - "0.12"
+  - "0.10"
+after_script:
+  - npm install -g codeclimate-test-reporter
+  - codeclimate-test-reporter < coverage/lcov.info
