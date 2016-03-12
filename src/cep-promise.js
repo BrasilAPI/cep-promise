@@ -1,6 +1,6 @@
 'use strict'
 
-export default function(cep) {
-  return new Promise((resovlve, reject) => {
+export default function (cep) {
+  return new Promise((resolve, reject) => {
   })
 }
