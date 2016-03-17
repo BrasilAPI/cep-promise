@@ -11,4 +11,11 @@ describe('cep-promise (unit)', () => {
       expect(cep).to.be.an('function')
     })
   })
+
+  describe('when invoked', () => {
+    it('should return a Promise', () => {
+      expect(cep()).to.have.property('then')
+      expect(cep()).to.have.property('catch')
+    })
+  })
 })
