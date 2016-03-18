@@ -22,7 +22,7 @@ describe('cep-promise (unit)', () => {
     })
     
     it('should fulfill the Promise', () => {
-      expect(cep().to.eventually.be.fulfilled)
+      return expect(cep()).to.eventually.be.fulfilled
     })
   })
 
