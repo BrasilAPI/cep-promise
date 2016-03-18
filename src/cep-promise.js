@@ -5,6 +5,6 @@ export default function (cepRawValue) {
     if (!cepRawValue) {
       reject()
     }
-    resolve()
+    resolve(true)
   })
 }
