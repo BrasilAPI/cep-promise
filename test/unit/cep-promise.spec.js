@@ -20,6 +20,10 @@ describe('cep-promise (unit)', () => {
       expect(cep().then).to.be.a('function')
       expect(cep().catch).to.be.a('function')
     })
+    
+    it('should fulfill the Promise', () => {
+      expect(cep().to.eventually.be.fulfilled)
+    })
   })
 
   describe('when invoked without arguments', () => {
