@@ -14,8 +14,8 @@ describe('cep-promise (unit)', () => {
 
   describe('when invoked', () => {
     it('should return a Promise', () => {
-      expect(cep()).to.have.property('then')
-      expect(cep()).to.have.property('catch')
+      expect(cep().then).to.be.a('function')
+      expect(cep().catch).to.be.a('function')
     })
   })
 })
