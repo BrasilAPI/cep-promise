@@ -1,6 +1,9 @@
 'use strict'
 
-export default function (cep) {
+export default function (cepRawValue) {
   return new Promise((resolve, reject) => {
+    if (!cepRawValue) {
+      reject()
+    }
   })
 }
