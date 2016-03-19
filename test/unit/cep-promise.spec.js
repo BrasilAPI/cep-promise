@@ -23,8 +23,11 @@ describe('cep-promise (unit)', () => {
   })
 
   describe('when invoked without arguments', () => {
-    it('should reject the Promise', () => {
-      return expect(cep()).to.eventually.be.rejected
+    it('should reject with "type_error"', () => {
+      return expect(cep()).to.rejectedWith({
+        type: 'type_error',
+        message: 'You need to call the constructor with a String.'
+      })
     })
   })
 })
