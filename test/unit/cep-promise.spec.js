@@ -30,4 +30,43 @@ describe('cep-promise (unit)', () => {
       })
     })
   })
+
+  describe('when invoked with an Array', () => {
+    it('should reject with "type_error"', () => {
+      return expect(cep([1, 2, 3])).to.rejectedWith({
+        type: 'type_error',
+        message: 'You need to call the constructor with a String.'
+      })
+    })
+  })
+
+  describe('when invoked with an Object', () => {
+    it('should reject with "type_error"', () => {
+      return expect(cep({ nintendo: true, ps: false, xbox: false })).to.rejectedWith({
+        type: 'type_error',
+        message: 'You need to call the constructor with a String.'
+      })
+    })
+  })
+
+  describe('when invoked with an Function', () => {
+    it('should reject with "type_error"', () => {
+      return expect(cep(function zelda () { return 'link' })).to.rejectedWith({
+        type: 'type_error',
+        message: 'You need to call the constructor with a String.'
+      })
+    })
+  })
+
+  describe('when invoked with a valid String', () => {
+    it('should fulfill', () => {
+      return expect(cep('05010000')).to.be.fulfilled
+    })
+  })
+
+  describe('when invoked with a valid Number', () => {
+    it('should fulfill', () => {
+      return expect(cep(5010000)).to.be.fulfilled
+    })
+  })
 })
