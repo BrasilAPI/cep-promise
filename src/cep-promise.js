@@ -5,7 +5,7 @@ export default function (cepRawValue) {
     validateInput(cepRawValue)
       .then(removeSpecialCharacters)
       .then(finish)
-      .catch(reject)
+      .catch(handleError)
 
     function validateInput (cepRawValue) {
       return new Promise(function (resolve, reject) {
@@ -15,10 +15,7 @@ export default function (cepRawValue) {
           return resolve(cepRawValue)
         }
 
-        return reject({
-          type: 'type_error',
-          message: 'You need to call the constructor with a String or Number.'
-        })
+        throw new TypeError('You need to call the constructor with a String or Number.')
       })
     }
 
@@ -31,6 +28,20 @@ export default function (cepRawValue) {
 
     function finish (cepResult) {
       resolve(cepResult)
+    }
+
+    function handleError (error) {
+      if (error instanceof TypeError) {
+        return reject({
+          type: 'type_error',
+          message: error.message
+        })
+      }
+
+      return reject({
+        type: 'internal_error',
+        message: 'Internal error.'
+      })
     }
   })
 }
