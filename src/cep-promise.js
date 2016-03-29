@@ -37,11 +37,6 @@ export default function (cepRawValue) {
           message: error.message
         })
       }
-
-      return reject({
-        type: 'internal_error',
-        message: 'Internal error.'
-      })
     }
   })
 }
