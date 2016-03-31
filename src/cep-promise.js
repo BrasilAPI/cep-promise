@@ -4,6 +4,7 @@ export default function (cepRawValue) {
   return new Promise((resolve, reject) => {
     validateInput(cepRawValue)
       .then(removeSpecialCharacters)
+      .then(leftPadWithZeros)
       .then(finish)
       .catch(handleError)
 
@@ -24,6 +25,17 @@ export default function (cepRawValue) {
         let cepCleanValue = cepRawValue.toString().replace(/[^0-9]+/ig, '')
         resolve(cepCleanValue)
       })
+    }
+
+    function leftPadWithZeros (cepCleanValue) {
+      let cepWithLeftPad = cepCleanValue.toString()
+      let size = 8
+
+      while (cepWithLeftPad.length < size) {
+        cepWithLeftPad = '0' + cepWithLeftPad
+      }
+
+      return cepWithLeftPad
     }
 
     function finish (cepResult) {
