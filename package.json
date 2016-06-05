@@ -39,5 +39,8 @@
       "describe",
       "it"
     ]
+  },
+  "dependencies": {
+    "xml2js": "^0.4.16"
   }
 }
