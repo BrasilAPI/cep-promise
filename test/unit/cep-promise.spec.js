@@ -58,15 +58,27 @@ describe('cep-promise (unit)', () => {
     })
   })
 
-  describe('when invoked with a valid String', () => {
-    it('should fulfill', () => {
-      return expect(cep('05010000')).to.be.fulfilled
+  describe('when invoked with "05010000" string', () => {
+    it('should fulfill with correct address', () => {
+      return expect(cep('05010000')).to.eventually.deep.equal({
+        cep: '05010000',
+        state: 'SP',
+        city: 'São Paulo',
+        neighborhood: 'Perdizes',
+        street: 'Rua Caiubi'
+      })
     })
   })
 
-  describe('when invoked with a valid Number', () => {
-    it('should fulfill', () => {
-      return expect(cep(5010000)).to.be.fulfilled
+  describe('when invoked with 5010000 number', () => {
+    it('should fulfill with correct address', () => {
+      return expect(cep(5010000)).to.eventually.deep.equal({
+        cep: '05010000',
+        state: 'SP',
+        city: 'São Paulo',
+        neighborhood: 'Perdizes',
+        street: 'Rua Caiubi'
+      })
     })
   })
 })
