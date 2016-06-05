@@ -2,29 +2,26 @@
 
 export default function (cepRawValue) {
   return new Promise((resolve, reject) => {
-    validateInput(cepRawValue)
+    Promise.resolve(cepRawValue)
+      .then(validateInput)
       .then(removeSpecialCharacters)
       .then(leftPadWithZeros)
       .then(finish)
       .catch(handleError)
 
     function validateInput (cepRawValue) {
-      return new Promise(function (resolve, reject) {
-        var cepTypeOf = typeof cepRawValue
+      var cepTypeOf = typeof cepRawValue
 
-        if (cepTypeOf === 'number' || cepTypeOf === 'string') {
-          return resolve(cepRawValue)
-        }
+      if (cepTypeOf === 'number' || cepTypeOf === 'string') {
+        return cepRawValue
+      }
 
-        throw new TypeError('You need to call the constructor with a String or Number.')
-      })
+      throw new TypeError('You need to call the constructor with a String or Number.')
     }
 
     function removeSpecialCharacters (cepRawValue) {
-      return new Promise((resolve, reject) => {
-        let cepCleanValue = cepRawValue.toString().replace(/[^0-9]+/ig, '')
-        resolve(cepCleanValue)
-      })
+      let cepCleanValue = cepRawValue.toString().replace(/[^0-9]+/ig, '')
+      return cepCleanValue
     }
 
     function leftPadWithZeros (cepCleanValue) {
