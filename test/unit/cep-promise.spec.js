@@ -58,7 +58,7 @@ describe('cep-promise (unit)', () => {
     })
   })
 
-  describe('when invoked with "05010000" string', () => {
+  describe('when invoked with a valid "05010000" string', () => {
     it('should fulfill with correct address', () => {
       return expect(cep('05010000')).to.eventually.deep.equal({
         cep: '05010000',
@@ -70,7 +70,7 @@ describe('cep-promise (unit)', () => {
     })
   })
 
-  describe('when invoked with 5010000 number', () => {
+  describe('when invoked with a valid 5010000 number', () => {
     it('should fulfill with correct address', () => {
       return expect(cep(5010000)).to.eventually.deep.equal({
         cep: '05010000',
@@ -78,6 +78,24 @@ describe('cep-promise (unit)', () => {
         city: 'São Paulo',
         neighborhood: 'Perdizes',
         street: 'Rua Caiubi'
+      })
+    })
+  })
+
+  describe('when invoked with an inexistend "99999999" cep', () => {
+    it('should reject with "type_error"', () => {
+      return expect(cep('99999999')).to.be.rejected.and.to.eventually.deep.equal({
+        type: 'type_error',
+        message: 'CEP NAO ENCONTRADO'
+      })
+    })
+  })
+
+  describe('when invoked with an inexistend "1" cep', () => {
+    it('should reject with "type_error"', () => {
+      return expect(cep('1')).to.be.rejected.and.to.eventually.deep.equal({
+        type: 'type_error',
+        message: 'CEP NAO ENCONTRADO'
       })
     })
   })
