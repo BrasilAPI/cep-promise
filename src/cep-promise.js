@@ -7,8 +7,9 @@ import { get as _get } from 'lodash'
 export default function (cepRawValue) {
   return new Promise((resolve, reject) => {
     Promise.resolve(cepRawValue)
-      .then(validateInput)
+      .then(validateInputType)
       .then(removeSpecialCharacters)
+      .then(validateInputLength)
       .then(leftPadWithZeros)
       .then(fetchCorreiosService)
       .then(parseXML)
@@ -16,7 +17,7 @@ export default function (cepRawValue) {
       .then(finish)
       .catch(handleError)
 
-    function validateInput (cepRawValue) {
+    function validateInputType (cepRawValue) {
       var cepTypeOf = typeof cepRawValue
 
       if (cepTypeOf === 'number' || cepTypeOf === 'string') {
@@ -40,6 +41,15 @@ export default function (cepRawValue) {
       }
 
       return cepWithLeftPad
+    }
+
+    function validateInputLength (cepWithLeftPad) {
+
+      if (cepWithLeftPad.length <= 8) {
+        return cepWithLeftPad
+      }
+
+      throw new TypeError('Cep deve conter exatamente 8 caracteres')
     }
 
     function fetchCorreiosService (cepWithLeftPad) {
