@@ -125,7 +125,7 @@ describe('cep-promise (unit)', () => {
         .replyWithFile(500, path.join( __dirname, '/fixtures/response-cep-invalid-format.xml' ) )
 
       return expect(cep('123456789')).to.be.rejected.and.to.eventually.deep.equal({
-        type: 'range_error',
+        type: 'type_error',
         message: 'Cep deve conter exatamente 8 caracteres'
       })
     })

@@ -35,18 +35,18 @@ describe('cep-promise (integration)', () => {
   })
 
   describe('when invoked with an inexistend "99999999" cep', () => {
-    it('should reject with "type_error"', () => {
+    it('should reject with "range_error"', () => {
       return expect(cep('99999999')).to.be.rejected.and.to.eventually.deep.equal({
-        type: 'type_error',
+        type: 'range_error',
         message: 'Cep não encontrado na base dos Correios'
       })
     })
   })
 
   describe('when invoked with an inexistend "1" cep', () => {
-    it('should reject with "type_error"', () => {
+    it('should reject with "range_error"', () => {
       return expect(cep('1')).to.be.rejected.and.to.eventually.deep.equal({
-        type: 'type_error',
+        type: 'range_error',
         message: 'Cep não encontrado na base dos Correios'
       })
     })
