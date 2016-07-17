@@ -60,5 +60,4 @@ describe('cep-promise (integration)', () => {
       })
     })
   })
-
 })

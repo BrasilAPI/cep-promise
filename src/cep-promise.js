@@ -44,7 +44,6 @@ export default function (cepRawValue) {
     }
 
     function validateInputLength (cepWithLeftPad) {
-
       if (cepWithLeftPad.length <= 8) {
         return cepWithLeftPad
       }
@@ -78,14 +77,13 @@ export default function (cepRawValue) {
               return resolve(body)
             } else {
               parseXMLString(body, function (err, xmlObject) {
-                var errorMessage = _get(xmlObject, 'soap:Envelope.soap:Body[0].soap:Fault[0].faultstring');
+                var errorMessage = _get(xmlObject, 'soap:Envelope.soap:Body[0].soap:Fault[0].faultstring')
 
-                if(errorMessage) {
+                if (errorMessage) {
                   return reject(new RangeError(errorMessage))
                 }
 
                 return reject(new Error('Correios respondeu consulta utilizando um formato de XML desconhecido'))
-
               })
             }
           })
@@ -124,15 +122,13 @@ export default function (cepRawValue) {
       }
 
       throw new Error('Correios respondeu consulta utilizando um formato de XML desconhecido')
-
     }
 
     function finish (addressObject) {
       resolve(addressObject)
     }
 
-    function translateCorreiosMessages(message) {
-
+    function translateCorreiosMessages (message) {
       let dictionary = {
         'CEP NAO ENCONTRADO': 'Cep não encontrado na base dos Correios',
         'BUSCA DEFINIDA COMO EXATA, 0 CEP DEVE TER 8 DIGITOS': 'Cep deve conter exatamente 8 caracteres'
@@ -140,7 +136,6 @@ export default function (cepRawValue) {
 
       return dictionary[message] || message
     }
-
 
     function handleError (error) {
       if (error instanceof TypeError) {
