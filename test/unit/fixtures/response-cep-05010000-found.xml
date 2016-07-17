@@ -1,0 +1,16 @@
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+    <soap:Body>
+        <ns2:consultaCEPResponse xmlns:ns2="http://cliente.bean.master.sigep.bsb.correios.com.br/">
+            <return>
+                <bairro>Perdizes</bairro>
+                <cep>05010000</cep>
+                <cidade>São Paulo</cidade>
+                <complemento></complemento>
+                <complemento2></complemento2>
+                <end>Rua Caiubi</end>
+                <id>0</id>
+                <uf>SP</uf>
+            </return>
+        </ns2:consultaCEPResponse>
+    </soap:Body>
+</soap:Envelope>
