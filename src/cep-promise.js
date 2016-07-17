@@ -1,6 +1,6 @@
 'use strict'
 
-var http = require('https')
+var https = require('https')
 var parseXMLString = require('xml2js').parseString
 import { get as _get } from 'lodash'
 
@@ -23,7 +23,7 @@ export default function (cepRawValue) {
         return cepRawValue
       }
 
-      throw new TypeError('You need to call the constructor with a String or Number.')
+      throw new TypeError('Você deve chamar o construtor utilizando uma String ou Number')
     }
 
     function removeSpecialCharacters (cepRawValue) {
@@ -54,7 +54,7 @@ export default function (cepRawValue) {
           }
         }
 
-        var req = http.request(options, function (res) {
+        var req = https.request(options, function (res) {
           var chunks = []
 
           res.on('data', function (chunk) {
@@ -71,7 +71,7 @@ export default function (cepRawValue) {
                 var errorMessage = _get(xmlObject, 'soap:Envelope.soap:Body[0].soap:Fault[0].faultstring');
 
                 if(errorMessage) {
-                  return reject(new TypeError(errorMessage))
+                  return reject(new RangeError(errorMessage))
                 }
 
                 return reject(new Error('Correios respondeu consulta utilizando um formato de XML desconhecido'))
@@ -82,7 +82,7 @@ export default function (cepRawValue) {
         })
 
         req.on('error', function (err) {
-          return reject(new Error(err.message))
+          return reject(new Error('Erro ao se conectar com o serviço dos Correios'))
         })
 
         req.write('<?xml version="1.0"?>\n<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:cli="http://cliente.bean.master.sigep.bsb.correios.com.br/">\n  <soapenv:Header />\n  <soapenv:Body>\n    <cli:consultaCEP>\n      <cep>' + cepWithLeftPad + '</cep>\n    </cli:consultaCEP>\n  </soapenv:Body>\n</soapenv:Envelope>')
@@ -113,7 +113,7 @@ export default function (cepRawValue) {
         return addressObject
       }
 
-      throw new Error ('Correios respondeu consulta utilizando um formato de XML desconhecido')
+      throw new Error('Correios respondeu consulta utilizando um formato de XML desconhecido')
 
     }
 
@@ -121,18 +121,36 @@ export default function (cepRawValue) {
       resolve(addressObject)
     }
 
+    function translateCorreiosMessages(message) {
+
+      let dictionary = {
+        'CEP NAO ENCONTRADO': 'Cep não encontrado na base dos Correios',
+        'BUSCA DEFINIDA COMO EXATA, 0 CEP DEVE TER 8 DIGITOS': 'Cep deve conter exatamente 8 caracteres'
+      }
+
+      return dictionary[message] || message
+    }
+
+
     function handleError (error) {
       if (error instanceof TypeError) {
         return reject({
           type: 'type_error',
-          message: error.message
+          message: translateCorreiosMessages(error.message)
+        })
+      }
+
+      if (error instanceof RangeError) {
+        return reject({
+          type: 'range_error',
+          message: translateCorreiosMessages(error.message)
         })
       }
 
       if (error instanceof Error) {
         return reject({
           type: 'error',
-          message: error.message
+          message: translateCorreiosMessages(error.message)
         })
       }
     }
