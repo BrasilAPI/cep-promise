@@ -26,36 +26,36 @@ describe('cep-promise (unit)', () => {
 
   describe('when invoked without arguments', () => {
     it('should reject with "type_error"', () => {
-      return expect(cep()).to.rejectedWith({
+      return expect(cep()).to.be.rejected.and.to.eventually.deep.equal({
         type: 'type_error',
-        message: 'You need to call the constructor with a String.'
+        message: 'Você deve chamar o construtor utilizando uma String ou Number'
       })
     })
   })
 
   describe('when invoked with an Array', () => {
     it('should reject with "type_error"', () => {
-      return expect(cep([1, 2, 3])).to.rejectedWith({
+      return expect(cep([1, 2, 3])).to.be.rejected.and.to.eventually.deep.equal({
         type: 'type_error',
-        message: 'You need to call the constructor with a String.'
+        message: 'Você deve chamar o construtor utilizando uma String ou Number'
       })
     })
   })
 
   describe('when invoked with an Object', () => {
     it('should reject with "type_error"', () => {
-      return expect(cep({ nintendo: true, ps: false, xbox: false })).to.rejectedWith({
+      return expect(cep({ nintendo: true, ps: false, xbox: false })).to.be.rejected.and.to.eventually.deep.equal({
         type: 'type_error',
-        message: 'You need to call the constructor with a String.'
+        message: 'Você deve chamar o construtor utilizando uma String ou Number'
       })
     })
   })
 
   describe('when invoked with an Function', () => {
     it('should reject with "type_error"', () => {
-      return expect(cep(function zelda () { return 'link' })).to.rejectedWith({
+      return expect(cep(function zelda () { return 'link' })).to.be.rejected.and.to.eventually.deep.equal({
         type: 'type_error',
-        message: 'You need to call the constructor with a String.'
+        message: 'Você deve chamar o construtor utilizando uma String ou Number'
       })
     })
   })
@@ -99,8 +99,8 @@ describe('cep-promise (unit)', () => {
         .replyWithFile(500, path.join( __dirname, '/fixtures/response-cep-not-found.xml' ) )
 
       return expect(cep('99999999')).to.be.rejected.and.to.eventually.deep.equal({
-        type: 'type_error',
-        message: 'CEP NAO ENCONTRADO'
+        type: 'range_error',
+        message: 'Cep não encontrado na base dos Correios'
       })
     })
   })
@@ -112,21 +112,21 @@ describe('cep-promise (unit)', () => {
         .replyWithFile(500, path.join( __dirname, '/fixtures/response-cep-not-found.xml' ) )
 
       return expect(cep('1')).to.be.rejected.and.to.eventually.deep.equal({
-        type: 'type_error',
-        message: 'CEP NAO ENCONTRADO'
+        type: 'range_error',
+        message: 'Cep não encontrado na base dos Correios'
       })
     })
   })
 
   describe('when invoked with an invalid "123456789" cep', () => {
-    it('should reject with "type_error"', () => {
+    it('should reject with "range_error"', () => {
       nock('https://apps.correios.com.br')
         .post('/SigepMasterJPA/AtendeClienteService/AtendeCliente')
         .replyWithFile(500, path.join( __dirname, '/fixtures/response-cep-invalid-format.xml' ) )
 
       return expect(cep('123456789')).to.be.rejected.and.to.eventually.deep.equal({
-        type: 'type_error',
-        message: 'BUSCA DEFINIDA COMO EXATA, 0 CEP DEVE TER 8 DIGITOS'
+        type: 'range_error',
+        message: 'Cep deve conter exatamente 8 caracteres'
       })
     })
   })
@@ -166,6 +166,19 @@ describe('cep-promise (unit)', () => {
       return expect(cep('05010000')).to.be.rejected.and.to.eventually.deep.equal({
         type: 'error',
         message: 'Correios respondeu consulta utilizando um formato de XML desconhecido'
+      })
+    })
+  })
+
+  describe('when http request fail', () => {
+    it('should reject with "error"', () => {
+      nock('https://apps.correios.com.br')
+        .post('/SigepMasterJPA/AtendeClienteService/AtendeCliente')
+        .replyWithError('getaddrinfo ENOTFOUND apps.correios.com.br apps.correios.com.br:443')
+
+      return expect(cep('05010000')).to.be.rejected.and.to.eventually.deep.equal({
+        type: 'error',
+        message: 'Erro ao se conectar com o serviço dos Correios'
       })
     })
   })

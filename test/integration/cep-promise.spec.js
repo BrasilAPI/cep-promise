@@ -38,7 +38,7 @@ describe('cep-promise (integration)', () => {
     it('should reject with "type_error"', () => {
       return expect(cep('99999999')).to.be.rejected.and.to.eventually.deep.equal({
         type: 'type_error',
-        message: 'CEP NAO ENCONTRADO'
+        message: 'Cep não encontrado na base dos Correios'
       })
     })
   })
@@ -47,7 +47,7 @@ describe('cep-promise (integration)', () => {
     it('should reject with "type_error"', () => {
       return expect(cep('1')).to.be.rejected.and.to.eventually.deep.equal({
         type: 'type_error',
-        message: 'CEP NAO ENCONTRADO'
+        message: 'Cep não encontrado na base dos Correios'
       })
     })
   })
@@ -56,7 +56,7 @@ describe('cep-promise (integration)', () => {
     it('should reject with "type_error"', () => {
       return expect(cep('123456789')).to.be.rejected.and.to.eventually.deep.equal({
         type: 'type_error',
-        message: 'BUSCA DEFINIDA COMO EXATA, 0 CEP DEVE TER 8 DIGITOS'
+        message: 'Cep deve conter exatamente 8 caracteres'
       })
     })
   })
