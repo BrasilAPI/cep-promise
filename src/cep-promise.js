@@ -61,9 +61,21 @@ export default function (cepRawValue) {
           })
 
           res.on('end', function () {
-            var body = Buffer.concat(chunks)
-            return resolve(body.toString())
+            var body = Buffer.concat(chunks).toString()
+
+            if (res.statusCode === 200) {
+              return resolve(body)
+            } else {
+              parseXMLString(body, function (err, xmlObject) {
+                var errorMessage = xmlObject['soap:Envelope']['soap:Body'][0]['soap:Fault'][0]['faultstring']
+                reject(new TypeError(errorMessage))
+              })
+            }
           })
+        })
+
+        req.on('error', function (err) {
+          return reject(new Error(err.message))
         })
 
         req.write('<?xml version="1.0"?>\n<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:cli="http://cliente.bean.master.sigep.bsb.correios.com.br/">\n  <soapenv:Header />\n  <soapenv:Body>\n    <cli:consultaCEP>\n      <cep>' + cepWithLeftPad + '</cep>\n    </cli:consultaCEP>\n  </soapenv:Body>\n</soapenv:Envelope>')
@@ -100,6 +112,13 @@ export default function (cepRawValue) {
       if (error instanceof TypeError) {
         return reject({
           type: 'type_error',
+          message: error.message
+        })
+      }
+
+      if (error instanceof Error) {
+        return reject({
+          type: 'error',
           message: error.message
         })
       }
