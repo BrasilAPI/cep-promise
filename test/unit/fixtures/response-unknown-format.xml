@@ -1,0 +1,9 @@
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+    <soap:Zelda>
+        <LinkToThePast>
+          <IGN>9.7/10</IGN>
+          <GameSpot>9.2/10</GameSpot>
+          <AllGame>5/5</AllGame>
+        </LinkToThePast>
+    </soap:Zelda>
+</soap:Envelope>
