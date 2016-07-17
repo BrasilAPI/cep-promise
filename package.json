@@ -8,6 +8,8 @@
     "coverage": "babel-node node_modules/.bin/babel-istanbul cover _mocha -- --timeout 30000 test/**/*.spec.js",
     "test-unit": "mocha --compilers js:babel-core/register test/unit/**/*.spec.js",
     "test-unit-watch": "mocha --watch --compilers js:babel-core/register test/unit/**/*.spec.js",
+    "test-integration": "mocha --compilers js:babel-core/register test/integration/**/*.spec.js",
+    "test-integration-watch": "mocha --watch --compilers js:babel-core/register test/integration/**/*.spec.js",
     "lint-check": "standard",
     "lint-apply": "standard-format -w"
   },
