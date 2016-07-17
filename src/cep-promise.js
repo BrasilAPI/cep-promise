@@ -2,6 +2,7 @@
 
 var http = require('https')
 var parseXMLString = require('xml2js').parseString
+import { get as _get } from 'lodash'
 
 export default function (cepRawValue) {
   return new Promise((resolve, reject) => {
@@ -67,8 +68,14 @@ export default function (cepRawValue) {
               return resolve(body)
             } else {
               parseXMLString(body, function (err, xmlObject) {
-                var errorMessage = xmlObject['soap:Envelope']['soap:Body'][0]['soap:Fault'][0]['faultstring']
-                reject(new TypeError(errorMessage))
+                var errorMessage = _get(xmlObject, 'soap:Envelope.soap:Body[0].soap:Fault[0].faultstring');
+
+                if(errorMessage) {
+                  return reject(new TypeError(errorMessage))
+                }
+
+                return reject(new Error('Correios respondeu consulta utilizando um formato de XML desconhecido'))
+
               })
             }
           })
@@ -92,16 +99,22 @@ export default function (cepRawValue) {
     }
 
     function extractValuesFromParsedXML (xmlObject) {
-      var addressValues = xmlObject['soap:Envelope']['soap:Body'][0]['ns2:consultaCEPResponse'][0]['return'][0]
-      var addressObject = {
-        cep: addressValues['cep'][0],
-        state: addressValues['uf'][0],
-        city: addressValues['cidade'][0],
-        neighborhood: addressValues['bairro'][0],
-        street: addressValues['end'][0]
+      var addressValues = _get(xmlObject, 'soap:Envelope.soap:Body[0].ns2:consultaCEPResponse[0].return[0]')
+
+      if (addressValues) {
+        var addressObject = {
+          cep: addressValues['cep'][0],
+          state: addressValues['uf'][0],
+          city: addressValues['cidade'][0],
+          neighborhood: addressValues['bairro'][0],
+          street: addressValues['end'][0]
+        }
+
+        return addressObject
       }
 
-      return addressObject
+      throw new Error ('Correios respondeu consulta utilizando um formato de XML desconhecido')
+
     }
 
     function finish (addressObject) {
