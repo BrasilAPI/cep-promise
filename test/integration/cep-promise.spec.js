@@ -9,7 +9,6 @@ chai.use(chaiAsPromised)
 let expect = chai.expect
 
 describe('cep-promise (integration)', () => {
-
   describe('when invoked with a valid "05010000" string', () => {
     it('should fulfill with correct address', () => {
       return expect(cep('05010000')).to.eventually.deep.equal({
