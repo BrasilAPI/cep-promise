@@ -80,7 +80,7 @@ cep(5010000)
 import cep from 'cep-promise';
 
 cep('99999999')
-  .then(console.log);
+  .then(console.log)
   .catch(console.log)
 
   //  {
