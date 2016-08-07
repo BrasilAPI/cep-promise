@@ -39,7 +39,7 @@ $ npm install --save cep-promise
 ### Realizando uma consulta
 
 ``` js
-let cep = require('cep-promise');
+import cep from 'cep-promise';
 
 cep('05010000')
   .then(console.log);
@@ -54,29 +54,14 @@ cep('05010000')
 ```
 
 
-### Cep não encontrado
+### Você também poderá passar o CEP como Inteiro
+
+Em muitos sistemas o CEP é utilizado erroneamente como um Inteiro (e com isto cortanto todos os zeros à esquerda). Caso este seja o seu caso, não há problema, pois a biblioteca irá preencher os caracteres faltantes na string, por exemplo:
 
 ``` js
-let cep = require('cep-promise');
+import cep from 'cep-promise';
 
-cep('05010000')
-  .then(console.log);
-  .catch(console.log)
-
-  //  {
-  //    "type": "range_error",
-  //    "message": "Cep não encontrado na base dos Correios"
-  //  }
-```
-
-### Você também poderá passar o Cep como Inteiro
-
-Em muitos sistemas o Cep é utilizado erroneamente como um Inteiro (e com isto cortanto todos os zeros à esquerda). Caso este seja o seu caso, não há problema, pois a biblioteca irá preencher os caracteres faltantes na string, por exemplo:
-
-``` js
-let cep = require('cep-promise');
-
-// enviando sem ter um zero à esquerda do Cep "05010000"
+// enviando sem ter um zero à esquerda do CEP "05010000"
 cep(5010000)
   .then(console.log);
 
@@ -89,3 +74,17 @@ cep(5010000)
   // }
 ```
 
+### Quando o CEP não é encontrado
+
+``` js
+import cep from 'cep-promise';
+
+cep('99999999')
+  .then(console.log);
+  .catch(console.log)
+
+  //  {
+  //    "type": "range_error",
+  //    "message": "CEP não encontrado na base dos Correios"
+  //  }
+```
