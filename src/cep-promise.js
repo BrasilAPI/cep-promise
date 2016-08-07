@@ -1,7 +1,7 @@
 'use strict'
 
-var https = require('https')
-var parseXMLString = require('xml2js').parseString
+let https = require('https')
+let parseXMLString = require('xml2js').parseString
 import { get as _get } from 'lodash'
 
 export default function (cepRawValue) {
@@ -18,7 +18,7 @@ export default function (cepRawValue) {
       .catch(handleError)
 
     function validateInputType (cepRawValue) {
-      var cepTypeOf = typeof cepRawValue
+      let cepTypeOf = typeof cepRawValue
 
       if (cepTypeOf === 'number' || cepTypeOf === 'string') {
         return cepRawValue
@@ -53,7 +53,7 @@ export default function (cepRawValue) {
 
     function fetchCorreiosService (cepWithLeftPad) {
       return new Promise(function (resolve, reject) {
-        var options = {
+        let options = {
           'method': 'POST',
           'hostname': 'apps.correios.com.br',
           'path': '/SigepMasterJPA/AtendeClienteService/AtendeCliente',
@@ -63,21 +63,21 @@ export default function (cepRawValue) {
           }
         }
 
-        var req = https.request(options, function (res) {
-          var chunks = []
+        let req = https.request(options, function (res) {
+          let chunks = []
 
           res.on('data', function (chunk) {
             chunks.push(chunk)
           })
 
           res.on('end', function () {
-            var body = Buffer.concat(chunks).toString()
+            let body = Buffer.concat(chunks).toString()
 
             if (res.statusCode === 200) {
               return resolve(body)
             } else {
               parseXMLString(body, function (err, xmlObject) {
-                var errorMessage = _get(xmlObject, 'soap:Envelope.soap:Body[0].soap:Fault[0].faultstring')
+                let errorMessage = _get(xmlObject, 'soap:Envelope.soap:Body[0].soap:Fault[0].faultstring')
 
                 if (errorMessage) {
                   return reject(new RangeError(errorMessage))
@@ -107,10 +107,10 @@ export default function (cepRawValue) {
     }
 
     function extractValuesFromParsedXML (xmlObject) {
-      var addressValues = _get(xmlObject, 'soap:Envelope.soap:Body[0].ns2:consultaCEPResponse[0].return[0]')
+      let addressValues = _get(xmlObject, 'soap:Envelope.soap:Body[0].ns2:consultaCEPResponse[0].return[0]')
 
       if (addressValues) {
-        var addressObject = {
+        let addressObject = {
           cep: addressValues['cep'][0],
           state: addressValues['uf'][0],
           city: addressValues['cidade'][0],
