@@ -1,8 +1,10 @@
 'use strict'
 
-let https = require('https')
-let parseXMLString = require('xml2js').parseString
+import https from 'https'
+import xml2js from 'xml2js'
 import { get as _get } from 'lodash'
+
+let parseXMLString = xml2js.parseString
 
 export default function (cepRawValue) {
   return new Promise((resolve, reject) => {
