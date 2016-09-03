@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://raw.githubusercontent.com/filipedeschamps/cep-promise/master/content/logo.gif">
+</p>
+
 <h1 align="center">CEP Promise</h1>
 
 <p align="center">
@@ -19,9 +23,10 @@
 
 ## Features
 
- * Sem riscos de ficar desatualizado (integração direta aos services dos Correios)
+ * Sempre atualizado em tempo-real por se conectar diretamente aos serviços dos Correios
+ * Sem limites de uso (rate limit) conhecidos
  * Interface de Promise extremamente simples
- * Suporte ao Node.js `0.10.x`, `0.12.x`, `4.x`, `5.x`, and `@stable`
+ * Suporte ao Node.js `0.10.x`, `0.12.x`, `4.x`, `5.x`, `6.x` e `@stable`
  * 100% de code coverage com testes unitários e E2E
  * Desenvolvido utilizando ES6
 
@@ -80,8 +85,7 @@ cep(5010000)
 import cep from 'cep-promise';
 
 cep('99999999')
-  .then(console.log)
-  .catch(console.log)
+  .catch(console.log);
 
   //  {
   //    "type": "range_error",
