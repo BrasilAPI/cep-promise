@@ -17,7 +17,7 @@
 </p>
 
 <p align="center">
-  Busca por CEP integrado diretamente aos serviços dos correios
+  Busca por CEP integrado diretamente aos serviços dos Correios
 </p>
 
 
