@@ -1,6 +1,6 @@
 {
   "name": "cep-promise",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Busca por CEP integrado diretamente aos serviços dos Correios",
   "main": "dist/cep-promise.js",
   "scripts": {
