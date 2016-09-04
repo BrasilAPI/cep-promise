@@ -50,7 +50,7 @@ export default function (cepRawValue) {
         return cepWithLeftPad
       }
 
-      throw new TypeError('Cep deve conter exatamente 8 caracteres')
+      throw new TypeError('CEP deve conter exatamente 8 caracteres')
     }
 
     function fetchCorreiosService (cepWithLeftPad) {
@@ -132,8 +132,8 @@ export default function (cepRawValue) {
 
     function translateCorreiosMessages (message) {
       let dictionary = {
-        'CEP NAO ENCONTRADO': 'Cep não encontrado na base dos Correios',
-        'BUSCA DEFINIDA COMO EXATA, 0 CEP DEVE TER 8 DIGITOS': 'Cep deve conter exatamente 8 caracteres'
+        'CEP NAO ENCONTRADO': 'CEP não encontrado na base dos Correios',
+        'BUSCA DEFINIDA COMO EXATA, 0 CEP DEVE TER 8 DIGITOS': 'CEP deve conter exatamente 8 caracteres'
       }
 
       return dictionary[message] || message

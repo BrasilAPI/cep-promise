@@ -37,7 +37,7 @@ describe('cep-promise (E2E)', () => {
     it('should reject with "range_error"', () => {
       return expect(cep('99999999')).to.be.rejected.and.to.eventually.deep.equal({
         type: 'range_error',
-        message: 'Cep não encontrado na base dos Correios'
+        message: 'CEP não encontrado na base dos Correios'
       })
     })
   })
@@ -46,7 +46,7 @@ describe('cep-promise (E2E)', () => {
     it('should reject with "range_error"', () => {
       return expect(cep('1')).to.be.rejected.and.to.eventually.deep.equal({
         type: 'range_error',
-        message: 'Cep não encontrado na base dos Correios'
+        message: 'CEP não encontrado na base dos Correios'
       })
     })
   })
@@ -55,7 +55,7 @@ describe('cep-promise (E2E)', () => {
     it('should reject with "type_error"', () => {
       return expect(cep('123456789')).to.be.rejected.and.to.eventually.deep.equal({
         type: 'type_error',
-        message: 'Cep deve conter exatamente 8 caracteres'
+        message: 'CEP deve conter exatamente 8 caracteres'
       })
     })
   })

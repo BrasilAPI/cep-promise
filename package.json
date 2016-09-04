@@ -1,7 +1,7 @@
 {
   "name": "cep-promise",
   "version": "1.0.1",
-  "description": "Busca por CEP integrado ao banco de dados dos Correios - Node.js e Browser",
+  "description": "Busca por CEP integrado diretamente aos serviços dos Correios",
   "main": "dist/cep-promise.js",
   "scripts": {
     "test": "npm run coverage",
@@ -19,7 +19,7 @@
     "type": "git",
     "url": "https://github.com/filipedeschamps/cep-promise.git"
   },
-  "author": "",
+  "author": "Filipe Deschamps",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/filipedeschamps/cep-promise/issues"
