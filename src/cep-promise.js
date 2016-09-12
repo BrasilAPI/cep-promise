@@ -7,6 +7,9 @@ import { get as _get } from 'lodash'
 let parseXMLString = xml2js.parseString
 
 export default function (cepRawValue) {
+
+  const CEP_LENGTH = 8
+
   return new Promise((resolve, reject) => {
     Promise.resolve(cepRawValue)
       .then(validateInputType)
@@ -36,9 +39,8 @@ export default function (cepRawValue) {
 
     function leftPadWithZeros (cepCleanValue) {
       let cepWithLeftPad = cepCleanValue.toString()
-      let size = 8
 
-      while (cepWithLeftPad.length < size) {
+      while (cepWithLeftPad.length < CEP_LENGTH) {
         cepWithLeftPad = '0' + cepWithLeftPad
       }
 
@@ -46,11 +48,11 @@ export default function (cepRawValue) {
     }
 
     function validateInputLength (cepWithLeftPad) {
-      if (cepWithLeftPad.length <= 8) {
+      if (cepWithLeftPad.length <= CEP_LENGTH) {
         return cepWithLeftPad
       }
 
-      throw new TypeError('CEP deve conter exatamente 8 caracteres')
+      throw new TypeError('CEP deve conter exatamente ' + CEP_LENGTH + ' caracteres')
     }
 
     function fetchCorreiosService (cepWithLeftPad) {
