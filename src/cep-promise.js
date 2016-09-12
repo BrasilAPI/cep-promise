@@ -4,6 +4,8 @@ import https from 'https'
 import xml2js from 'xml2js'
 import { get as _get } from 'lodash'
 
+const CEP_SIZE = 8
+
 let parseXMLString = xml2js.parseString
 
 export default function (cepRawValue) {
@@ -35,9 +37,8 @@ export default function (cepRawValue) {
 
     function leftPadWithZeros (cepCleanValue) {
       let cepWithLeftPad = cepCleanValue.toString()
-      let size = 8
 
-      while (cepWithLeftPad.length < size) {
+      while (cepWithLeftPad.length < CEP_SIZE) {
         cepWithLeftPad = '0' + cepWithLeftPad
       }
 
@@ -45,7 +46,7 @@ export default function (cepRawValue) {
     }
 
     function validateInputLength (cepWithLeftPad) {
-      if (cepWithLeftPad.length <= 8) {
+      if (cepWithLeftPad.length <= CEP_SIZE) {
         return cepWithLeftPad
       }
 
