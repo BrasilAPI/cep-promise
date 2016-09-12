@@ -30,8 +30,7 @@ export default function (cepRawValue) {
     }
 
     function removeSpecialCharacters (cepRawValue) {
-      let cepCleanValue = cepRawValue.toString().replace(/[^0-9]+/ig, '')
-      return cepCleanValue
+      return cepRawValue.toString().replace(/[\D]+/g, '')
     }
 
     function leftPadWithZeros (cepCleanValue) {
