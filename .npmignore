@@ -4,4 +4,4 @@ src
 .editorconfig
 .nvmrc
 test
-
+.DS_Store
