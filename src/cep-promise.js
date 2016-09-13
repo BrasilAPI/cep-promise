@@ -113,11 +113,11 @@ export default function (cepRawValue) {
 
       if (addressValues) {
         let addressObject = {
-          cep: addressValues['cep'][0],
-          state: addressValues['uf'][0],
-          city: addressValues['cidade'][0],
-          neighborhood: addressValues['bairro'][0],
-          street: addressValues['end'][0]
+          cep: _get(addressValues,'cep[0]'),
+          state: _get(addressValues,'uf[0]'),
+          city: _get(addressValues,'cidade[0]'),
+          neighborhood: _get(addressValues,'bairro[0]'),
+          street: _get(addressValues,'end[0]')
         }
 
         return addressObject
@@ -133,7 +133,7 @@ export default function (cepRawValue) {
     function translateCorreiosMessages (message) {
       let dictionary = {
         'CEP NAO ENCONTRADO': 'CEP não encontrado na base dos Correios',
-        'BUSCA DEFINIDA COMO EXATA, 0 CEP DEVE TER 8 DIGITOS': 'CEP deve conter exatamente 8 caracteres'
+        'BUSCA DEFINIDA COMO EXATA, 0 CEP DEVE TER 8 DIGITOS': 'CEP deve conter exatamente ' + CEP_SIZE + ' caracteres'
       }
 
       return dictionary[message] || message
