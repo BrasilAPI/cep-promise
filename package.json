@@ -47,7 +47,7 @@
     ]
   },
   "dependencies": {
-    "lodash.get": "^4.4.2",
+    "lodash.get": "4.4.2",
     "xml2js": "0.4.16"
   }
 }
