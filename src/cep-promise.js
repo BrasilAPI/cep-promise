@@ -2,7 +2,7 @@
 
 import https from 'https'
 import xml2js from 'xml2js'
-import _get from 'lodash/get'
+import _get from 'lodash.get'
 
 const CEP_SIZE = 8
 
