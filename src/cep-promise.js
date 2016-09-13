@@ -18,6 +18,7 @@ export default function (cepRawValue) {
       .then(fetchCorreiosService)
       .then(parseXML)
       .then(extractValuesFromParsedXML)
+      // .then(fetchViaCepService)
       .then(finish)
       .catch(handleError)
 
@@ -85,30 +86,92 @@ export default function (cepRawValue) {
                   return reject(new RangeError(errorMessage))
                 }
 
-                return reject(new Error('Correios respondeu consulta utilizando um formato de XML desconhecido'))
+                return fetchViaCepService(cepWithLeftPad)
+                  .then((res) => {
+                    return resolve(res)
+                  })
+                  .catch((err) => {
+                    return reject(err)
+                  })
               })
             }
           })
         })
 
         req.on('error', function (err) {
-          return reject(new Error('Erro ao se conectar com o serviço dos Correios'))
+          return fetchViaCepService(cepWithLeftPad)
+            .then((res) => {
+              return resolve(res)
+            })
+            .catch((err) => {
+              return reject(err)
+            })
         })
 
         req.write('<?xml version="1.0"?>\n<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:cli="http://cliente.bean.master.sigep.bsb.correios.com.br/">\n  <soapenv:Header />\n  <soapenv:Body>\n    <cli:consultaCEP>\n      <cep>' + cepWithLeftPad + '</cep>\n    </cli:consultaCEP>\n  </soapenv:Body>\n</soapenv:Envelope>')
         req.end()
       })
     }
+    
+    function fetchViaCepService (cepWithLeftPad) {
+      return new Promise(function (resolve, reject) {
+        let options = {
+          'method': 'GET',
+          'hostname': 'viacep.com.br',
+          'path': '/ws/' + cepWithLeftPad + '/json/',
+          'headers': {
+            'content-type': 'text/xml;charset=utf-8',
+            'cache-control': 'no-cache'
+          }
+        }
 
+        let req = https.request(options, function (res) {
+          let chunks = []
+
+          res.on('data', function (chunk) {
+            chunks.push(chunk)
+          })
+
+          res.on('end', function () {
+            let body = Buffer.concat(chunks).toString()
+
+            if (res.statusCode === 200) {
+              return resolve(body)
+            } else {
+              return reject(new Error('Não foi possível processar o cep requerido'))
+            }
+          })
+        })
+
+        req.on('error', function (err) {
+          return reject(new Error('Erro ao se conectar com o serviços de ceps'))
+        })
+        req.end()
+      })
+    }
+ 
     function parseXML (xmlString) {
       return new Promise(function (resolve, reject) {
-        parseXMLString(xmlString, function (err, xmlObject) {
-          resolve(xmlObject)
-        })
+        try {
+          resolve(JSON.parse(xmlString))
+        } catch (err) {
+          parseXMLString(xmlString, function (err, xmlObject) {
+            resolve(xmlObject)
+          })
+        }
       })
     }
 
     function extractValuesFromParsedXML (xmlObject) {
+      if(xmlObject.logradouro) {
+        return {
+          cep: xmlObject.cep.replace('-',''),
+          state: xmlObject.uf,
+          city: xmlObject.localidade,
+          neighborhood: xmlObject.bairro,
+          street: xmlObject.logradouro
+        }
+      }
       let addressValues = _get(xmlObject, 'soap:Envelope.soap:Body[0].ns2:consultaCEPResponse[0].return[0]')
 
       if (addressValues) {
@@ -122,7 +185,6 @@ export default function (cepRawValue) {
 
         return addressObject
       }
-
       throw new Error('Correios respondeu consulta utilizando um formato de XML desconhecido')
     }
 
