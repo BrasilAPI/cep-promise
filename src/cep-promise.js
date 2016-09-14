@@ -6,7 +6,7 @@ import _get from 'lodash.get'
 
 const CEP_SIZE = 8
 
-let parseXMLString = xml2js.parseString
+const parseXMLString = xml2js.parseString
 
 export default function (cepRawValue) {
   return new Promise((resolve, reject) => {
@@ -54,7 +54,7 @@ export default function (cepRawValue) {
     }
 
     function fetchCorreiosService (cepWithLeftPad) {
-      return new Promise(function (resolve, reject) {
+      return new Promise((resolve, reject) => {
         let options = {
           'method': 'POST',
           'hostname': 'apps.correios.com.br',
@@ -65,46 +65,36 @@ export default function (cepRawValue) {
           }
         }
 
-        let req = https.request(options, function (res) {
+        let req = https.request(options, (res) => {
           let chunks = []
 
-          res.on('data', function (chunk) {
+          res.on('data', (chunk) => {
             chunks.push(chunk)
           })
 
-          res.on('end', function () {
+          res.on('end', () => {
             let body = Buffer.concat(chunks).toString()
+            parseXMLString(body, (err, xmlObject) => {
+              let errorMessage = _get(xmlObject, 'soap:Envelope.soap:Body[0].soap:Fault[0].faultstring')
+              if (errorMessage) {
+                return reject(new RangeError(errorMessage))
+              }
+              if (res.statusCode === 200 && !err) {
+                return resolve(body)
+              }
 
-            if (res.statusCode === 200) {
-              return resolve(body)
-            } else {
-              parseXMLString(body, function (err, xmlObject) {
-                let errorMessage = _get(xmlObject, 'soap:Envelope.soap:Body[0].soap:Fault[0].faultstring')
-
-                if (errorMessage) {
-                  return reject(new RangeError(errorMessage))
-                }
-
-                return fetchViaCepService(cepWithLeftPad)
-                  .then((res) => {
-                    return resolve(res)
-                  })
-                  .catch((err) => {
-                    return reject(err)
-                  })
-              })
-            }
+              return fetchViaCepService(cepWithLeftPad)
+                  .then(res => resolve(res))
+                  .catch(err => reject(err))
+            })
+            
           })
         })
 
-        req.on('error', function (err) {
+        req.on('error', (err) => {
           return fetchViaCepService(cepWithLeftPad)
-            .then((res) => {
-              return resolve(res)
-            })
-            .catch((err) => {
-              return reject(err)
-            })
+            .then(res => resolve(res))
+            .catch(err => reject(err))
         })
 
         req.write('<?xml version="1.0"?>\n<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:cli="http://cliente.bean.master.sigep.bsb.correios.com.br/">\n  <soapenv:Header />\n  <soapenv:Body>\n    <cli:consultaCEP>\n      <cep>' + cepWithLeftPad + '</cep>\n    </cli:consultaCEP>\n  </soapenv:Body>\n</soapenv:Envelope>')
@@ -113,7 +103,7 @@ export default function (cepRawValue) {
     }
     
     function fetchViaCepService (cepWithLeftPad) {
-      return new Promise(function (resolve, reject) {
+      return new Promise((resolve, reject) => {
         let options = {
           'method': 'GET',
           'hostname': 'viacep.com.br',
@@ -123,15 +113,13 @@ export default function (cepRawValue) {
             'cache-control': 'no-cache'
           }
         }
-
-        let req = https.request(options, function (res) {
+        let req = https.request(options, (res) => {
           let chunks = []
-
-          res.on('data', function (chunk) {
+          res.on('data', (chunk) => {
             chunks.push(chunk)
           })
 
-          res.on('end', function () {
+          res.on('end', () => {
             let body = Buffer.concat(chunks).toString()
 
             if (res.statusCode === 200) {
@@ -142,7 +130,7 @@ export default function (cepRawValue) {
           })
         })
 
-        req.on('error', function (err) {
+        req.on('error', (err) => {
           return reject(new Error('Erro ao se conectar com o serviços de ceps'))
         })
         req.end()
@@ -150,7 +138,7 @@ export default function (cepRawValue) {
     }
  
     function parseResponse (responseString) {
-      return new Promise(function (resolve, reject) {
+      return new Promise((resolve, reject) => {
         try {
           resolve(JSON.parse(responseString))
         } catch (err) {
