@@ -16,9 +16,8 @@ export default function (cepRawValue) {
       .then(validateInputLength)
       .then(leftPadWithZeros)
       .then(fetchCorreiosService)
-      .then(parseXML)
-      .then(extractValuesFromParsedXML)
-      // .then(fetchViaCepService)
+      .then(parseResponse)
+      .then(extractValuesFromParsedResponse)
       .then(finish)
       .catch(handleError)
 
@@ -120,7 +119,7 @@ export default function (cepRawValue) {
           'hostname': 'viacep.com.br',
           'path': '/ws/' + cepWithLeftPad + '/json/',
           'headers': {
-            'content-type': 'text/xml;charset=utf-8',
+            'content-type': 'application/json;charset=utf-8',
             'cache-control': 'no-cache'
           }
         }
@@ -150,29 +149,29 @@ export default function (cepRawValue) {
       })
     }
  
-    function parseXML (xmlString) {
+    function parseResponse (responseString) {
       return new Promise(function (resolve, reject) {
         try {
-          resolve(JSON.parse(xmlString))
+          resolve(JSON.parse(responseString))
         } catch (err) {
-          parseXMLString(xmlString, function (err, xmlObject) {
-            resolve(xmlObject)
+          parseXMLString(responseString, function (err, responseObject) {
+            resolve(responseObject)
           })
         }
       })
     }
 
-    function extractValuesFromParsedXML (xmlObject) {
-      if(xmlObject.logradouro) {
+    function extractValuesFromParsedResponse (responseObject) {
+      if(responseObject.logradouro) {
         return {
-          cep: xmlObject.cep.replace('-',''),
-          state: xmlObject.uf,
-          city: xmlObject.localidade,
-          neighborhood: xmlObject.bairro,
-          street: xmlObject.logradouro
+          cep: responseObject.cep.replace('-',''),
+          state: responseObject.uf,
+          city: responseObject.localidade,
+          neighborhood: responseObject.bairro,
+          street: responseObject.logradouro
         }
       }
-      let addressValues = _get(xmlObject, 'soap:Envelope.soap:Body[0].ns2:consultaCEPResponse[0].return[0]')
+      let addressValues = _get(responseObject, 'soap:Envelope.soap:Body[0].ns2:consultaCEPResponse[0].return[0]')
 
       if (addressValues) {
         let addressObject = {
