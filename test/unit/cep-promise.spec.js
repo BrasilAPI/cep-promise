@@ -199,7 +199,7 @@ describe('cep-promise (unit)', () => {
     })
   })
   
-  describe('when http request fails both for primary and secondary service', () => {
+  describe('when http request fails both for primary and secondary service with bad response', () => {
     it('should reject with "error"', () => {
       nock('https://apps.correios.com.br')
         .post('/SigepMasterJPA/AtendeClienteService/AtendeCliente')
@@ -214,8 +214,37 @@ describe('cep-promise (unit)', () => {
       })
     })
   })
+  
+  describe('when http request has unformated xml and secondary service fails', () => {
+    it('should reject with "error"', () => {
+      nock('https://apps.correios.com.br')
+        .post('/SigepMasterJPA/AtendeClienteService/AtendeCliente')
+        .replyWithFile(200, path.join(__dirname, '/fixtures/response-bad-xml.xml'))
+      nock('https://viacep.com.br')
+        .get('/ws/05010000/json/')
+        .reply(400, '<h2>Bad Request (400)</h2>')
+      return expect(cep('05010000')).to.be.rejected.and.to.eventually.deep.equal({
+        type: 'error',
+        message: 'Não foi possível processar o cep requerido'
+      })
+    })
+  })
 
-
+  describe('when http request fails both for primary and secondary service with error', () => {
+    it('should reject with "error"', () => {
+      nock('https://apps.correios.com.br')
+        .post('/SigepMasterJPA/AtendeClienteService/AtendeCliente')
+        .replyWithError('getaddrinfo ENOTFOUND apps.correios.com.br apps.correios.com.br:443')
+      nock('https://viacep.com.br')
+        .get('/ws/05010000/json/')
+        .replyWithError('getaddrinfo ENOTFOUND apps.correios.com.br apps.correios.com.br:443')
+        
+      return expect(cep('05010000')).to.be.rejected.and.to.eventually.deep.equal({
+        type: 'error',
+        message: 'Erro ao se conectar com o serviços de ceps'
+      })
+    })
+  })
 
 
   afterEach(() => {
