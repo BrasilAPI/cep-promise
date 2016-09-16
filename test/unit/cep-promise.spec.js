@@ -188,7 +188,6 @@ describe('cep-promise (unit)', () => {
       nock('https://viacep.com.br')
         .get('/ws/05010000/json/')
         .replyWithFile(200, path.join(__dirname, '/fixtures/viacep-cep-05010000-found.json'))
-      
       return expect(cep('5010000')).to.eventually.deep.equal({
         cep: '05010000',
         state: 'SP',
@@ -198,7 +197,6 @@ describe('cep-promise (unit)', () => {
       })
     })
   })
-  
   describe('when http request fails both for primary and secondary service with bad response', () => {
     it('should reject with "error"', () => {
       nock('https://apps.correios.com.br')
@@ -207,14 +205,12 @@ describe('cep-promise (unit)', () => {
       nock('https://viacep.com.br')
         .get('/ws/05010000/json/')
         .reply(400, '<h2>Bad Request (400)</h2>')
-        
       return expect(cep('05010000')).to.be.rejected.and.to.eventually.deep.equal({
         type: 'error',
         message: 'Não foi possível processar o cep requerido'
       })
     })
   })
-  
   describe('when http request has unformated xml and secondary service fails', () => {
     it('should reject with "error"', () => {
       nock('https://apps.correios.com.br')
@@ -238,14 +234,12 @@ describe('cep-promise (unit)', () => {
       nock('https://viacep.com.br')
         .get('/ws/05010000/json/')
         .replyWithError('getaddrinfo ENOTFOUND apps.correios.com.br apps.correios.com.br:443')
-        
       return expect(cep('05010000')).to.be.rejected.and.to.eventually.deep.equal({
         type: 'error',
         message: 'Erro ao se conectar com o serviços de ceps'
       })
     })
   })
-
 
   afterEach(() => {
     nock.cleanAll()

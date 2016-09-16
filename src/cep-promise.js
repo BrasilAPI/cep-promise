@@ -87,11 +87,10 @@ export default function (cepRawValue) {
                   .then(res => resolve(res))
                   .catch(err => reject(err))
             })
-            
           })
         })
 
-        req.on('error', (err) => {
+        req.on('error', () => {
           return fetchViaCepService(cepWithLeftPad)
             .then(res => resolve(res))
             .catch(err => reject(err))
@@ -101,7 +100,6 @@ export default function (cepRawValue) {
         req.end()
       })
     }
-    
     function fetchViaCepService (cepWithLeftPad) {
       return new Promise((resolve, reject) => {
         let options = {
@@ -130,29 +128,31 @@ export default function (cepRawValue) {
           })
         })
 
-        req.on('error', (err) => {
+        req.on('error', () => {
           return reject(new Error('Erro ao se conectar com o serviços de ceps'))
         })
         req.end()
       })
     }
- 
     function parseResponse (responseString) {
       return new Promise((resolve, reject) => {
         try {
-          resolve(JSON.parse(responseString))
+          resolve(Object.assign({isJSON: true}, JSON.parse(responseString)))
         } catch (err) {
-          parseXMLString(responseString, function (err, responseObject) {
-            resolve(responseObject)
+          parseXMLString(responseString, (err, responseObject) => {
+            if (!err) {
+              resolve(responseObject)
+            }
+            throw new TypeError('Não foi possível interpretar o XML de resposta')
           })
         }
       })
     }
 
     function extractValuesFromParsedResponse (responseObject) {
-      if(responseObject.logradouro) {
+      if (responseObject.isJSON) {
         return {
-          cep: responseObject.cep.replace('-',''),
+          cep: responseObject.cep.replace('-', ''),
           state: responseObject.uf,
           city: responseObject.localidade,
           neighborhood: responseObject.bairro,
@@ -163,11 +163,11 @@ export default function (cepRawValue) {
 
       if (addressValues) {
         let addressObject = {
-          cep: _get(addressValues,'cep[0]'),
-          state: _get(addressValues,'uf[0]'),
-          city: _get(addressValues,'cidade[0]'),
-          neighborhood: _get(addressValues,'bairro[0]'),
-          street: _get(addressValues,'end[0]')
+          cep: _get(addressValues, 'cep[0]'),
+          state: _get(addressValues, 'uf[0]'),
+          city: _get(addressValues, 'cidade[0]'),
+          neighborhood: _get(addressValues, 'bairro[0]'),
+          street: _get(addressValues, 'end[0]')
         }
 
         return addressObject
