@@ -3,6 +3,7 @@
 import https from 'https'
 import xml2js from 'xml2js'
 import _get from 'lodash.get'
+import request from 'request-promise'
 
 const CEP_SIZE = 8
 
@@ -49,91 +50,62 @@ export default function (cepRawValue) {
       if (cepWithLeftPad.length <= CEP_SIZE) {
         return cepWithLeftPad
       }
-
       throw new TypeError('CEP deve conter exatamente 8 caracteres')
     }
 
+    function validateXmlResponse(response) {
+      return new Promise((resolve, reject) => {
+        parseXMLString(response, (err, xmlObject) => {
+          let errorMessage = _get(xmlObject, 'soap:Envelope.soap:Body[0].soap:Fault[0].faultstring')
+          if (errorMessage) {
+            reject(new RangeError(errorMessage))
+          }
+          if (!err &&  _get(xmlObject, 'soap:Envelope.soap:Body[0].ns2:consultaCEPResponse[0].return[0]')) {
+            resolve(response)
+          }
+          reject(err)
+        })
+      })
+    }
+
     function fetchCorreiosService (cepWithLeftPad) {
-      return new Promise((resolve, reject) => {
-        let options = {
-          'method': 'POST',
-          'hostname': 'apps.correios.com.br',
-          'path': '/SigepMasterJPA/AtendeClienteService/AtendeCliente',
-          'headers': {
-            'content-type': 'text/xml;charset=utf-8',
-            'cache-control': 'no-cache'
+      const options = {
+        method: 'POST',
+        simple: false,
+        uri: 'https://apps.correios.com.br/SigepMasterJPA/AtendeClienteService/AtendeCliente',
+        body: '<?xml version="1.0"?>\n<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:cli="http://cliente.bean.master.sigep.bsb.correios.com.br/">\n  <soapenv:Header />\n  <soapenv:Body>\n    <cli:consultaCEP>\n      <cep>' + cepWithLeftPad + '</cep>\n    </cli:consultaCEP>\n  </soapenv:Body>\n</soapenv:Envelope>',
+        headers: {
+          'Content-Type':'text/xml; charset=utf-8',
+          'cache-control': 'no-cache'
           }
         }
-
-        let req = https.request(options, (res) => {
-          let chunks = []
-
-          res.on('data', (chunk) => {
-            chunks.push(chunk)
-          })
-
-          res.on('end', () => {
-            let body = Buffer.concat(chunks).toString()
-            parseXMLString(body, (err, xmlObject) => {
-              let errorMessage = _get(xmlObject, 'soap:Envelope.soap:Body[0].soap:Fault[0].faultstring')
-              if (errorMessage) {
-                return reject(new RangeError(errorMessage))
-              }
-              if (res.statusCode === 200 && !err) {
-                return resolve(body)
-              }
-
-              return fetchViaCepService(cepWithLeftPad)
-                  .then(res => resolve(res))
-                  .catch(err => reject(err))
-            })
-          })
+      return request(options)
+        .then((response) => {
+          return validateXmlResponse(response)
         })
-
-        req.on('error', () => {
+        .catch((err) => {
+          if (err instanceof RangeError) {
+            throw err
+          }
           return fetchViaCepService(cepWithLeftPad)
-            .then(res => resolve(res))
-            .catch(err => reject(err))
         })
-
-        req.write('<?xml version="1.0"?>\n<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:cli="http://cliente.bean.master.sigep.bsb.correios.com.br/">\n  <soapenv:Header />\n  <soapenv:Body>\n    <cli:consultaCEP>\n      <cep>' + cepWithLeftPad + '</cep>\n    </cli:consultaCEP>\n  </soapenv:Body>\n</soapenv:Envelope>')
-        req.end()
-      })
     }
+    
     function fetchViaCepService (cepWithLeftPad) {
-      return new Promise((resolve, reject) => {
-        let options = {
-          'method': 'GET',
-          'hostname': 'viacep.com.br',
-          'path': '/ws/' + cepWithLeftPad + '/json/',
-          'headers': {
-            'content-type': 'application/json;charset=utf-8',
-            'cache-control': 'no-cache'
-          }
+      const options = {
+        method: 'GET',
+        uri: 'https://viacep.com.br/ws/' + cepWithLeftPad + '/json/',
+        headers: {
+          'content-type': 'application/json;charset=utf-8',
+          'cache-control': 'no-cache'
         }
-        let req = https.request(options, (res) => {
-          let chunks = []
-          res.on('data', (chunk) => {
-            chunks.push(chunk)
-          })
-
-          res.on('end', () => {
-            let body = Buffer.concat(chunks).toString()
-
-            if (res.statusCode === 200) {
-              return resolve(body)
-            } else {
-              return reject(new Error('Não foi possível processar o cep requerido'))
-            }
-          })
+      }
+      return request(options)
+        .catch(() => {
+          throw new Error('Erro ao se conectar com o serviços de ceps')
         })
-
-        req.on('error', () => {
-          return reject(new Error('Erro ao se conectar com o serviços de ceps'))
-        })
-        req.end()
-      })
     }
+    
     function parseResponse (responseString) {
       return new Promise((resolve, reject) => {
         try {

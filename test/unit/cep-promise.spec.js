@@ -131,19 +131,6 @@ describe('cep-promise (unit)', () => {
     })
   })
 
-  describe('when request returns with success but with an unkown XML schema', () => {
-    it('should reject with "error"', () => {
-      nock('https://apps.correios.com.br')
-        .post('/SigepMasterJPA/AtendeClienteService/AtendeCliente')
-        .replyWithFile(200, path.join(__dirname, '/fixtures/response-unknown-format.xml'))
-
-      return expect(cep('05010000')).to.be.rejected.and.to.eventually.deep.equal({
-        type: 'error',
-        message: 'Correios respondeu consulta utilizando um formato de XML desconhecido'
-      })
-    })
-  })
-
   describe('when request returns with error but with an unkown XML schema and then succeed to the failover service', () => {
     it('should reject with "error"', () => {
       nock('https://apps.correios.com.br')
@@ -207,7 +194,7 @@ describe('cep-promise (unit)', () => {
         .reply(400, '<h2>Bad Request (400)</h2>')
       return expect(cep('05010000')).to.be.rejected.and.to.eventually.deep.equal({
         type: 'error',
-        message: 'Não foi possível processar o cep requerido'
+        message: 'Erro ao se conectar com o serviços de ceps'
       })
     })
   })
@@ -221,7 +208,7 @@ describe('cep-promise (unit)', () => {
         .reply(400, '<h2>Bad Request (400)</h2>')
       return expect(cep('05010000')).to.be.rejected.and.to.eventually.deep.equal({
         type: 'error',
-        message: 'Não foi possível processar o cep requerido'
+        message: 'Erro ao se conectar com o serviços de ceps'
       })
     })
   })

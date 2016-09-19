@@ -48,6 +48,8 @@
   },
   "dependencies": {
     "lodash.get": "4.4.2",
+    "request": "^2.75.0",
+    "request-promise": "^4.1.1",
     "xml2js": "0.4.16"
   }
 }
