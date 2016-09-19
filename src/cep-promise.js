@@ -132,19 +132,13 @@ export default function (cepRawValue) {
         }
       }
       let addressValues = _get(responseObject, 'soap:Envelope.soap:Body[0].ns2:consultaCEPResponse[0].return[0]')
-
-      if (addressValues) {
-        let addressObject = {
-          cep: _get(addressValues, 'cep[0]'),
-          state: _get(addressValues, 'uf[0]'),
-          city: _get(addressValues, 'cidade[0]'),
-          neighborhood: _get(addressValues, 'bairro[0]'),
-          street: _get(addressValues, 'end[0]')
-        }
-
-        return addressObject
+      return {
+        cep: _get(addressValues, 'cep[0]'),
+        state: _get(addressValues, 'uf[0]'),
+        city: _get(addressValues, 'cidade[0]'),
+        neighborhood: _get(addressValues, 'bairro[0]'),
+        street: _get(addressValues, 'end[0]')
       }
-      throw new Error('Correios respondeu consulta utilizando um formato de XML desconhecido')
     }
 
     function finish (addressObject) {
