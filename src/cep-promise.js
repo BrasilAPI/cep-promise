@@ -1,6 +1,5 @@
 'use strict'
 
-import https from 'https'
 import xml2js from 'xml2js'
 import _get from 'lodash.get'
 import request from 'request-promise'
@@ -53,14 +52,14 @@ export default function (cepRawValue) {
       throw new TypeError('CEP deve conter exatamente 8 caracteres')
     }
 
-    function validateXmlResponse(response) {
+    function validateXmlResponse (response) {
       return new Promise((resolve, reject) => {
         parseXMLString(response, (err, xmlObject) => {
           let errorMessage = _get(xmlObject, 'soap:Envelope.soap:Body[0].soap:Fault[0].faultstring')
           if (errorMessage) {
             reject(new RangeError(errorMessage))
           }
-          if (!err &&  _get(xmlObject, 'soap:Envelope.soap:Body[0].ns2:consultaCEPResponse[0].return[0]')) {
+          if (!err && _get(xmlObject, 'soap:Envelope.soap:Body[0].ns2:consultaCEPResponse[0].return[0]')) {
             resolve(response)
           }
           reject(err)
@@ -75,10 +74,10 @@ export default function (cepRawValue) {
         uri: 'https://apps.correios.com.br/SigepMasterJPA/AtendeClienteService/AtendeCliente',
         body: '<?xml version="1.0"?>\n<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:cli="http://cliente.bean.master.sigep.bsb.correios.com.br/">\n  <soapenv:Header />\n  <soapenv:Body>\n    <cli:consultaCEP>\n      <cep>' + cepWithLeftPad + '</cep>\n    </cli:consultaCEP>\n  </soapenv:Body>\n</soapenv:Envelope>',
         headers: {
-          'Content-Type':'text/xml; charset=utf-8',
+          'Content-Type': 'text/xml; charset=utf-8',
           'cache-control': 'no-cache'
-          }
         }
+      }
       return request(options)
         .then((response) => {
           return validateXmlResponse(response)
@@ -90,7 +89,7 @@ export default function (cepRawValue) {
           return fetchViaCepService(cepWithLeftPad)
         })
     }
-    
+
     function fetchViaCepService (cepWithLeftPad) {
       const options = {
         method: 'GET',
@@ -105,7 +104,7 @@ export default function (cepRawValue) {
           throw new Error('Erro ao se conectar com o serviços de ceps')
         })
     }
-    
+
     function parseResponse (responseString) {
       return new Promise((resolve, reject) => {
         try {
