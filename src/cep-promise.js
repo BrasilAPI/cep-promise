@@ -2,7 +2,9 @@
 
 import xml2js from 'xml2js'
 import _get from 'lodash.get'
-import request from 'request-promise'
+import getCorreios from './services/correios.js'
+import getViaCep from './services/viacep.js'
+import Promise from 'bluebird'
 
 const CEP_SIZE = 8
 
@@ -15,11 +17,11 @@ export default function (cepRawValue) {
       .then(removeSpecialCharacters)
       .then(validateInputLength)
       .then(leftPadWithZeros)
-      .then(fetchCorreiosService)
+      .then(getCep)
       .then(parseResponse)
       .then(extractValuesFromParsedResponse)
       .then(finish)
-      .catch(handleError)
+      .catch(handleErrors)
 
     function validateInputType (cepRawValue) {
       let cepTypeOf = typeof cepRawValue
@@ -52,56 +54,13 @@ export default function (cepRawValue) {
       throw new TypeError('CEP deve conter exatamente 8 caracteres')
     }
 
-    function validateXmlResponse (response) {
-      return new Promise((resolve, reject) => {
-        parseXMLString(response, (err, xmlObject) => {
-          let errorMessage = _get(xmlObject, 'soap:Envelope.soap:Body[0].soap:Fault[0].faultstring')
-          if (errorMessage) {
-            reject(new RangeError(errorMessage))
-          }
-          if (!err && _get(xmlObject, 'soap:Envelope.soap:Body[0].ns2:consultaCEPResponse[0].return[0]')) {
-            resolve(response)
-          }
-          reject(err)
-        })
-      })
-    }
-
-    function fetchCorreiosService (cepWithLeftPad) {
-      const options = {
-        method: 'POST',
-        simple: false,
-        uri: 'https://apps.correios.com.br/SigepMasterJPA/AtendeClienteService/AtendeCliente',
-        body: '<?xml version="1.0"?>\n<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:cli="http://cliente.bean.master.sigep.bsb.correios.com.br/">\n  <soapenv:Header />\n  <soapenv:Body>\n    <cli:consultaCEP>\n      <cep>' + cepWithLeftPad + '</cep>\n    </cli:consultaCEP>\n  </soapenv:Body>\n</soapenv:Envelope>',
-        headers: {
-          'Content-Type': 'text/xml; charset=utf-8',
-          'cache-control': 'no-cache'
-        }
-      }
-      return request(options)
-        .then((response) => {
-          return validateXmlResponse(response)
-        })
-        .catch((err) => {
-          if (err instanceof RangeError) {
-            throw err
-          }
-          return fetchViaCepService(cepWithLeftPad)
-        })
-    }
-
-    function fetchViaCepService (cepWithLeftPad) {
-      const options = {
-        method: 'GET',
-        uri: 'https://viacep.com.br/ws/' + cepWithLeftPad + '/json/',
-        headers: {
-          'content-type': 'application/json;charset=utf-8',
-          'cache-control': 'no-cache'
-        }
-      }
-      return request(options)
-        .catch(() => {
-          throw new Error('Erro ao se conectar com o serviços de ceps')
+    function getCep (cepWithLeftPad) {
+      return Promise.any([
+        getCorreios(cepWithLeftPad),
+        getViaCep(cepWithLeftPad)
+      ])
+        .catch(Promise.AggregateError, (err) => {
+          throw err
         })
     }
 
@@ -153,26 +112,35 @@ export default function (cepRawValue) {
       return dictionary[message] || message
     }
 
-    function handleError (error) {
+    function errorHandler (error) {
       if (error instanceof TypeError) {
-        return reject({
+        return {
           type: 'type_error',
           message: translateCorreiosMessages(error.message)
-        })
+        }
       }
 
       if (error instanceof RangeError) {
-        return reject({
+        return {
           type: 'range_error',
           message: translateCorreiosMessages(error.message)
-        })
+        }
       }
-
       if (error instanceof Error) {
-        return reject({
+        return {
           type: 'error',
           message: translateCorreiosMessages(error.message)
-        })
+        }
+      }
+    }
+
+    function handleErrors (error) {
+      if (error instanceof Promise.AggregateError) {
+        return reject(error.map((err) => {
+          return errorHandler(err)
+        }))
+      } else {
+        return reject(errorHandler(error))
       }
     }
   })

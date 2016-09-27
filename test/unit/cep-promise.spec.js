@@ -98,7 +98,7 @@ describe('cep-promise (unit)', () => {
         .post('/SigepMasterJPA/AtendeClienteService/AtendeCliente')
         .replyWithFile(500, path.join(__dirname, '/fixtures/response-cep-not-found.xml'))
 
-      return expect(cep('99999999')).to.be.rejected.and.to.eventually.deep.equal({
+      return expect(cep('99999999')).to.be.rejected.and.to.eventually.deep.include({
         type: 'range_error',
         message: 'CEP não encontrado na base dos Correios'
       })
@@ -111,7 +111,7 @@ describe('cep-promise (unit)', () => {
         .post('/SigepMasterJPA/AtendeClienteService/AtendeCliente')
         .replyWithFile(500, path.join(__dirname, '/fixtures/response-cep-not-found.xml'))
 
-      return expect(cep('1')).to.be.rejected.and.to.eventually.deep.equal({
+      return expect(cep('1')).to.be.rejected.and.to.eventually.deep.include({
         type: 'range_error',
         message: 'CEP não encontrado na base dos Correios'
       })
@@ -124,7 +124,7 @@ describe('cep-promise (unit)', () => {
         .post('/SigepMasterJPA/AtendeClienteService/AtendeCliente')
         .replyWithFile(500, path.join(__dirname, '/fixtures/response-cep-invalid-format.xml'))
 
-      return expect(cep('123456789')).to.be.rejected.and.to.eventually.deep.equal({
+      return expect(cep('123456789')).to.be.rejected.and.to.eventually.deep.include({
         type: 'type_error',
         message: 'CEP deve conter exatamente 8 caracteres'
       })
@@ -192,7 +192,7 @@ describe('cep-promise (unit)', () => {
       nock('https://viacep.com.br')
         .get('/ws/05010000/json/')
         .reply(400, '<h2>Bad Request (400)</h2>')
-      return expect(cep('05010000')).to.be.rejected.and.to.eventually.deep.equal({
+      return expect(cep('05010000')).to.be.rejected.and.to.eventually.deep.include({
         type: 'error',
         message: 'Erro ao se conectar com o serviços de ceps'
       })
@@ -206,7 +206,7 @@ describe('cep-promise (unit)', () => {
       nock('https://viacep.com.br')
         .get('/ws/05010000/json/')
         .reply(400, '<h2>Bad Request (400)</h2>')
-      return expect(cep('05010000')).to.be.rejected.and.to.eventually.deep.equal({
+      return expect(cep('05010000')).to.be.rejected.and.to.eventually.deep.include({
         type: 'error',
         message: 'Erro ao se conectar com o serviços de ceps'
       })
@@ -221,7 +221,7 @@ describe('cep-promise (unit)', () => {
       nock('https://viacep.com.br')
         .get('/ws/05010000/json/')
         .replyWithError('getaddrinfo ENOTFOUND apps.correios.com.br apps.correios.com.br:443')
-      return expect(cep('05010000')).to.be.rejected.and.to.eventually.deep.equal({
+      return expect(cep('05010000')).to.be.rejected.and.to.eventually.deep.include({
         type: 'error',
         message: 'Erro ao se conectar com o serviços de ceps'
       })

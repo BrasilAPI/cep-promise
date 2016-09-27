@@ -35,19 +35,29 @@ describe('cep-promise (E2E)', () => {
 
   describe('when invoked with an inexistent "99999999" cep', () => {
     it('should reject with "range_error"', () => {
-      return expect(cep('99999999')).to.be.rejected.and.to.eventually.deep.equal({
-        type: 'range_error',
-        message: 'CEP não encontrado na base dos Correios'
-      })
+      return expect(cep('99999999')).to.be.rejected.and.to.eventually.deep
+        .include({
+          type: 'range_error',
+          message: 'CEP não encontrado na base dos Correios'
+        })
+        .include({
+          type: 'range_error',
+          message: 'CEP inválido'
+        })
     })
   })
 
   describe('when invoked with an inexistend "1" cep', () => {
     it('should reject with "range_error"', () => {
-      return expect(cep('1')).to.be.rejected.and.to.eventually.deep.equal({
-        type: 'range_error',
-        message: 'CEP não encontrado na base dos Correios'
-      })
+      return expect(cep('1')).to.be.rejected.and.to.eventually.deep
+        .include({
+          type: 'range_error',
+          message: 'CEP não encontrado na base dos Correios'
+        })
+        .include({
+          type: 'range_error',
+          message: 'CEP inválido'
+        })
     })
   })
 
