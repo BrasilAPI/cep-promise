@@ -18,12 +18,30 @@ function fetchViaCepService (cepWithLeftPad) {
       }
       return res
     })
+    .then(parseResponse)
+    .then(extractValuesFromParsedResponse)
     .catch((err) => {
       if (err instanceof RangeError) {
         throw err
       }
       throw new Error('Erro ao se conectar com o serviços de ceps')
     })
+}
+
+function parseResponse (responseString) {
+  return new Promise((resolve, reject) => {
+    resolve(JSON.parse(responseString))
+  })
+}
+
+function extractValuesFromParsedResponse (responseObject) {
+  return {
+    cep: responseObject.cep.replace('-', ''),
+    state: responseObject.uf,
+    city: responseObject.localidade,
+    neighborhood: responseObject.bairro,
+    street: responseObject.logradouro
+  }
 }
 
 export default fetchViaCepService

@@ -1,14 +1,10 @@
 'use strict'
 
-import xml2js from 'xml2js'
-import _get from 'lodash.get'
 import getCorreios from './services/correios.js'
 import getViaCep from './services/viacep.js'
 import Promise from 'bluebird'
 
 const CEP_SIZE = 8
-
-const parseXMLString = xml2js.parseString
 
 export default function (cepRawValue) {
   return new Promise((resolve, reject) => {
@@ -18,8 +14,6 @@ export default function (cepRawValue) {
       .then(validateInputLength)
       .then(leftPadWithZeros)
       .then(getCep)
-      .then(parseResponse)
-      .then(extractValuesFromParsedResponse)
       .then(finish)
       .catch(handleErrors)
 
@@ -62,41 +56,6 @@ export default function (cepRawValue) {
         .catch(Promise.AggregateError, (err) => {
           throw err
         })
-    }
-
-    function parseResponse (responseString) {
-      return new Promise((resolve, reject) => {
-        try {
-          resolve(Object.assign({isJSON: true}, JSON.parse(responseString)))
-        } catch (err) {
-          parseXMLString(responseString, (err, responseObject) => {
-            if (!err) {
-              resolve(responseObject)
-            }
-            throw new TypeError('Não foi possível interpretar o XML de resposta')
-          })
-        }
-      })
-    }
-
-    function extractValuesFromParsedResponse (responseObject) {
-      if (responseObject.isJSON) {
-        return {
-          cep: responseObject.cep.replace('-', ''),
-          state: responseObject.uf,
-          city: responseObject.localidade,
-          neighborhood: responseObject.bairro,
-          street: responseObject.logradouro
-        }
-      }
-      let addressValues = _get(responseObject, 'soap:Envelope.soap:Body[0].ns2:consultaCEPResponse[0].return[0]')
-      return {
-        cep: _get(addressValues, 'cep[0]'),
-        state: _get(addressValues, 'uf[0]'),
-        city: _get(addressValues, 'cidade[0]'),
-        neighborhood: _get(addressValues, 'bairro[0]'),
-        street: _get(addressValues, 'end[0]')
-      }
     }
 
     function finish (addressObject) {
