@@ -71,20 +71,23 @@ export default function (cepRawValue) {
       if (error instanceof TypeError) {
         return {
           type: 'type_error',
-          message: error.message
+          message: error.message,
+          service: error.service
         }
       }
 
       if (error instanceof RangeError) {
         return {
           type: 'range_error',
-          message: error.message
+          message: error.message,
+          service: error.service
         }
       }
       if (error instanceof Error) {
         return {
           type: 'error',
-          message: error.message
+          message: error.message,
+          service: error.service
         }
       }
     }

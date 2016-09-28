@@ -22,9 +22,9 @@ function fetchViaCepService (cepWithLeftPad) {
     .then(extractValuesFromParsedResponse)
     .catch((err) => {
       if (err instanceof RangeError) {
-        throw err
+        throw Object.assign(err, {service: 'Viacep'})
       }
-      throw new Error('Erro ao se conectar com o serviços de ceps')
+      throw Object.assign(err, {message: 'Erro ao se conectar com o serviços de ceps', service: 'Viacep'})
     })
 }
 

@@ -28,7 +28,8 @@ describe('cep-promise (unit)', () => {
     it('should reject with "type_error"', () => {
       return expect(cep()).to.be.rejected.and.to.eventually.deep.equal({
         type: 'type_error',
-        message: 'Você deve chamar o construtor utilizando uma String ou Number'
+        message: 'Você deve chamar o construtor utilizando uma String ou Number',
+        service: undefined
       })
     })
   })
@@ -37,7 +38,8 @@ describe('cep-promise (unit)', () => {
     it('should reject with "type_error"', () => {
       return expect(cep([1, 2, 3])).to.be.rejected.and.to.eventually.deep.equal({
         type: 'type_error',
-        message: 'Você deve chamar o construtor utilizando uma String ou Number'
+        message: 'Você deve chamar o construtor utilizando uma String ou Number',
+        service: undefined
       })
     })
   })
@@ -46,7 +48,8 @@ describe('cep-promise (unit)', () => {
     it('should reject with "type_error"', () => {
       return expect(cep({ nintendo: true, ps: false, xbox: false })).to.be.rejected.and.to.eventually.deep.equal({
         type: 'type_error',
-        message: 'Você deve chamar o construtor utilizando uma String ou Number'
+        message: 'Você deve chamar o construtor utilizando uma String ou Number',
+        service: undefined
       })
     })
   })
@@ -55,7 +58,8 @@ describe('cep-promise (unit)', () => {
     it('should reject with "type_error"', () => {
       return expect(cep(function zelda () { return 'link' })).to.be.rejected.and.to.eventually.deep.equal({
         type: 'type_error',
-        message: 'Você deve chamar o construtor utilizando uma String ou Number'
+        message: 'Você deve chamar o construtor utilizando uma String ou Number',
+        service: undefined
       })
     })
   })
@@ -100,7 +104,8 @@ describe('cep-promise (unit)', () => {
 
       return expect(cep('99999999')).to.be.rejected.and.to.eventually.deep.include({
         type: 'range_error',
-        message: 'CEP não encontrado na base dos Correios'
+        message: 'CEP não encontrado na base dos Correios',
+        service: 'Correios'
       })
     })
   })
@@ -113,7 +118,8 @@ describe('cep-promise (unit)', () => {
 
       return expect(cep('1')).to.be.rejected.and.to.eventually.deep.include({
         type: 'range_error',
-        message: 'CEP não encontrado na base dos Correios'
+        message: 'CEP não encontrado na base dos Correios',
+        service: 'Correios'
       })
     })
   })
@@ -126,7 +132,8 @@ describe('cep-promise (unit)', () => {
 
       return expect(cep('123456789')).to.be.rejected.and.to.eventually.deep.include({
         type: 'type_error',
-        message: 'CEP deve conter exatamente 8 caracteres'
+        message: 'CEP deve conter exatamente 8 caracteres',
+        service: undefined
       })
     })
   })
@@ -194,7 +201,8 @@ describe('cep-promise (unit)', () => {
         .reply(400, '<h2>Bad Request (400)</h2>')
       return expect(cep('05010000')).to.be.rejected.and.to.eventually.deep.include({
         type: 'error',
-        message: 'Erro ao se conectar com o serviços de ceps'
+        message: 'Erro ao se conectar com o serviços de ceps',
+        service: 'Viacep'
       })
     })
   })
@@ -208,7 +216,8 @@ describe('cep-promise (unit)', () => {
         .reply(400, '<h2>Bad Request (400)</h2>')
       return expect(cep('05010000')).to.be.rejected.and.to.eventually.deep.include({
         type: 'error',
-        message: 'Erro ao se conectar com o serviços de ceps'
+        message: 'Erro ao se conectar com o serviços de ceps',
+        service: 'Viacep'
       })
     })
   })
@@ -223,7 +232,9 @@ describe('cep-promise (unit)', () => {
         .replyWithError('getaddrinfo ENOTFOUND apps.correios.com.br apps.correios.com.br:443')
       return expect(cep('05010000')).to.be.rejected.and.to.eventually.deep.include({
         type: 'error',
-        message: 'Erro ao se conectar com o serviços de ceps'
+        message: 'Erro ao se conectar com o serviços de ceps',
+        service: 'Viacep'
+        
       })
     })
   })
@@ -238,7 +249,8 @@ describe('cep-promise (unit)', () => {
         .replyWithError('getaddrinfo ENOTFOUND apps.correios.com.br apps.correios.com.br:443')
       return expect(cep('05010000')).to.be.rejected.and.to.eventually.deep.include({
         type: 'range_error',
-        message: 'CEP deve conter exatamente 8 caracteres'
+        message: 'CEP deve conter exatamente 8 caracteres',
+        service: 'Correios'
       })
     })
   })
