@@ -227,6 +227,21 @@ describe('cep-promise (unit)', () => {
       })
     })
   })
+  
+  describe('when http request fails to correios because it\'s length it is superior to 8', () => {
+    it('should reject with "error"', () => {
+      nock('https://apps.correios.com.br')
+        .post('/SigepMasterJPA/AtendeClienteService/AtendeCliente')
+        .replyWithFile(500, path.join(__dirname, '/fixtures/response-cep-invalid-format.xml'))
+      nock('https://viacep.com.br')
+        .get('/ws/05010000/json/')
+        .replyWithError('getaddrinfo ENOTFOUND apps.correios.com.br apps.correios.com.br:443')
+      return expect(cep('05010000')).to.be.rejected.and.to.eventually.deep.include({
+        type: 'range_error',
+        message: 'CEP deve conter exatamente 8 caracteres'
+      })
+    })
+  })
 
   afterEach(() => {
     nock.cleanAll()

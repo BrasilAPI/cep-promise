@@ -6,6 +6,8 @@ import request from 'request-promise'
 
 const parseXMLString = xml2js.parseString
 
+const CEP_SIZE = 8
+
 function fetchCorreiosService (cepWithLeftPad) {
   const options = {
     method: 'POST',
@@ -21,6 +23,12 @@ function fetchCorreiosService (cepWithLeftPad) {
     .then((response) => validateXmlResponse(response))
     .then(parseResponse)
     .then(extractValuesFromParsedResponse)
+    .catch({message: 'CEP NAO ENCONTRADO'}, (err) => {
+      throw Object.assign(err, {message: 'CEP não encontrado na base dos Correios'})
+    })
+    .catch({message: 'BUSCA DEFINIDA COMO EXATA, 0 CEP DEVE TER 8 DIGITOS'}, (err) => {
+      throw Object.assign(err, {message: 'CEP deve conter exatamente ' + CEP_SIZE + ' caracteres'})
+    })
     .catch((err) => {
       throw err
     })

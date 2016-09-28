@@ -15,7 +15,12 @@ export default function (cepRawValue) {
       .then(leftPadWithZeros)
       .then(getCep)
       .then(finish)
-      .catch(handleErrors)
+      .catch(Promise.AggregateError, (err) => {
+        return reject(err.map((error) => {
+          return errorHandler(error)
+        }))
+      })
+      .catch((err) => reject(errorHandler(err)))
 
     function validateInputType (cepRawValue) {
       let cepTypeOf = typeof cepRawValue
@@ -62,44 +67,25 @@ export default function (cepRawValue) {
       resolve(addressObject)
     }
 
-    function translateCorreiosMessages (message) {
-      let dictionary = {
-        'CEP NAO ENCONTRADO': 'CEP não encontrado na base dos Correios',
-        'BUSCA DEFINIDA COMO EXATA, 0 CEP DEVE TER 8 DIGITOS': 'CEP deve conter exatamente ' + CEP_SIZE + ' caracteres'
-      }
-
-      return dictionary[message] || message
-    }
-
     function errorHandler (error) {
       if (error instanceof TypeError) {
         return {
           type: 'type_error',
-          message: translateCorreiosMessages(error.message)
+          message: error.message
         }
       }
 
       if (error instanceof RangeError) {
         return {
           type: 'range_error',
-          message: translateCorreiosMessages(error.message)
+          message: error.message
         }
       }
       if (error instanceof Error) {
         return {
           type: 'error',
-          message: translateCorreiosMessages(error.message)
+          message: error.message
         }
-      }
-    }
-
-    function handleErrors (error) {
-      if (error instanceof Promise.AggregateError) {
-        return reject(error.map((err) => {
-          return errorHandler(err)
-        }))
-      } else {
-        return reject(errorHandler(error))
       }
     }
   })
