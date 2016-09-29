@@ -234,12 +234,11 @@ describe('cep-promise (unit)', () => {
         type: 'error',
         message: 'Erro ao se conectar com o serviços de ceps',
         service: 'Viacep'
-        
       })
     })
   })
-  
-  describe('when http request fails to correios because it\'s length it is superior to 8', () => {
+
+  describe("when http request fails to correios because it's length it is superior to 8", () => {
     it('should reject with "error"', () => {
       nock('https://apps.correios.com.br')
         .post('/SigepMasterJPA/AtendeClienteService/AtendeCliente')

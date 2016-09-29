@@ -72,5 +72,3 @@ function extractValuesFromParsedResponse (responseObject) {
 }
 
 export default fetchCorreiosService
-
-

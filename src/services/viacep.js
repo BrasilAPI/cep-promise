@@ -45,5 +45,3 @@ function extractValuesFromParsedResponse (responseObject) {
 }
 
 export default fetchViaCepService
-
-
