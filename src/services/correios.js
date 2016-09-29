@@ -30,7 +30,7 @@ function fetchCorreiosService (cepWithLeftPad) {
       throw Object.assign(err, {message: 'CEP deve conter exatamente ' + CEP_SIZE + ' caracteres'})
     })
     .catch((err) => {
-      throw Object.assign(err, {service: 'Correios'})
+      throw Object.assign(err, {service: 'correios'})
     })
 }
 

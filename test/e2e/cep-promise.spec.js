@@ -39,12 +39,12 @@ describe('cep-promise (E2E)', () => {
         .include({
           type: 'range_error',
           message: 'CEP não encontrado na base dos Correios',
-          service: 'Correios'
+          service: 'correios'
         })
         .include({
           type: 'range_error',
           message: 'CEP inválido',
-          service: 'Viacep'
+          service: 'viacep'
         })
     })
   })
@@ -55,12 +55,12 @@ describe('cep-promise (E2E)', () => {
         .include({
           type: 'range_error',
           message: 'CEP não encontrado na base dos Correios',
-          service: 'Correios'
+          service: 'correios'
         })
         .include({
           type: 'range_error',
           message: 'CEP inválido',
-          service: 'Viacep'
+          service: 'viacep'
         })
     })
   })

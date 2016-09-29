@@ -105,7 +105,7 @@ describe('cep-promise (unit)', () => {
       return expect(cep('99999999')).to.be.rejected.and.to.eventually.deep.include({
         type: 'range_error',
         message: 'CEP não encontrado na base dos Correios',
-        service: 'Correios'
+        service: 'correios'
       })
     })
   })
@@ -119,7 +119,7 @@ describe('cep-promise (unit)', () => {
       return expect(cep('1')).to.be.rejected.and.to.eventually.deep.include({
         type: 'range_error',
         message: 'CEP não encontrado na base dos Correios',
-        service: 'Correios'
+        service: 'correios'
       })
     })
   })
@@ -202,7 +202,7 @@ describe('cep-promise (unit)', () => {
       return expect(cep('05010000')).to.be.rejected.and.to.eventually.deep.include({
         type: 'error',
         message: 'Erro ao se conectar com o serviços de ceps',
-        service: 'Viacep'
+        service: 'viacep'
       })
     })
   })
@@ -217,7 +217,7 @@ describe('cep-promise (unit)', () => {
       return expect(cep('05010000')).to.be.rejected.and.to.eventually.deep.include({
         type: 'error',
         message: 'Erro ao se conectar com o serviços de ceps',
-        service: 'Viacep'
+        service: 'viacep'
       })
     })
   })
@@ -233,7 +233,7 @@ describe('cep-promise (unit)', () => {
       return expect(cep('05010000')).to.be.rejected.and.to.eventually.deep.include({
         type: 'error',
         message: 'Erro ao se conectar com o serviços de ceps',
-        service: 'Viacep'
+        service: 'viacep'
       })
     })
   })
@@ -249,7 +249,7 @@ describe('cep-promise (unit)', () => {
       return expect(cep('05010000')).to.be.rejected.and.to.eventually.deep.include({
         type: 'range_error',
         message: 'CEP deve conter exatamente 8 caracteres',
-        service: 'Correios'
+        service: 'correios'
       })
     })
   })
