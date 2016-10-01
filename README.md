@@ -14,16 +14,25 @@
   <a href="https://www.npmjs.com/package/cep-promise">
     <img src="https://badge.fury.io/js/cep-promise.svg">
   </a>
+  <a href="http://standardjs.com/">
+    <img src="https://img.shields.io/badge/code%20style-standard-brightgreen.svg">
+  </a>
 </p>
 
 <p align="center">
-  Busca por CEP integrado diretamente aos serviços dos Correios
+  Busca por CEP integrado diretamente aos serviços dos Correios e ViaCEP
+</p>
+
+<p align="center">
+  <a arget="_blank" href="https://runkit.com/lucianopf/cep-promise">Demo</a>
 </p>
 
 
 ## Features
 
- * Sempre atualizado em tempo-real por se conectar diretamente aos serviços dos Correios
+ * Sempre atualizado em tempo-real por se conectar diretamente aos serviços dos Correios ou ViaCEP
+ * Possui alta disponibilidade por usar serviços como fallback
+ * Sempre retorna a resposta mais rápida por usar concorrência
  * Sem limites de uso (rate limit) conhecidos
  * Interface de Promise extremamente simples
  * Suporte ao Node.js `0.10.x`, `0.12.x`, `4.x`, `5.x`, `6.x` e `@stable`

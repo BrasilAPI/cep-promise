@@ -35,19 +35,33 @@ describe('cep-promise (E2E)', () => {
 
   describe('when invoked with an inexistent "99999999" cep', () => {
     it('should reject with "range_error"', () => {
-      return expect(cep('99999999')).to.be.rejected.and.to.eventually.deep.equal({
-        type: 'range_error',
-        message: 'CEP não encontrado na base dos Correios'
-      })
+      return expect(cep('99999999')).to.be.rejected.and.to.eventually.deep
+        .include({
+          type: 'range_error',
+          message: 'CEP não encontrado na base dos Correios',
+          service: 'correios'
+        })
+        .include({
+          type: 'range_error',
+          message: 'CEP inválido',
+          service: 'viacep'
+        })
     })
   })
 
   describe('when invoked with an inexistend "1" cep', () => {
     it('should reject with "range_error"', () => {
-      return expect(cep('1')).to.be.rejected.and.to.eventually.deep.equal({
-        type: 'range_error',
-        message: 'CEP não encontrado na base dos Correios'
-      })
+      return expect(cep('1')).to.be.rejected.and.to.eventually.deep
+        .include({
+          type: 'range_error',
+          message: 'CEP não encontrado na base dos Correios',
+          service: 'correios'
+        })
+        .include({
+          type: 'range_error',
+          message: 'CEP inválido',
+          service: 'viacep'
+        })
     })
   })
 
@@ -55,7 +69,8 @@ describe('cep-promise (E2E)', () => {
     it('should reject with "type_error"', () => {
       return expect(cep('123456789')).to.be.rejected.and.to.eventually.deep.equal({
         type: 'type_error',
-        message: 'CEP deve conter exatamente 8 caracteres'
+        message: 'CEP deve conter exatamente 8 caracteres',
+        service: undefined
       })
     })
   })
