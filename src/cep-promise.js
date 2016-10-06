@@ -20,7 +20,7 @@ export default function (cepRawValue) {
           return errorHandler(error)
         }))
       })
-      .catch((err) => reject(errorHandler(err)))
+      .catch((err) => reject( [errorHandler(err)] ))
 
     function validateInputType (cepRawValue) {
       let cepTypeOf = typeof cepRawValue
