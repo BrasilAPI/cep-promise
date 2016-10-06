@@ -26,7 +26,7 @@ describe('cep-promise (unit)', () => {
 
   describe('when invoked without arguments', () => {
     it('should reject with "type_error"', () => {
-      return expect(cep()).to.be.rejected.and.to.eventually.deep.equal({
+      return expect(cep()).to.be.rejected.and.to.eventually.contain({
         type: 'type_error',
         message: 'Você deve chamar o construtor utilizando uma String ou Number',
         service: undefined
@@ -36,7 +36,7 @@ describe('cep-promise (unit)', () => {
 
   describe('when invoked with an Array', () => {
     it('should reject with "type_error"', () => {
-      return expect(cep([1, 2, 3])).to.be.rejected.and.to.eventually.deep.equal({
+      expect(cep([1, 2, 3])).to.be.rejected.and.to.eventually.contain({
         type: 'type_error',
         message: 'Você deve chamar o construtor utilizando uma String ou Number',
         service: undefined
@@ -46,7 +46,7 @@ describe('cep-promise (unit)', () => {
 
   describe('when invoked with an Object', () => {
     it('should reject with "type_error"', () => {
-      return expect(cep({ nintendo: true, ps: false, xbox: false })).to.be.rejected.and.to.eventually.deep.equal({
+      return expect(cep({ nintendo: true, ps: false, xbox: false })).to.be.rejected.and.to.eventually.contain({
         type: 'type_error',
         message: 'Você deve chamar o construtor utilizando uma String ou Number',
         service: undefined
@@ -56,7 +56,7 @@ describe('cep-promise (unit)', () => {
 
   describe('when invoked with an Function', () => {
     it('should reject with "type_error"', () => {
-      return expect(cep(function zelda () { return 'link' })).to.be.rejected.and.to.eventually.deep.equal({
+      return expect(cep(function zelda () { return 'link' })).to.be.rejected.and.to.eventually.contain({
         type: 'type_error',
         message: 'Você deve chamar o construtor utilizando uma String ou Number',
         service: undefined
