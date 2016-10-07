@@ -96,8 +96,16 @@ import cep from 'cep-promise';
 cep('99999999')
   .catch(console.log);
 
-  //  {
-  //    "type": "range_error",
-  //    "message": "CEP não encontrado na base dos Correios"
-  //  }
+  // [
+  //   {
+  //     "type": "range_error",
+  //     "message": "CEP não encontrado na base dos Correios",
+  //     "service": 'correios'
+  //   },
+  //   {
+  //     "type": "range_error",
+  //     "message": "CEP inválido",
+  //     "service": "viacep"
+  //   }
+  // ]
 ```
