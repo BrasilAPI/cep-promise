@@ -19,8 +19,15 @@ describe('cep-promise (unit)', () => {
 
   describe('when invoked', () => {
     it('should return a Promise', () => {
-      expect(cep().then).to.be.a('function')
-      expect(cep().catch).to.be.a('function')
+      nock('https://apps.correios.com.br')
+        .post('/SigepMasterJPA/AtendeClienteService/AtendeCliente')
+        .replyWithFile(200, path.join(__dirname, '/fixtures/response-cep-05010000-found.xml'))
+      nock('https://viacep.com.br')
+        .get('/ws/05010000/json/')
+        .replyWithFile(200, path.join(__dirname, '/fixtures/viacep-cep-05010000-found.json'))
+      const cepRequest = cep('05010000')
+      expect(cepRequest.then).to.be.a('function')
+      expect(cepRequest.catch).to.be.a('function')
     })
   })
 
