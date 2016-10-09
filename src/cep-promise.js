@@ -37,13 +37,7 @@ export default function (cepRawValue) {
     }
 
     function leftPadWithZeros (cepCleanValue) {
-      let cepWithLeftPad = cepCleanValue.toString()
-
-      while (cepWithLeftPad.length < CEP_SIZE) {
-        cepWithLeftPad = '0' + cepWithLeftPad
-      }
-
-      return cepWithLeftPad
+      return '0'.repeat(CEP_SIZE - cepCleanValue.length) + cepCleanValue
     }
 
     function validateInputLength (cepWithLeftPad) {
