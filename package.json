@@ -12,9 +12,10 @@
     "test-e2e-watch": "mocha --watch --compilers js:babel-core/register test/e2e/**/*.spec.js",
     "lint-check": "standard",
     "lint-fix": "standard --fix",
-    "build": "babel src --out-dir dist",
-    "build-web": "browserify dist/cep-promise.js -s cep -o | uglifyjs > web/cep-promise.min.js",
-    "prepublish": "npm run build && npm run build-web"
+    "build-node": "babel src --out-dir dist",
+    "build-web": "browserify src/cep-promise.js -s cep -t [ babelify --presets [ es2015 ] ] -o | uglifyjs > dist/cep-promise-browser.min.js",
+    "build": "npm run build-node && npm run build-web",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -33,13 +34,14 @@
     "babel-istanbul": "0.11.0",
     "babel-plugin-add-module-exports": "0.2.1",
     "babel-preset-es2015": "6.13.2",
-    "browserify": "^13.1.0",
+    "babelify": "7.3.0",
+    "browserify": "13.1.0",
     "chai": "3.5.0",
     "chai-as-promised": "5.3.0",
     "mocha": "3.0.1",
     "nock": "8.0.0",
     "standard": "7.1.2",
-    "uglify-js": "^2.7.3"
+    "uglify-js": "2.7.3"
   },
   "standard": {
     "parser": "babel-eslint",
@@ -51,6 +53,7 @@
   },
   "dependencies": {
     "bluebird": "^3.4.6",
+    "isomorphic-fetch": "2.2.1",
     "lodash.get": "4.4.2",
     "request": "^2.75.0",
     "request-promise": "^4.1.1",
