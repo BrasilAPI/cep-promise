@@ -1,8 +1,9 @@
 {
   "name": "cep-promise",
   "version": "1.0.3",
-  "description": "Busca por CEP integrado diretamente aos serviços dos Correios",
+  "description": "Busca por CEP integrado diretamente aos serviços dos Correios e ViaCEP",
   "main": "dist/cep-promise.js",
+  "browser": "dist/cep-promise-browser.min.js",
   "scripts": {
     "test": "npm run coverage",
     "coverage": "babel-node node_modules/.bin/babel-istanbul cover _mocha -- --timeout 30000 test/**/*.spec.js",
@@ -13,7 +14,7 @@
     "lint-check": "standard",
     "lint-fix": "standard --fix",
     "build-node": "babel src --out-dir dist",
-    "build-web": "browserify src/cep-promise.js -s cep -t [ babelify --presets [ es2015 ] ] -o | uglifyjs > dist/cep-promise-browser.min.js",
+    "build-web": "npm run build-node && rowserify dist/cep-promise.js -s cep -o | uglifyjs > dist/cep-promise-browser.min.js",
     "build": "npm run build-node && npm run build-web",
     "prepublish": "npm run build"
   },
@@ -34,7 +35,6 @@
     "babel-istanbul": "0.11.0",
     "babel-plugin-add-module-exports": "0.2.1",
     "babel-preset-es2015": "6.13.2",
-    "babelify": "7.3.0",
     "browserify": "13.1.0",
     "chai": "3.5.0",
     "chai-as-promised": "5.3.0",
@@ -52,11 +52,9 @@
     ]
   },
   "dependencies": {
-    "bluebird": "^3.4.6",
+    "bluebird": "3.4.6",
     "isomorphic-fetch": "2.2.1",
     "lodash.get": "4.4.2",
-    "request": "^2.75.0",
-    "request-promise": "^4.1.1",
     "xml2js": "0.4.16"
   }
 }

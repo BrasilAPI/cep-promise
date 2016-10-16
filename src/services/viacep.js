@@ -1,39 +1,39 @@
 'use strict'
 
-import request from 'request-promise'
+import fetch from 'isomorphic-fetch'
 
 function fetchViaCepService (cepWithLeftPad) {
+  const url = 'https://viacep.com.br/ws/' + cepWithLeftPad + '/json/'
   const options = {
     method: 'GET',
     uri: 'https://viacep.com.br/ws/' + cepWithLeftPad + '/json/',
+    mode: 'cors',
     headers: {
       'content-type': 'application/json;charset=utf-8'
     }
   }
-  return request(options)
-    .then((res) => {
-      if (JSON.parse(res).erro) {
-        throw new RangeError('CEP inválido')
-      }
-      return res
-    })
-    .then(parseResponse)
+
+  return fetch(url, options)
+    .then(response => response.json())
     .then(extractValuesFromParsedResponse)
     .catch((err) => {
       if (err instanceof RangeError) {
-        throw Object.assign(err, {service: 'viacep'})
+        throw Object.assign(err, {
+          service: 'viacep'
+        })
       }
-      throw Object.assign(err, {message: 'Erro ao se conectar com o serviços de ceps', service: 'viacep'})
+      throw Object.assign(err, {
+        message: 'Erro ao se conectar com o serviço ViaCEP',
+        service: 'viacep'
+      })
     })
 }
 
-function parseResponse (responseString) {
-  return new Promise((resolve, reject) => {
-    resolve(JSON.parse(responseString))
-  })
-}
-
 function extractValuesFromParsedResponse (responseObject) {
+  if (responseObject.erro === true) {
+    throw new RangeError('CEP não encontrado na base do ViaCEP')
+  }
+
   return {
     cep: responseObject.cep.replace('-', ''),
     state: responseObject.uf,
