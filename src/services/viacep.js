@@ -7,8 +7,7 @@ function fetchViaCepService (cepWithLeftPad) {
     method: 'GET',
     uri: 'https://viacep.com.br/ws/' + cepWithLeftPad + '/json/',
     headers: {
-      'content-type': 'application/json;charset=utf-8',
-      'cache-control': 'no-cache'
+      'content-type': 'application/json;charset=utf-8'
     }
   }
   return request(options)

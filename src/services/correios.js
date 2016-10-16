@@ -14,13 +14,14 @@ function fetchCorreiosService (cepWithLeftPad) {
     simple: false,
     uri: 'https://apps.correios.com.br/SigepMasterJPA/AtendeClienteService/AtendeCliente',
     body: '<?xml version="1.0"?>\n<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:cli="http://cliente.bean.master.sigep.bsb.correios.com.br/">\n  <soapenv:Header />\n  <soapenv:Body>\n    <cli:consultaCEP>\n      <cep>' + cepWithLeftPad + '</cep>\n    </cli:consultaCEP>\n  </soapenv:Body>\n</soapenv:Envelope>',
+    mode: 'no-cors',
     headers: {
       'Content-Type': 'text/xml; charset=utf-8',
       'cache-control': 'no-cache'
     }
   }
   return request(options)
-    .then((response) => validateXmlResponse(response))
+    .then(validateXmlResponse)
     .then(parseResponse)
     .then(extractValuesFromParsedResponse)
     .catch({message: 'CEP NAO ENCONTRADO'}, (err) => {

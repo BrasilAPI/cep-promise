@@ -19,8 +19,15 @@ describe('cep-promise (unit)', () => {
 
   describe('when invoked', () => {
     it('should return a Promise', () => {
-      expect(cep().then).to.be.a('function')
-      expect(cep().catch).to.be.a('function')
+      nock('https://apps.correios.com.br')
+        .post('/SigepMasterJPA/AtendeClienteService/AtendeCliente')
+        .replyWithFile(200, path.join(__dirname, '/fixtures/response-cep-05010000-found.xml'))
+      nock('https://viacep.com.br')
+        .get('/ws/05010000/json/')
+        .replyWithFile(200, path.join(__dirname, '/fixtures/viacep-cep-05010000-found.json'))
+      const cepRequest = cep('05010000')
+      expect(cepRequest.then).to.be.a('function')
+      expect(cepRequest.catch).to.be.a('function')
     })
   })
 
@@ -101,6 +108,9 @@ describe('cep-promise (unit)', () => {
       nock('https://apps.correios.com.br')
         .post('/SigepMasterJPA/AtendeClienteService/AtendeCliente')
         .replyWithFile(500, path.join(__dirname, '/fixtures/response-cep-not-found.xml'))
+      nock('https://viacep.com.br')
+        .get('/ws/99999999/json/')
+        .replyWithFile(200, path.join(__dirname, '/fixtures/viacep-cep-99999999-error.json'))
 
       return expect(cep('99999999')).to.be.rejected.and.to.eventually.deep.include({
         type: 'range_error',
@@ -115,6 +125,9 @@ describe('cep-promise (unit)', () => {
       nock('https://apps.correios.com.br')
         .post('/SigepMasterJPA/AtendeClienteService/AtendeCliente')
         .replyWithFile(500, path.join(__dirname, '/fixtures/response-cep-not-found.xml'))
+      nock('https://viacep.com.br')
+        .get('/ws/99999999/json/')
+        .reply(400, '<h2>Bad Request (400)</h2>')
 
       return expect(cep('1')).to.be.rejected.and.to.eventually.deep.include({
         type: 'range_error',

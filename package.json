@@ -13,7 +13,8 @@
     "lint-check": "standard",
     "lint-fix": "standard --fix",
     "build": "babel src --out-dir dist",
-    "prepublish": "npm run build"
+    "build-web": "browserify dist/cep-promise.js -s cep -o | uglifyjs > web/cep-promise.min.js",
+    "prepublish": "npm run build && npm run build-web"
   },
   "repository": {
     "type": "git",
@@ -32,11 +33,13 @@
     "babel-istanbul": "0.11.0",
     "babel-plugin-add-module-exports": "0.2.1",
     "babel-preset-es2015": "6.13.2",
+    "browserify": "^13.1.0",
     "chai": "3.5.0",
     "chai-as-promised": "5.3.0",
     "mocha": "3.0.1",
     "nock": "8.0.0",
-    "standard": "7.1.2"
+    "standard": "7.1.2",
+    "uglify-js": "^2.7.3"
   },
   "standard": {
     "parser": "babel-eslint",
