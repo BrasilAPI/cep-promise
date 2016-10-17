@@ -19,8 +19,15 @@ describe('cep-promise (unit)', () => {
 
   describe('when invoked', () => {
     it('should return a Promise', () => {
-      expect(cep().then).to.be.a('function')
-      expect(cep().catch).to.be.a('function')
+      nock('https://apps.correios.com.br')
+        .post('/SigepMasterJPA/AtendeClienteService/AtendeCliente')
+        .replyWithFile(200, path.join(__dirname, '/fixtures/response-cep-05010000-found.xml'))
+      nock('https://viacep.com.br')
+        .get('/ws/05010000/json/')
+        .replyWithFile(200, path.join(__dirname, '/fixtures/viacep-cep-05010000-found.json'))
+      const cepRequest = cep('05010000')
+      expect(cepRequest.then).to.be.a('function')
+      expect(cepRequest.catch).to.be.a('function')
     })
   })
 
@@ -29,7 +36,7 @@ describe('cep-promise (unit)', () => {
       return expect(cep()).to.be.rejected.and.to.eventually.contain({
         type: 'type_error',
         message: 'Você deve chamar o construtor utilizando uma String ou Number',
-        service: undefined
+        service: 'cep-promise'
       })
     })
   })
@@ -39,7 +46,7 @@ describe('cep-promise (unit)', () => {
       expect(cep([1, 2, 3])).to.be.rejected.and.to.eventually.contain({
         type: 'type_error',
         message: 'Você deve chamar o construtor utilizando uma String ou Number',
-        service: undefined
+        service: 'cep-promise'
       })
     })
   })
@@ -49,7 +56,7 @@ describe('cep-promise (unit)', () => {
       return expect(cep({ nintendo: true, ps: false, xbox: false })).to.be.rejected.and.to.eventually.contain({
         type: 'type_error',
         message: 'Você deve chamar o construtor utilizando uma String ou Number',
-        service: undefined
+        service: 'cep-promise'
       })
     })
   })
@@ -59,7 +66,7 @@ describe('cep-promise (unit)', () => {
       return expect(cep(function zelda () { return 'link' })).to.be.rejected.and.to.eventually.contain({
         type: 'type_error',
         message: 'Você deve chamar o construtor utilizando uma String ou Number',
-        service: undefined
+        service: 'cep-promise'
       })
     })
   })
@@ -101,26 +108,21 @@ describe('cep-promise (unit)', () => {
       nock('https://apps.correios.com.br')
         .post('/SigepMasterJPA/AtendeClienteService/AtendeCliente')
         .replyWithFile(500, path.join(__dirname, '/fixtures/response-cep-not-found.xml'))
+      nock('https://viacep.com.br')
+        .get('/ws/99999999/json/')
+        .replyWithFile(200, path.join(__dirname, '/fixtures/viacep-cep-99999999-error.json'))
 
-      return expect(cep('99999999')).to.be.rejected.and.to.eventually.deep.include({
-        type: 'range_error',
-        message: 'CEP não encontrado na base dos Correios',
-        service: 'correios'
-      })
-    })
-  })
-
-  describe('when invoked with an inexistend "1" cep', () => {
-    it('should reject with "range_error"', () => {
-      nock('https://apps.correios.com.br')
-        .post('/SigepMasterJPA/AtendeClienteService/AtendeCliente')
-        .replyWithFile(500, path.join(__dirname, '/fixtures/response-cep-not-found.xml'))
-
-      return expect(cep('1')).to.be.rejected.and.to.eventually.deep.include({
-        type: 'range_error',
-        message: 'CEP não encontrado na base dos Correios',
-        service: 'correios'
-      })
+      return expect(cep('99999999')).to.be.rejected.and.to.eventually.deep
+        .include({
+          type: 'range_error',
+          message: 'CEP não encontrado na base dos Correios',
+          service: 'correios'
+        })
+        .include({
+          type: 'range_error',
+          message: 'CEP não encontrado na base do ViaCEP',
+          service: 'viacep'
+        })
     })
   })
 
@@ -133,7 +135,7 @@ describe('cep-promise (unit)', () => {
       return expect(cep('123456789')).to.be.rejected.and.to.eventually.deep.include({
         type: 'type_error',
         message: 'CEP deve conter exatamente 8 caracteres',
-        service: undefined
+        service: 'cep-promise'
       })
     })
   })
@@ -199,11 +201,17 @@ describe('cep-promise (unit)', () => {
       nock('https://viacep.com.br')
         .get('/ws/05010000/json/')
         .reply(400, '<h2>Bad Request (400)</h2>')
-      return expect(cep('05010000')).to.be.rejected.and.to.eventually.deep.include({
-        type: 'error',
-        message: 'Erro ao se conectar com o serviços de ceps',
-        service: 'viacep'
-      })
+      return expect(cep('05010000')).to.be.rejected.and.to.eventually.deep
+        .include({
+          type: 'error',
+          message: 'Erro ao se conectar com o serviço dos Correios',
+          service: 'correios'
+        })
+        .include({
+          type: 'error',
+          message: 'Erro ao se conectar com o serviço ViaCEP',
+          service: 'viacep'
+        })
     })
   })
   describe('when http request has unformated xml and secondary service fails', () => {
@@ -214,11 +222,18 @@ describe('cep-promise (unit)', () => {
       nock('https://viacep.com.br')
         .get('/ws/05010000/json/')
         .reply(400, '<h2>Bad Request (400)</h2>')
-      return expect(cep('05010000')).to.be.rejected.and.to.eventually.deep.include({
-        type: 'error',
-        message: 'Erro ao se conectar com o serviços de ceps',
-        service: 'viacep'
-      })
+
+      return expect(cep('05010000')).to.be.rejected.and.to.eventually.deep
+        .include({
+          type: 'type_error',
+          message: 'Não foi possível interpretar o XML de resposta',
+          service: 'correios'
+        })
+        .include({
+          type: 'error',
+          message: 'Erro ao se conectar com o serviço ViaCEP',
+          service: 'viacep'
+        })
     })
   })
 
@@ -230,11 +245,18 @@ describe('cep-promise (unit)', () => {
       nock('https://viacep.com.br')
         .get('/ws/05010000/json/')
         .replyWithError('getaddrinfo ENOTFOUND apps.correios.com.br apps.correios.com.br:443')
-      return expect(cep('05010000')).to.be.rejected.and.to.eventually.deep.include({
-        type: 'error',
-        message: 'Erro ao se conectar com o serviços de ceps',
-        service: 'viacep'
-      })
+
+      return expect(cep('05010000')).to.be.rejected.and.to.eventually.deep
+        .include({
+          type: 'error',
+          message: 'Erro ao se conectar com o serviço dos Correios',
+          service: 'correios'
+        })
+        .include({
+          type: 'error',
+          message: 'Erro ao se conectar com o serviço ViaCEP',
+          service: 'viacep'
+        })
     })
   })
 
@@ -245,7 +267,8 @@ describe('cep-promise (unit)', () => {
         .replyWithFile(500, path.join(__dirname, '/fixtures/response-cep-invalid-format.xml'))
       nock('https://viacep.com.br')
         .get('/ws/05010000/json/')
-        .replyWithError('getaddrinfo ENOTFOUND apps.correios.com.br apps.correios.com.br:443')
+        .replyWithError('getaddrinfo ENOTFOUND viacep.com.br viacep.com.br:443')
+
       return expect(cep('05010000')).to.be.rejected.and.to.eventually.deep.include({
         type: 'range_error',
         message: 'CEP deve conter exatamente 8 caracteres',
