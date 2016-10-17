@@ -52,9 +52,9 @@ export default function (cepRawValue) {
         getCorreios(cepWithLeftPad),
         getViaCep(cepWithLeftPad)
       ])
-        .catch(Promise.AggregateError, (err) => {
-          throw err
-        })
+      .catch(Promise.AggregateError, (err) => {
+        throw err
+      })
     }
 
     function finish (addressObject) {
@@ -62,6 +62,8 @@ export default function (cepRawValue) {
     }
 
     function errorHandler (error) {
+      error.service = error.service || 'cep-promise'
+
       if (error instanceof TypeError) {
         return {
           type: 'type_error',

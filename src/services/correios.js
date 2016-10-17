@@ -2,56 +2,44 @@
 
 import xml2js from 'xml2js'
 import _get from 'lodash.get'
-import request from 'request-promise'
+import fetch from 'isomorphic-fetch'
 
 const parseXMLString = xml2js.parseString
 
 const CEP_SIZE = 8
 
 function fetchCorreiosService (cepWithLeftPad) {
+  const url = 'https://apps.correios.com.br/SigepMasterJPA/AtendeClienteService/AtendeCliente'
   const options = {
     method: 'POST',
-    simple: false,
-    uri: 'https://apps.correios.com.br/SigepMasterJPA/AtendeClienteService/AtendeCliente',
     body: '<?xml version="1.0"?>\n<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:cli="http://cliente.bean.master.sigep.bsb.correios.com.br/">\n  <soapenv:Header />\n  <soapenv:Body>\n    <cli:consultaCEP>\n      <cep>' + cepWithLeftPad + '</cep>\n    </cli:consultaCEP>\n  </soapenv:Body>\n</soapenv:Envelope>',
+    mode: 'no-cors',
     headers: {
       'Content-Type': 'text/xml; charset=utf-8',
       'cache-control': 'no-cache'
     }
   }
-  return request(options)
-    .then((response) => validateXmlResponse(response))
+  return fetch(url, options)
     .then(parseResponse)
-    .then(extractValuesFromParsedResponse)
-    .catch({message: 'CEP NAO ENCONTRADO'}, (err) => {
-      throw Object.assign(err, {message: 'CEP não encontrado na base dos Correios'})
-    })
-    .catch({message: 'BUSCA DEFINIDA COMO EXATA, 0 CEP DEVE TER 8 DIGITOS'}, (err) => {
-      throw Object.assign(err, {message: 'CEP deve conter exatamente ' + CEP_SIZE + ' caracteres'})
-    })
-    .catch((err) => {
-      throw Object.assign(err, {service: 'correios'})
-    })
+    .catch(throwError)
 }
 
-function validateXmlResponse (response) {
-  return new Promise((resolve, reject) => {
-    parseXMLString(response, (err, xmlObject) => {
-      let errorMessage = _get(xmlObject, 'soap:Envelope.soap:Body[0].soap:Fault[0].faultstring')
-      if (errorMessage) {
-        reject(new RangeError(errorMessage))
-      }
-      if (!err && _get(xmlObject, 'soap:Envelope.soap:Body[0].ns2:consultaCEPResponse[0].return[0]')) {
-        resolve(response)
-      }
-      reject(err)
-    })
-  })
+function parseResponse (response) {
+  if (response.ok) {
+    return response.text()
+      .then(parseXML)
+      .then(extractValuesFromSuccessResponse)
+  }
+
+  return response.text()
+    .then(parseXML)
+    .then(translateErrorMessage)
+    .then(throwRangeError)
 }
 
-function parseResponse (responseString) {
+function parseXML (xmlString) {
   return new Promise((resolve, reject) => {
-    parseXMLString(responseString, (err, responseObject) => {
+    parseXMLString(xmlString, (err, responseObject) => {
       if (!err) {
         resolve(responseObject)
       }
@@ -60,8 +48,24 @@ function parseResponse (responseString) {
   })
 }
 
-function extractValuesFromParsedResponse (responseObject) {
-  let addressValues = _get(responseObject, 'soap:Envelope.soap:Body[0].ns2:consultaCEPResponse[0].return[0]')
+function translateErrorMessage (xmlObject) {
+  let errorMessageFromCorreios = _get(xmlObject, 'soap:Envelope.soap:Body[0].soap:Fault[0].faultstring[0]')
+
+  const dictionary = {
+    'CEP NAO ENCONTRADO': 'CEP não encontrado na base dos Correios',
+    'BUSCA DEFINIDA COMO EXATA, 0 CEP DEVE TER 8 DIGITOS': 'CEP deve conter exatamente ' + CEP_SIZE + ' caracteres'
+  }
+
+  return dictionary[errorMessageFromCorreios] || errorMessageFromCorreios
+}
+
+function throwRangeError (translatedErrorMessage) {
+  throw new RangeError(translatedErrorMessage)
+}
+
+function extractValuesFromSuccessResponse (xmlObject) {
+  let addressValues = _get(xmlObject, 'soap:Envelope.soap:Body[0].ns2:consultaCEPResponse[0].return[0]')
+
   return {
     cep: _get(addressValues, 'cep[0]'),
     state: _get(addressValues, 'uf[0]'),
@@ -69,6 +73,14 @@ function extractValuesFromParsedResponse (responseObject) {
     neighborhood: _get(addressValues, 'bairro[0]'),
     street: _get(addressValues, 'end[0]')
   }
+}
+
+function throwError (error) {
+  if (error.name === 'FetchError') {
+    error.message = 'Erro ao se conectar com o serviço dos Correios'
+  }
+
+  throw Object.assign(error, { service: 'correios' })
 }
 
 export default fetchCorreiosService

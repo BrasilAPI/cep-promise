@@ -43,7 +43,7 @@ describe('cep-promise (E2E)', () => {
         })
         .include({
           type: 'range_error',
-          message: 'CEP inválido',
+          message: 'CEP não encontrado na base do ViaCEP',
           service: 'viacep'
         })
     })
@@ -59,7 +59,7 @@ describe('cep-promise (E2E)', () => {
         })
         .include({
           type: 'range_error',
-          message: 'CEP inválido',
+          message: 'CEP não encontrado na base do ViaCEP',
           service: 'viacep'
         })
     })
@@ -70,7 +70,7 @@ describe('cep-promise (E2E)', () => {
       return expect(cep('123456789')).to.be.rejected.and.to.eventually.contain({
         type: 'type_error',
         message: 'CEP deve conter exatamente 8 caracteres',
-        service: undefined
+        service: 'cep-promise'
       })
     })
   })
