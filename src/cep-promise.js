@@ -3,6 +3,7 @@
 import getCorreios from './services/correios.js'
 import getViaCep from './services/viacep.js'
 import Promise from 'bluebird'
+import AggregateError from './utils/custom-errors.js'
 
 const CEP_SIZE = 8
 
@@ -16,11 +17,13 @@ export default function (cepRawValue) {
       .then(getCep)
       .then(finish)
       .catch(Promise.AggregateError, (err) => {
-        return reject(err.map((error) => {
-          return errorHandler(error)
-        }))
+        return reject(
+          new AggregateError(err.map((error) => {
+            return errorHandler(error)
+          }))
+        )
       })
-      .catch((err) => reject([errorHandler(err)]))
+      .catch((err) => reject(new AggregateError([errorHandler(err)])))
 
     function validateInputType (cepRawValue) {
       let cepTypeOf = typeof cepRawValue
@@ -65,26 +68,26 @@ export default function (cepRawValue) {
       error.service = error.service || 'cep-promise'
 
       if (error instanceof TypeError) {
-        return {
+        return Object.assign({
           type: 'type_error',
           message: error.message,
           service: error.service
-        }
+        }, error)
       }
 
       if (error instanceof RangeError) {
-        return {
+        return Object.assign({
           type: 'range_error',
           message: error.message,
           service: error.service
-        }
+        }, error)
       }
       if (error instanceof Error) {
-        return {
+        return Object.assign({
           type: 'error',
           message: error.message,
           service: error.service
-        }
+        }, error)
       }
     }
   })
