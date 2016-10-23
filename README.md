@@ -20,15 +20,15 @@
 </p>
 
 <p align="center">
-  Busca por CEP integrado diretamente aos serviços dos Correios e ViaCEP
+  Busca por CEP integrado diretamente aos serviços dos Correios e ViaCEP (Node.js e Browser)
 </p>
 
 ## Features
 
  * Sempre atualizado em tempo-real por se conectar diretamente aos serviços dos Correios ou ViaCEP
  * Possui alta disponibilidade por usar serviços como fallback
- * Sempre retorna a resposta mais rápida por usar concorrência
- * Sem limites de uso (rate limit) conhecidos
+ * Sempre retorna a resposta mais rápida por fazer as consultas de forma concorrente
+ * Sem limites de uso (rate limits) conhecidos
  * Interface de Promise extremamente simples
  * Suporte ao Node.js `0.10.x`, `0.12.x`, `4.x`, `5.x`, `6.x` e `@stable`
  * 100% de code coverage com testes unitários e E2E
@@ -50,10 +50,10 @@ $ npm install --save cep-promise
 Por ser multifornecedor, a biblioteca irá resolver a Promise com o fornecedor que mais rápido lhe responder.
 
 ``` js
-import cep from 'cep-promise';
+import cep from 'cep-promise'
 
 cep('05010000')
-  .then(console.log);
+  .then(console.log)
 
   // {
   //   "zipcode":  "05010000",
@@ -70,11 +70,11 @@ cep('05010000')
 Em muitos sistemas o CEP é utilizado erroneamente como um Inteiro (e com isto cortanto todos os zeros à esquerda). Caso este seja o seu caso, não há problema, pois a biblioteca irá preencher os caracteres faltantes na String, por exemplo:
 
 ``` js
-import cep from 'cep-promise';
+import cep from 'cep-promise'
 
 // enviando sem ter um zero à esquerda do CEP "05010000"
 cep(5010000)
-  .then(console.log);
+  .then(console.log)
 
   // {
   //   "zipcode":  "05010000",
@@ -87,45 +87,46 @@ cep(5010000)
 
 ### Quando o CEP não é encontrado
 
-Por ser multifornecedor, a biblioteca irá rejeitar a Promise apenas quando tiver a resposta negativa de todos os fornecedores.
+Neste caso será retornado um `"service_error"` e por ser multifornecedor, a biblioteca irá rejeitar a Promise apenas quando tiver a resposta negativa de todos os fornecedores.
 
 ``` js
-import cep from 'cep-promise';
+import cep from 'cep-promise'
 
 cep('99999999')
-  .catch(console.log);
+  .catch(console.log)
 
-  // [
-  //   {
-  //     "type": "range_error",
-  //     "message": "CEP não encontrado na base dos Correios",
-  //     "service": 'correios'
-  //   },
-  //   {
-  //     "type": "range_error",
-  //     "message": "CEP inválido",
-  //     "service": "viacep"
-  //   }
-  // ]
+  // {
+  //     message: 'Todos os serviços de CEP retornaram erro.',
+  //     type: 'service_error',
+  //     errors: [{
+  //       message: 'CEP NAO ENCONTRADO',
+  //       service: 'correios'
+  //     }, {
+  //       message: 'CEP não encontrado na base do ViaCEP.',
+  //       service: 'viacep'
+  //     }]
+  // }
+
 ```
 
 ### Quando o CEP possui um formato inválido
 
-Neste caso a biblioteca irá rejeitar imediatamente a Promise, sem chegar a consultar nenhum fornecedor.
+Neste caso será retornado um `"validation_error"` e a biblioteca irá rejeitar imediatamente a Promise, sem chegar a consultar nenhum fornecedor.
 
 ``` js
-import cep from 'cep-promise';
+import cep from 'cep-promise'
 
 cep('123456789123456789')
-  .catch(console.log);
+  .catch(console.log)
 
-  // [
-  //   {
-  //     "type": "type_error",
-  //     "message": "CEP deve conter exatamente 8 caracteres",
-  //     "service": undefined
-  //   }
-  // ]
+  // {
+  //     message: 'CEP deve conter exatamente 8 caracteres.',
+  //     type: 'validation_error',
+  //     errors: [{
+  //       message: 'CEP informado possui mais do que 8 caracteres.',
+  //       service: 'cep_validation'
+  //     }]
+  // }
 ```
 
 ## Contribuidores
