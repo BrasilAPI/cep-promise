@@ -2,8 +2,8 @@
 
 import fetchCorreios from './services/correios.js'
 import fetchViaCep from './services/viacep.js'
-import Promise from 'bluebird'
 import CepPromiseError from './errors/cep-promise.js'
+import Promise from './utils/promise-any.js'
 
 const CEP_SIZE = 8
 
@@ -16,7 +16,7 @@ export default function (cepRawValue) {
       .then(leftPadWithZeros)
       .then(fetchCepFromServices)
       .then(resolvePromise)
-      .catch(Promise.AggregateError, handleServicesError)
+      .catch(handleServicesError)
       .catch(rejectWithCepPromiseError)
 
     function validateInputType (cepRawValue) {
@@ -71,18 +71,14 @@ export default function (cepRawValue) {
     }
 
     function handleServicesError (aggregatedErrors) {
-      const errors = aggregatedErrors.map((error) => {
-        return {
-          message: error.message,
-          service: error.service
-        }
-      })
-
-      throw new CepPromiseError({
-        message: 'Todos os serviços de CEP retornaram erro.',
-        type: 'service_error',
-        errors: errors
-      })
+      if (aggregatedErrors.length !== undefined) {
+        throw new CepPromiseError({
+          message: 'Todos os serviços de CEP retornaram erro.',
+          type: 'service_error',
+          errors: aggregatedErrors
+        })
+      }
+      throw aggregatedErrors
     }
 
     function rejectWithCepPromiseError (error) {
