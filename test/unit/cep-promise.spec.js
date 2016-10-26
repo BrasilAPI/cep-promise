@@ -147,7 +147,7 @@ describe('cep-promise (unit)', () => {
     })
   })
 
-  describe('when request returns with error but with an unkown XML schema and then succeed to the failover service', () => {
+  describe('when request returns with error but with an unknown XML schema and then succeed to the failover service', () => {
     it('should fulfill with correct address', () => {
       nock('https://apps.correios.com.br')
         .post('/SigepMasterJPA/AtendeClienteService/AtendeCliente')
@@ -166,7 +166,7 @@ describe('cep-promise (unit)', () => {
     })
   })
 
-  describe('when its not possible to parse the returning XML and then succeed to the failover service', () => {
+  describe('when its not possible to parse the returned XML and then succeed to the failover service', () => {
     it('should fulfill with correct address', () => {
       nock('https://apps.correios.com.br')
         .post('/SigepMasterJPA/AtendeClienteService/AtendeCliente')
@@ -204,7 +204,7 @@ describe('cep-promise (unit)', () => {
     })
   })
 
-  describe('when invoked with an inexistend "99999999" CEP', () => {
+  describe('when invoked with an inexistent "99999999" CEP', () => {
     it('should reject with "service_error"', () => {
       nock('https://apps.correios.com.br')
         .post('/SigepMasterJPA/AtendeClienteService/AtendeCliente')
@@ -279,7 +279,7 @@ describe('cep-promise (unit)', () => {
     })
   })
 
-  describe('when http request has unformated xml and secondary service fails', () => {
+  describe('when http request has unformatted xml and secondary service fails', () => {
     it('should reject with "service_error"', () => {
       nock('https://apps.correios.com.br')
         .post('/SigepMasterJPA/AtendeClienteService/AtendeCliente')
