@@ -3,13 +3,9 @@
 import fetchCorreios from './services/correios.js'
 import fetchViaCep from './services/viacep.js'
 import CepPromiseError from './errors/cep-promise.js'
+import Promise from './utils/promise-any.js'
 
 const CEP_SIZE = 8
-
-const reverse = (promise) => new Promise((resolve, reject) => Promise.resolve(promise).then(reject, resolve))
-Promise.any = function (iterable) {
-  return reverse(Promise.all([...iterable].map(reverse)))
-}
 
 export default function (cepRawValue) {
   return new Promise((resolve, reject) => {
