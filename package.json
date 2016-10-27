@@ -32,6 +32,9 @@
       ]
     ]
   },
+  "browser": {
+    "./src/services/correios.js": "./src/services/correios-browser-mock.js"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/filipedeschamps/cep-promise.git"
