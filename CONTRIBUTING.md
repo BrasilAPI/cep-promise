@@ -23,5 +23,6 @@ Você pode criar uma issue [aqui](https://github.com/filipedeschamps/cep-promise
 ## Submetendo Pull Requests
 * Crie pull requests pequenos, para que a revisão seja feita mais facilmente
 * Inclua detalhes do que está sendo feito na descrição
-* Altera a documentação se necessário
-* Não esqueça de verificar o build!
+* Altera a documentação se for necessário
+* Verifique se todos os testes estão passando localmente
+* Não esqueça de verificar o build com as validações de teste coverage e build no travis-ci
