@@ -43,6 +43,7 @@ describe('cep-promise (unit)', () => {
           return expect(error)
             .to.be.an.instanceOf(CepPromiseError)
             .and.containSubset({
+              name: 'CepPromiseError',
               message: 'Erro ao inicializar a instância do CepPromise.',
               type: 'validation_error',
               errors: [{
@@ -61,6 +62,7 @@ describe('cep-promise (unit)', () => {
           return expect(error)
             .to.be.an.instanceOf(CepPromiseError)
             .and.containSubset({
+              name: 'CepPromiseError',
               message: 'Erro ao inicializar a instância do CepPromise.',
               type: 'validation_error',
               errors: [{
@@ -79,6 +81,7 @@ describe('cep-promise (unit)', () => {
           return expect(error)
             .to.be.an.instanceOf(CepPromiseError)
             .and.containSubset({
+              name: 'CepPromiseError',
               message: 'Erro ao inicializar a instância do CepPromise.',
               type: 'validation_error',
               errors: [{
@@ -97,6 +100,7 @@ describe('cep-promise (unit)', () => {
           return expect(error)
             .to.be.an.instanceOf(CepPromiseError)
             .and.containSubset({
+              name: 'CepPromiseError',
               message: 'Erro ao inicializar a instância do CepPromise.',
               type: 'validation_error',
               errors: [{
@@ -219,6 +223,7 @@ describe('cep-promise (unit)', () => {
           return expect(error)
             .to.be.an.instanceOf(CepPromiseError)
             .and.containSubset({
+              name: 'CepPromiseError',
               message: 'Todos os serviços de CEP retornaram erro.',
               type: 'service_error',
               errors: [{
@@ -240,6 +245,7 @@ describe('cep-promise (unit)', () => {
           return expect(error)
             .to.be.an.instanceOf(CepPromiseError)
             .and.containSubset({
+              name: 'CepPromiseError',
               message: 'CEP deve conter exatamente 8 caracteres.',
               type: 'validation_error',
               errors: [{
@@ -265,6 +271,7 @@ describe('cep-promise (unit)', () => {
           return expect(error)
             .to.be.an.instanceOf(CepPromiseError)
             .and.containSubset({
+              name: 'CepPromiseError',
               message: 'Todos os serviços de CEP retornaram erro.',
               type: 'service_error',
               errors: [{
@@ -293,6 +300,7 @@ describe('cep-promise (unit)', () => {
           return expect(error)
             .to.be.an.instanceOf(CepPromiseError)
             .and.containSubset({
+              name: 'CepPromiseError',
               message: 'Todos os serviços de CEP retornaram erro.',
               type: 'service_error',
               errors: [{
@@ -321,6 +329,7 @@ describe('cep-promise (unit)', () => {
           return expect(error)
             .to.be.an.instanceOf(CepPromiseError)
             .and.containSubset({
+              name: 'CepPromiseError',
               message: 'Todos os serviços de CEP retornaram erro.',
               type: 'service_error',
               errors: [{
