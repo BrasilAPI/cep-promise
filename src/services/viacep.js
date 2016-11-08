@@ -6,7 +6,7 @@ import ServiceError from '../errors/service.js'
 function fetchViaCepService (cepWithLeftPad) {
 
   return new Promise((resolve, reject) => {
-    const url = 'https://viacep.com.br/ws/' + cepWithLeftPad + '/json/'
+    const url = `https://viacep.com.br/ws/${cepWithLeftPad}/json/`
     const options = {
       method: 'GET',
       mode: 'cors',

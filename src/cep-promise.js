@@ -30,7 +30,7 @@ export default function (cepRawValue) {
         message: 'Erro ao inicializar a instância do CepPromise.',
         type: 'validation_error',
         errors: [{
-          message: 'Você deve chamar o construtor utilizando uma String ou Number.',
+          message: 'Você deve chamar o construtor utilizando uma String ou um Number.',
           service: 'cep_validation'
         }]
       })
@@ -50,10 +50,10 @@ export default function (cepRawValue) {
       }
 
       throw new CepPromiseError({
-        message: 'CEP deve conter exatamente 8 caracteres.',
+        message: `CEP deve conter exatamente ${CEP_SIZE} caracteres.`,
         type: 'validation_error',
         errors: [{
-          message: 'CEP informado possui mais do que 8 caracteres.',
+          message: `CEP informado possui mais do que ${CEP_SIZE} caracteres.`,
           service: 'cep_validation'
         }]
       })
