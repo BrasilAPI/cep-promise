@@ -30,7 +30,7 @@ export default function (cepRawValue) {
         message: 'Erro ao inicializar a instância do CepPromise.',
         type: 'validation_error',
         errors: [{
-          message: 'Você deve chamar o construtor utilizando uma String ou Number.',
+          message: 'Você deve chamar o construtor utilizando uma String ou um Number.',
           service: 'cep_validation'
         }]
       })
