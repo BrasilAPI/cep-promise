@@ -96,6 +96,7 @@ cep('99999999')
   .catch(console.log)
 
   // {
+  //     name: 'CepPromiseError',
   //     message: 'Todos os serviços de CEP retornaram erro.',
   //     type: 'service_error',
   //     errors: [{
@@ -120,6 +121,7 @@ cep('123456789123456789')
   .catch(console.log)
 
   // {
+  //     name: 'CepPromiseError',
   //     message: 'CEP deve conter exatamente 8 caracteres.',
   //     type: 'validation_error',
   //     errors: [{
