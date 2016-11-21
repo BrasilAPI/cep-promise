@@ -1,5 +1,4 @@
-function CepPromiseError (options) {
-  options = options || {}
+function CepPromiseError (options = {}) {
   this.name = 'CepPromiseError'
   this.message = options.message
   this.type = options.type
