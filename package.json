@@ -46,21 +46,21 @@
   },
   "homepage": "https://github.com/filipedeschamps/cep-promise",
   "devDependencies": {
-    "babel-cli": "6.11.4",
-    "babel-core": "6.13.2",
-    "babel-eslint": "6.1.2",
+    "babel-cli": "6.18.0",
+    "babel-core": "6.18.2",
+    "babel-eslint": "7.1.1",
     "babel-istanbul": "0.11.0",
     "babel-plugin-add-module-exports": "0.2.1",
-    "babel-preset-es2015": "6.13.2",
+    "babel-preset-es2015": "6.18.0",
     "babelify": "7.3.0",
-    "browserify": "13.1.0",
+    "browserify": "13.1.1",
     "chai": "3.5.0",
-    "chai-as-promised": "5.3.0",
+    "chai-as-promised": "6.0.0",
     "chai-subset": "1.3.0",
-    "mocha": "3.0.1",
-    "nock": "8.0.0",
-    "standard": "7.1.2",
-    "uglify-js": "2.7.3"
+    "mocha": "3.2.0",
+    "nock": "9.0.2",
+    "standard": "8.6.0",
+    "uglify-js": "2.7.5"
   },
   "standard": {
     "parser": "babel-eslint",
@@ -73,6 +73,6 @@
   "dependencies": {
     "isomorphic-fetch": "2.2.1",
     "lodash.get": "4.4.2",
-    "xml2js": "0.4.16"
+    "xml2js": "0.4.17"
   }
 }
