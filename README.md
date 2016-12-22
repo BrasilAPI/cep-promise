@@ -56,7 +56,7 @@ cep('05010000')
   .then(console.log)
 
   // {
-  //   "zipcode":  "05010000",
+  //   "cep":  "05010000",
   //   "state":  "SP",
   //   "city":  "São Paulo",
   //   "street":  "Rua Caiubí",
@@ -77,7 +77,7 @@ cep(5010000)
   .then(console.log)
 
   // {
-  //   "zipcode":  "05010000",
+  //   "cep":  "05010000",
   //   "state":  "SP",
   //   "city":  "São Paulo",
   //   "street":  "Rua Caiubí",
