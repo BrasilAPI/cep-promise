@@ -5,7 +5,6 @@ function CepPromiseError ({ message, type, errors } = {}) {
   this.errors = errors
 }
 
-CepPromiseError.prototype = Object.create(Error.prototype)
-CepPromiseError.prototype.constructor = CepPromiseError
+CepPromiseError.prototype = new Error()
 
 export default CepPromiseError

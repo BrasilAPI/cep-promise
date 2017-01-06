@@ -4,7 +4,6 @@ function ServiceError ({ message, service } = {}) {
   this.service = service
 }
 
-ServiceError.prototype = Object.create(Error.prototype)
-ServiceError.prototype.constructor = Error
+ServiceError.prototype = new Error()
 
 export default ServiceError
