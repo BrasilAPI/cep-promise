@@ -1,12 +1,9 @@
-function ServiceError (options) {
-  options = options || {}
+function ServiceError ({ message, service } = {}) {
   this.name = 'ServiceError'
-  this.message = options.message
-  this.service = options.service
+  this.message = message
+  this.service = service
 }
 
-ServiceError.prototype = Object.create(Error.prototype)
-ServiceError.prototype.constructor = Error
+ServiceError.prototype = new Error()
 
 export default ServiceError
-

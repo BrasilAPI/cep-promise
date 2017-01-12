@@ -1,11 +1,10 @@
-function CepPromiseError (options = {}) {
+function CepPromiseError ({ message, type, errors } = {}) {
   this.name = 'CepPromiseError'
-  this.message = options.message
-  this.type = options.type
-  this.errors = options.errors
+  this.message = message
+  this.type = type
+  this.errors = errors
 }
 
-CepPromiseError.prototype = Object.create(Error.prototype)
-CepPromiseError.prototype.constructor = CepPromiseError
+CepPromiseError.prototype = new Error()
 
 export default CepPromiseError
