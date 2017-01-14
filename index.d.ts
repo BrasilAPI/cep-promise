@@ -1,5 +1,5 @@
 interface CEP {
-    cep:  string | number,
+    cep:  string,
     state:  string,
     city:  string,
     street:  string,
