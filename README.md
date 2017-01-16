@@ -67,7 +67,7 @@ cep('05010000')
 
 ### Você também poderá passar o CEP como Inteiro
 
-Em muitos sistemas o CEP é utilizado erroneamente como um Inteiro (e com isto cortanto todos os zeros à esquerda). Caso este seja o seu caso, não há problema, pois a biblioteca irá preencher os caracteres faltantes na String, por exemplo:
+Em muitos sistemas o CEP é utilizado erroneamente como um Inteiro (e com isto cortando todos os zeros à esquerda). Caso este seja o seu caso, não há problema, pois a biblioteca irá preencher os caracteres faltantes na String, por exemplo:
 
 ``` js
 import cep from 'cep-promise'
@@ -131,6 +131,17 @@ cep('123456789123456789')
   // }
 ```
 
+### Usando com Angular 2
+
+``` ts
+import { default as cep } from 'cep-promise'
+
+...
+
+cep('05010000')
+  .then(console.log)
+```
+
 ## Como contribuir
 
 Leia nosso guia de contribuição [aqui](CONTRIBUTING.md)
@@ -139,7 +150,7 @@ Leia nosso guia de contribuição [aqui](CONTRIBUTING.md)
 
 | [<img src="https://avatars1.githubusercontent.com/u/8251208?v=3&s=115"><br><sub>@lucianopf</sub>](https://github.com/lucianopf) | [<img src="https://avatars1.githubusercontent.com/u/7863230?v=3&s=115"><br><sub>@MarcoWorms</sub>](https://github.com/MarcoWorms) | [<img src="https://avatars1.githubusercontent.com/u/551228?v=3&s=115"><br><sub>@caio-ribeiro-pereira</sub>](https://github.com/caio-ribeiro-pereira) | [<img src="https://avatars1.githubusercontent.com/u/1225447?v=3&s=115"><br><sub>@chrisbenseler</sub>](https://github.com/chrisbenseler) | [<img src="https://avatars0.githubusercontent.com/u/3428149?v=3&s=115"><br><sub>@luanmuniz</sub>](https://github.com/luanmuniz) | [<img src="https://avatars3.githubusercontent.com/u/3094496?v=3&s=115"><br><sub>@AlbertoTrindade</sub>](https://github.com/AlbertoTrindade) |
 |:-:|:-:|:-:|:-:|:-:|:-:|
-| [<img src="https://avatars1.githubusercontent.com/u/4137355?v=3&s=115"><br><sub>@pedrro</sub>](https://github.com/pedrro) |
+| [<img src="https://avatars1.githubusercontent.com/u/4137355?v=3&s=115"><br><sub>@pedrro</sub>](https://github.com/pedrro) | [<img src="https://avatars1.githubusercontent.com/u/8260778?v=3&s=115"><br><sub>@petronetto</sub>](https://github.com/Petronetto) |
 
 
 ## Autor
