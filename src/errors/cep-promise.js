@@ -1,4 +1,4 @@
-function CepPromiseError ({ message, type, errors } = {}) {
+function CepPromiseError ({ message, type, errors }) {
   this.name = 'CepPromiseError'
   this.message = message
   this.type = type

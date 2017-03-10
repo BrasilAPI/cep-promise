@@ -7,7 +7,7 @@ import Promise from './utils/promise-any.js'
 
 const CEP_SIZE = 8
 
-export default function (cepRawValue) {
+function start (cepRawValue) {
   return new Promise((resolve, reject) => {
     Promise.resolve(cepRawValue)
       .then(validateInputType)
@@ -91,3 +91,11 @@ export default function (cepRawValue) {
 
   })
 }
+
+export default function (ceps) {
+  if (Array.isArray(ceps)) {
+    return Promise.all(ceps.map(start))
+  }
+  return start(ceps)
+}
+

@@ -77,4 +77,25 @@ describe('cep-promise (E2E)', () => {
         })
     })
   })
+
+  describe('when invoked with an Array', () => {
+    it('should fetch all ceps', () => {
+      return expect(cep(['05679010', '01447030'])).to.eventually.deep.equal([
+        {
+          cep: '05679010',
+          state: 'SP',
+          city: 'São Paulo',
+          neighborhood: 'Jardim Panorama',
+          street: 'Rua Armando Petrella'
+        },
+        {
+          cep: '01447030',
+          state: 'SP',
+          city: 'São Paulo',
+          neighborhood: 'Jardim Europa',
+          street: 'Rua Sofia'
+        },
+      ])
+    })
+  })
 })
