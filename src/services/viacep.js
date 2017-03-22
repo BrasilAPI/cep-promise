@@ -3,7 +3,7 @@
 import fetch from 'isomorphic-fetch'
 import ServiceError from '../errors/service.js'
 
-function fetchViaCepService (cepWithLeftPad) {
+export default function fetchViaCepService (cepWithLeftPad) {
   const url = `https://viacep.com.br/ws/${cepWithLeftPad}/json/`
   const options = {
     method: 'GET',
@@ -58,5 +58,3 @@ function throwApplicationError (error) {
 
   throw serviceError;
 }
-
-export default fetchViaCepService

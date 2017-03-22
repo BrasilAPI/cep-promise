@@ -7,7 +7,7 @@ import ServiceError from '../errors/service.js'
 
 const parseXMLString = xml2js.parseString
 
-function fetchCorreiosService (cepWithLeftPad) {
+export default function fetchCorreiosService (cepWithLeftPad) {
   const url = 'https://apps.correios.com.br/SigepMasterJPA/AtendeClienteService/AtendeCliente'
   const options = {
     method: 'POST',
@@ -86,5 +86,3 @@ function throwApplicationError (error) {
 
   throw serviceError
 }
-
-export default fetchCorreiosService
