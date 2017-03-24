@@ -76,10 +76,6 @@ function handleServicesError (aggregatedErrors) {
   throw aggregatedErrors
 }
 
-function throwApplicationError (error) {
-  throw new CepPromiseError({
-    message: error.message,
-    type: error.type,
-    errors: error.errors
-  })
+function throwApplicationError ({ message, type, errors }) {
+  throw new CepPromiseError({ message, type, errors })
 }
