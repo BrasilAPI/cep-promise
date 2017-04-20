@@ -37,13 +37,19 @@
 
 ## Como utilizar
 
-
 ### Instalação
+
+#### NPM
 
 ```
 $ npm install --save cep-promise
 ```
 
+#### Bower
+
+```
+$ bower install --save cep-promise
+```
 
 ### Realizando uma consulta
 
