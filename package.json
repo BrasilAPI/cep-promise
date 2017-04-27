@@ -13,7 +13,7 @@
     "lint-check": "standard",
     "lint-fix": "standard --fix",
     "build-node": "babel src --out-dir dist",
-    "build-web": "browserify src/cep-promise.js -s cep -o | uglifyjs > dist/cep-promise-browser.min.js",
+    "build-web": "browserify src/cep-promise.js -s cep -o dist/cep-promise-browser.js && uglifyjs dist/cep-promise-browser.js > dist/cep-promise-browser.min.js",
     "build": "npm run build-node && npm run build-web",
     "prepublish": "npm run build"
   },

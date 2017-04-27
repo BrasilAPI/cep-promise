@@ -1,0 +1,17 @@
+{
+  "name": "cep-promise",
+  "version": "2.0.4",
+  "description": "Busca por CEP integrado diretamente aos serviços dos Correios e ViaCEP",
+  "main": "dist/cep-promise-browser.js",
+  "authors": [
+    "Filipe Deschamps"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/filipedeschamps/cep-promise",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "src",
+    "test"
+  ]
+}
