@@ -28,3 +28,10 @@ node_modules
 
 # MacOS .DS_Store
 .DS_Store
+
+#Allow only webbrowser to be version
+dist
+!dist/cep-promise-browser[!.min]js
+
+#Yarn
+yarn.lock
