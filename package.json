@@ -5,7 +5,7 @@
   "main": "dist/cep-promise.js",
   "scripts": {
     "test": "npm run coverage",
-    "coverage": "babel-node node_modules/.bin/babel-istanbul cover _mocha -- --timeout 30000 test/**/*.spec.js",
+    "coverage": "babel-node node_modules/.bin/babel-istanbul cover _mocha -- --timeout 60000 test/**/*.spec.js",
     "test-unit": "mocha --compilers js:babel-core/register test/unit/**/*.spec.js",
     "test-unit-watch": "mocha --watch --compilers js:babel-core/register test/unit/**/*.spec.js",
     "test-e2e": "mocha --compilers js:babel-core/register test/e2e/**/*.spec.js",
