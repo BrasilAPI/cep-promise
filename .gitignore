@@ -30,8 +30,8 @@ node_modules
 .DS_Store
 
 #Allow only webbrowser to be version
-dist
-!dist/cep-promise-browser[!.min]js
+dist/*
+!dist/cep-promise-browser*.js
 
 #Yarn
 yarn.lock
