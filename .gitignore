@@ -29,7 +29,7 @@ node_modules
 # MacOS .DS_Store
 .DS_Store
 
-#Allow only webbrowser to be version
+#Allow only webbrowser to be versioned
 dist/*
 !dist/cep-promise-browser*.js
 
