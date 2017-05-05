@@ -5,8 +5,8 @@
 <h1 align="center">CEP Promise</h1>
 
 <p align="center">
-  <a href="https://travis-ci.org/filipedeschamps/cep-promise">
-    <img src="https://travis-ci.org/filipedeschamps/cep-promise.svg?branch=master">
+  <a href="https://www.npmjs.com/package/cep-promise">
+    <img src="https://img.shields.io/npm/dm/cep-promise.svg">
   </a>
   <a href="https://coveralls.io/github/filipedeschamps/cep-promise?branch=master">
     <img src="https://coveralls.io/repos/github/filipedeschamps/cep-promise/badge.svg?branch=master">
