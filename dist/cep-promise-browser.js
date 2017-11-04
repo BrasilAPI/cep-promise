@@ -490,6 +490,10 @@ var _viacep = require('./services/viacep.js');
 
 var _viacep2 = _interopRequireDefault(_viacep);
 
+var _cepaberto = require('./services/cepaberto.js');
+
+var _cepaberto2 = _interopRequireDefault(_cepaberto);
+
 var _cepPromise = require('./errors/cep-promise.js');
 
 var _cepPromise2 = _interopRequireDefault(_cepPromise);
@@ -543,7 +547,7 @@ function validateInputLength(cepWithLeftPad) {
 }
 
 function fetchCepFromServices(cepWithLeftPad) {
-  return _promiseAny2.default.any([(0, _correios2.default)(cepWithLeftPad), (0, _viacep2.default)(cepWithLeftPad)]);
+  return _promiseAny2.default.any([(0, _correios2.default)(cepWithLeftPad), (0, _viacep2.default)(cepWithLeftPad), (0, _cepaberto2.default)(cepWithLeftPad)]);
 }
 
 function handleServicesError(aggregatedErrors) {
@@ -566,7 +570,7 @@ function throwApplicationError(_ref) {
 }
 module.exports = exports['default'];
 
-},{"./errors/cep-promise.js":4,"./services/correios.js":6,"./services/viacep.js":7,"./utils/promise-any.js":8}],4:[function(require,module,exports){
+},{"./errors/cep-promise.js":4,"./services/cepaberto.js":6,"./services/correios.js":7,"./services/viacep.js":8,"./utils/promise-any.js":9}],4:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -631,6 +635,41 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * dependencies like "xml2js"
  */
 
+function fetchViaCepService(cepWithLeftPad) {
+  return new Promise(function (resolve, reject) {
+    var serviceError = new _service2.default({
+      message: 'O serviço dos Cep aberto não aceita requests via Browser (CORS).',
+      service: 'cepaberto'
+    });
+
+    reject(serviceError);
+  });
+}
+
+exports.default = fetchViaCepService;
+module.exports = exports['default'];
+
+},{"../errors/service.js":5}],7:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _service = require('../errors/service.js');
+
+var _service2 = _interopRequireDefault(_service);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/*
+ * This is a mock service to be used when Browserify
+ * renders the distribution file. Correios service
+ * doesn't support CORS, so there's no reason to
+ * include the original file with it's (heavy)
+ * dependencies like "xml2js"
+ */
+
 function fetchCorreiosService(cepWithLeftPad) {
 
   return new Promise(function (resolve, reject) {
@@ -646,7 +685,7 @@ function fetchCorreiosService(cepWithLeftPad) {
 exports.default = fetchCorreiosService;
 module.exports = exports['default'];
 
-},{"../errors/service.js":5}],7:[function(require,module,exports){
+},{"../errors/service.js":5}],8:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -717,7 +756,7 @@ function throwApplicationError(error) {
 }
 module.exports = exports['default'];
 
-},{"../errors/service.js":5,"isomorphic-fetch":1}],8:[function(require,module,exports){
+},{"../errors/service.js":5,"isomorphic-fetch":1}],9:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {

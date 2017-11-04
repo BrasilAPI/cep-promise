@@ -33,7 +33,8 @@
     ]
   },
   "browser": {
-    "./src/services/correios.js": "./src/services/correios-browser-mock.js"
+    "./src/services/correios.js": "./src/services/correios-browser-mock.js",
+    "./src/services/cepaberto.js": "./src/services/cepaberto-browser-mock.js"
   },
   "repository": {
     "type": "git",
