@@ -21,11 +21,10 @@ export default function fetchCorreiosService (cepWithLeftPad) {
 
   return fetch(url, options)
     .then(analyzeAndParseResponse)
-    .then(resolvePromise)
     .catch(throwApplicationError)
 }
 
- function analyzeAndParseResponse (response) {
+function analyzeAndParseResponse (response) {
   if (response.ok) {
     return response.text()
       .then(parseXML)
@@ -68,10 +67,6 @@ function extractValuesFromSuccessResponse (xmlObject) {
     neighborhood: _get(addressValues, 'bairro[0]'),
     street: _get(addressValues, 'end[0]')
   }
-}
-
-function resolvePromise (cepObject) {
-  resolve(cepObject)
 }
 
 function throwApplicationError (error) {
