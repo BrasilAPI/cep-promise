@@ -41,7 +41,7 @@ function parseXML (xmlString) {
   return new Promise((resolve, reject) => {
     parseXMLString(xmlString, (err, responseObject) => {
       if (!err) {
-        resolve(responseObject)
+        return resolve(responseObject)
       }
 
       throw new Error('Não foi possível interpretar o XML de resposta.')
