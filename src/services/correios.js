@@ -21,11 +21,10 @@ export default function fetchCorreiosService (cepWithLeftPad) {
 
   return fetch(url, options)
     .then(analyzeAndParseResponse)
-    .then(resolvePromise)
     .catch(throwApplicationError)
 }
 
- function analyzeAndParseResponse (response) {
+function analyzeAndParseResponse (response) {
   if (response.ok) {
     return response.text()
       .then(parseXML)
@@ -42,7 +41,7 @@ function parseXML (xmlString) {
   return new Promise((resolve, reject) => {
     parseXMLString(xmlString, (err, responseObject) => {
       if (!err) {
-        resolve(responseObject)
+        return resolve(responseObject)
       }
 
       throw new Error('Não foi possível interpretar o XML de resposta.')
@@ -68,10 +67,6 @@ function extractValuesFromSuccessResponse (xmlObject) {
     neighborhood: _get(addressValues, 'bairro[0]'),
     street: _get(addressValues, 'end[0]')
   }
-}
-
-function resolvePromise (cepObject) {
-  resolve(cepObject)
 }
 
 function throwApplicationError (error) {
