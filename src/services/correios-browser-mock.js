@@ -11,7 +11,6 @@ import ServiceError from '../errors/service.js'
  */
 
 function fetchCorreiosService (cepWithLeftPad) {
-
   return new Promise((resolve, reject) => {
     const serviceError = new ServiceError({
       message: 'O serviço dos Correios não aceita requests via Browser (CORS).',
@@ -21,6 +20,5 @@ function fetchCorreiosService (cepWithLeftPad) {
     reject(serviceError)
   })
 }
-
 
 export default fetchCorreiosService
