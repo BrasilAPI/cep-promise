@@ -35,7 +35,3 @@ dist/*
 
 #Yarn
 yarn.lock
-
-index.js
-
-index.html

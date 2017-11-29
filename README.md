@@ -53,7 +53,7 @@ $ npm install --save cep-promise
 
 ```
   const path = require('path')
-  ...
+  // ...
 
   resolve: {
     alias: {
