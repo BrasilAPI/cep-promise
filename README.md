@@ -44,6 +44,25 @@
 ```
 $ npm install --save cep-promise
 ```
+<strong>OBS: </strong>
+> Detalhes para utilização da lib no browser quando utilizar o `npm` como gerenciador da dependência. 
+>
+> Lembrar de apontar para o arquivo `/dist/cep-promise-browser.min.js` quando quiser importar a lib.
+>
+> Se estiverem utilizando webpack é possível configurar o `webpack.config.js` trocando caminho do cep-promise para usar o caminho correto da seguinte forma:
+
+```
+  const path = require('path')
+  ...
+
+  resolve: {
+    alias: {
+      "cep-promise": path.join(__dirname, 'node_modules', 'cep-promise', 'dist', 'cep-promise-browser.min.js')
+    }
+  } 
+```
+
+> Com isto o `import cep from 'cep-promise'` deve funcionar como o esperado
 
 #### Bower
 
