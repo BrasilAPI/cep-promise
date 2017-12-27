@@ -5,12 +5,10 @@ import ServiceError from '../errors/service.js'
 /*
  * This is a mock service to be used when Browserify
  * renders the distribution file. Correios service
- * doesn't support CORS, so there's no reason to
- * include the original file with it's (heavy)
- * dependencies like "xml2js"
+ * doesn't support CORS.
  */
 
-function fetchViaCepService (cepWithLeftPad) {
+function fetchCepAbertoService (cepWithLeftPad) {
   return new Promise((resolve, reject) => {
     const serviceError = new ServiceError({
       message: 'O serviço dos Cep aberto não aceita requests via Browser (CORS).',
@@ -21,4 +19,4 @@ function fetchViaCepService (cepWithLeftPad) {
   })
 }
 
-export default fetchViaCepService
+export default fetchCepAbertoService

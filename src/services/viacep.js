@@ -20,7 +20,7 @@ export default function fetchViaCepService (cepWithLeftPad) {
     .catch(throwApplicationError)
 }
 
- function analyzeAndParseResponse (response) {
+function analyzeAndParseResponse (response) {
   if (response.ok) {
     return response.json()
   }
@@ -56,5 +56,5 @@ function throwApplicationError (error) {
     serviceError.message = 'Erro ao se conectar com o serviço ViaCEP.'
   }
 
-  throw serviceError;
+  throw serviceError
 }

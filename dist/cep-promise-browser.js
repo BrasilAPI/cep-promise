@@ -630,12 +630,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /*
  * This is a mock service to be used when Browserify
  * renders the distribution file. Correios service
- * doesn't support CORS, so there's no reason to
- * include the original file with it's (heavy)
- * dependencies like "xml2js"
+ * doesn't support CORS.
  */
 
-function fetchViaCepService(cepWithLeftPad) {
+function fetchCepAbertoService(cepWithLeftPad) {
   return new Promise(function (resolve, reject) {
     var serviceError = new _service2.default({
       message: 'O serviço dos Cep aberto não aceita requests via Browser (CORS).',
@@ -646,7 +644,7 @@ function fetchViaCepService(cepWithLeftPad) {
   });
 }
 
-exports.default = fetchViaCepService;
+exports.default = fetchCepAbertoService;
 module.exports = exports['default'];
 
 },{"../errors/service.js":5}],7:[function(require,module,exports){
@@ -671,7 +669,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  */
 
 function fetchCorreiosService(cepWithLeftPad) {
-
   return new Promise(function (resolve, reject) {
     var serviceError = new _service2.default({
       message: 'O serviço dos Correios não aceita requests via Browser (CORS).',
