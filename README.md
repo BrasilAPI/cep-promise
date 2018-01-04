@@ -39,6 +39,11 @@
 
 ### Instalação
 
+#### Browser usando CDN
+```
+<script src="https://cdn.jsdelivr.net/npm/cep-promise/dist/cep-promise-browser.min.js"></script>
+```
+
 #### NPM
 
 ```
