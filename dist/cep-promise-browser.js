@@ -15252,7 +15252,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var parseXMLString = _xml2js2.default.parseString;
 
 function fetchCorreiosService(cepWithLeftPad) {
-  var url = 'https://cors.now.sh/http://apps.correios.com.br/SigepMasterJPA/AtendeClienteService/AtendeCliente';
+  var url = 'https://cors.now.sh/https://apps.correios.com.br/SigepMasterJPA/AtendeClienteService/AtendeCliente';
   var options = {
     method: 'POST',
     body: '<?xml version="1.0"?>\n<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:cli="http://cliente.bean.master.sigep.bsb.correios.com.br/">\n  <soapenv:Header />\n  <soapenv:Body>\n    <cli:consultaCEP>\n      <cep>' + cepWithLeftPad + '</cep>\n    </cli:consultaCEP>\n  </soapenv:Body>\n</soapenv:Envelope>',
@@ -15263,10 +15263,7 @@ function fetchCorreiosService(cepWithLeftPad) {
     }
   };
 
-  return (0, _isomorphicFetch2.default)(url, options).then(analyzeAndParseResponse).then(function (res) {
-    res.service = 'correios';
-    return res;
-  }).catch(throwApplicationError);
+  return (0, _isomorphicFetch2.default)(url, options).then(analyzeAndParseResponse).catch(throwApplicationError);
 }
 
 function analyzeAndParseResponse(response) {
