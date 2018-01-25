@@ -164,7 +164,7 @@ cep('123456789123456789')
 ### Usando com Angular 2
 
 ``` ts
-import { default as cep } from 'cep-promise'
+import * as cep from 'cep-promise'
 
 ...
 
