@@ -30,7 +30,7 @@
  * Sempre retorna a resposta mais rápida por fazer as consultas de forma concorrente
  * Sem limites de uso (rate limits) conhecidos
  * Interface de Promise extremamente simples
- * Suporte ao Node.js `0.10.x`, `0.12.x`, `4.x`, `5.x`, `6.x` e `7.x`
+ * Suporte ao Node.js `0.10.x`, `0.12.x`, `4.x`, `5.x`, `6.x`, `7.x`, `8.x` e `9.x`
  * 100% de code coverage com testes unitários e E2E
  * Desenvolvido utilizando ES6
 
@@ -164,7 +164,7 @@ cep('123456789123456789')
 ### Usando com Angular 2
 
 ``` ts
-import { default as cep } from 'cep-promise'
+import * as cep from 'cep-promise'
 
 ...
 
