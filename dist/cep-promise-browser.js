@@ -620,6 +620,11 @@ module.exports = exports['default'];
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.default = fetchCepAbertoService;
+
+var _isomorphicFetch = require('isomorphic-fetch');
+
+var _isomorphicFetch2 = _interopRequireDefault(_isomorphicFetch);
 
 var _service = require('../errors/service.js');
 
@@ -627,27 +632,59 @@ var _service2 = _interopRequireDefault(_service);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/*
- * This is a mock service to be used when Browserify
- * renders the distribution file. Correios service
- * doesn't support CORS.
- */
-
 function fetchCepAbertoService(cepWithLeftPad) {
-  return new Promise(function (resolve, reject) {
-    var serviceError = new _service2.default({
-      message: 'O serviço dos Cep aberto não aceita requests via Browser (CORS).',
-      service: 'cepaberto'
-    });
+  var url = 'https://cors.now.sh/http://www.cepaberto.com/api/v2/ceps.json?cep=' + cepWithLeftPad;
+  var options = {
+    method: 'GET',
+    mode: 'cors',
+    headers: {
+      'content-type': 'application/json;charset=utf-8',
+      'Authorization': 'Token token="37bfda18fd4b423cdb6748d14ba30aa6"'
+    }
+  };
 
-    reject(serviceError);
-  });
+  return (0, _isomorphicFetch2.default)(url, options).then(analyzeAndParseResponse).then(checkForViaCepError).then(extractCepValuesFromResponse).catch(throwApplicationError);
 }
 
-exports.default = fetchCepAbertoService;
+function analyzeAndParseResponse(response) {
+  if (response.ok) {
+    return response.json();
+  }
+  throw Error('Erro ao se conectar com o serviço Cep Aberto.');
+}
+
+function checkForViaCepError(responseObject) {
+  if (!Object.keys(responseObject).length) {
+    throw new Error('CEP não encontrado na base do Cep Aberto.');
+  }
+  return responseObject;
+}
+
+function extractCepValuesFromResponse(responseObject) {
+  return {
+    cep: responseObject.cep,
+    state: responseObject.estado,
+    city: responseObject.cidade,
+    neighborhood: responseObject.bairro,
+    street: responseObject.logradouro
+  };
+}
+
+function throwApplicationError(error) {
+  var serviceError = new _service2.default({
+    message: error.message,
+    service: 'cepaberto'
+  });
+
+  if (error.name === 'FetchError') {
+    serviceError.message = 'Erro ao se conectar com o serviço Cep Aberto.';
+  }
+
+  throw serviceError;
+}
 module.exports = exports['default'];
 
-},{"../errors/service.js":5}],7:[function(require,module,exports){
+},{"../errors/service.js":5,"isomorphic-fetch":1}],7:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -661,12 +698,12 @@ var _service2 = _interopRequireDefault(_service);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /*
- * This is a mock service to be used when Browserify
- * renders the distribution file. Correios service
- * doesn't support CORS, so there's no reason to
- * include the original file with it's (heavy)
- * dependencies like "xml2js"
- */
+  * This is a mock service to be used when Browserify
+  * renders the distribution file. Correios service
+  * doesn't support CORS, so there's no reason to
+  * include the original file with it's (heavy)
+  * dependencies like "xml2js'
+*/
 
 function fetchCorreiosService(cepWithLeftPad) {
   return new Promise(function (resolve, reject) {
