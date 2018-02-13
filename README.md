@@ -20,64 +20,26 @@
 </p>
 
 <p align="center">
-  Busca por CEP integrado diretamente aos serviços dos Correios e ViaCEP (Node.js e Browser)
+  Busca por CEP integrado diretamente aos serviços dos Correios, ViaCEP e outros (Node.js e Browser)
 </p>
 
 ## Features
 
- * Sempre atualizado em tempo-real por se conectar diretamente aos serviços dos Correios ou ViaCEP
- * Possui alta disponibilidade por usar serviços como fallback
- * Sempre retorna a resposta mais rápida por fazer as consultas de forma concorrente
- * Sem limites de uso (rate limits) conhecidos
- * Interface de Promise extremamente simples
- * Suporte ao Node.js `0.10.x`, `0.12.x`, `4.x`, `5.x`, `6.x`, `7.x`, `8.x` e `9.x`
- * 100% de code coverage com testes unitários e E2E
- * Desenvolvido utilizando ES6
+ * Sempre atualizado em tempo-real por se conectar diretamente aos serviços dos Correios, ViaCEP e outros.
+ * Possui alta disponibilidade por usar vários serviços como fallback.
+ * Sempre retorna a resposta mais rápida por fazer as consultas de forma concorrente.
+ * Sem limites de uso (rate limits) conhecidos.
+ * Interface de Promise extremamente simples.
+ * Suporte ao Node.js `0.10.x`, `0.12.x`, `4.x`, `5.x`, `6.x`, `7.x`, `8.x`, `9.x` e `@stable`.
+ * 100% de code coverage com testes unitários e E2E.
+ * Desenvolvido utilizando ES6.
 
 
 ## Como utilizar
 
-### Instalação
-
-#### Browser usando CDN
-```
-<script src="https://cdn.jsdelivr.net/npm/cep-promise/dist/cep-promise-browser.min.js"></script>
-```
-
-#### NPM
-
-```
-$ npm install --save cep-promise
-```
-<strong>OBS: </strong>
-> Detalhes para utilização da lib no browser quando utilizar o `npm` como gerenciador da dependência.
->
-> Lembrar de apontar para o arquivo `/dist/cep-promise-browser.min.js` quando quiser importar a lib.
->
-> Se estiverem utilizando webpack é possível configurar o `webpack.config.js` trocando caminho do cep-promise para usar o caminho correto da seguinte forma:
-
-```
-  const path = require('path')
-  // ...
-
-  resolve: {
-    alias: {
-      "cep-promise": path.join(__dirname, 'node_modules', 'cep-promise', 'dist', 'cep-promise-browser.min.js')
-    }
-  }
-```
-
-> Com isto o `import cep from 'cep-promise'` deve funcionar como o esperado
-
-#### Bower
-
-```
-$ bower install --save cep-promise
-```
-
 ### Realizando uma consulta
 
-Por ser multifornecedor, a biblioteca irá resolver a Promise com o fornecedor que mais rápido lhe responder.
+Por ser multifornecedor, a biblioteca irá resolver a Promise com o fornecedor que **mais rápido** lhe responder.
 
 ``` js
 import cep from 'cep-promise'
@@ -135,6 +97,9 @@ cep('99999999')
   //     }, {
   //       message: 'CEP não encontrado na base do ViaCEP.',
   //       service: 'viacep'
+  //     }, {
+  //       message: 'CEP não encontrado na base do Cep Aberto.',
+  //       service: 'cepaberto'
   //     }]
   // }
 
@@ -161,12 +126,51 @@ cep('123456789123456789')
   // }
 ```
 
-### Usando com Angular 2
+
+### Instalação
+
+#### Browser usando CDN
+```
+<script src="https://cdn.jsdelivr.net/npm/cep-promise/dist/cep-promise-browser.min.js"></script>
+```
+
+#### npm
+
+```
+$ npm install --save cep-promise
+```
+
+#### Bower
+
+```
+$ bower install --save cep-promise
+```
+
+#### Browser
+Caso você utilize o `browserify` para gerenciamento de dependência no browser, importe a versão **otimizada** com o seguinte path:
+
+```
+require('/dist/cep-promise-browser.min.js')
+```
+
+#### Webpack
+É possível configurar o `webpack.config.js` trocando caminho do cep-promise para usar o caminho correto da forma abaixo e com isto o `import cep from 'cep-promise'` deverá funcionar como o esperado:
+
+```
+  const path = require('path')
+  // ...
+
+  resolve: {
+    alias: {
+      "cep-promise": path.join(__dirname, 'node_modules', 'cep-promise', 'dist', 'cep-promise-browser.min.js')
+    }
+  }
+```
+
+#### Angular 2
 
 ``` ts
 import * as cep from 'cep-promise'
-
-...
 
 cep('05010000')
   .then(console.log)
