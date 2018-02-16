@@ -34,13 +34,12 @@ export default [
   },
   {
     input,
-    plugins: [
-      ...defaultPlugins,
+    plugins: [].concat(defaultPlugins, [
       resolve({
         browser: true
       }),
       commonjs()
-    ],
+    ]),
     context: 'window',
     output: {
       file: 'dist/cep-promise-browser.js',
