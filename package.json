@@ -1,27 +1,20 @@
 {
   "name": "cep-promise",
   "version": "2.0.8",
-  "description":
-    "Busca por CEP integrado diretamente aos serviços dos Correios e ViaCEP",
+  "description": "Busca por CEP integrado diretamente aos serviços dos Correios e ViaCEP",
   "main": "dist/cep-promise.js",
   "module": "dist/cep-promise-esm.js",
   "jsnext:main": "dist/cep-promise-esm.js",
   "scripts": {
     "test": "npm run coverage",
-    "coverage":
-      "babel-node node_modules/.bin/babel-istanbul cover _mocha -- --timeout 60000 test/**/*.spec.js",
-    "test-unit":
-      "mocha --compilers js:babel-core/register test/unit/**/*.spec.js",
-    "test-unit-watch":
-      "mocha --watch --compilers js:babel-core/register test/unit/**/*.spec.js",
-    "test-e2e":
-      "mocha --compilers js:babel-core/register test/e2e/**/*.spec.js",
-    "test-e2e-watch":
-      "mocha --watch --compilers js:babel-core/register test/e2e/**/*.spec.js",
+    "coverage": "babel-node node_modules/.bin/babel-istanbul cover _mocha -- --timeout 60000 test/**/*.spec.js",
+    "test-unit": "mocha --compilers js:babel-core/register test/unit/**/*.spec.js",
+    "test-unit-watch": "mocha --watch --compilers js:babel-core/register test/unit/**/*.spec.js",
+    "test-e2e": "mocha --compilers js:babel-core/register test/e2e/**/*.spec.js",
+    "test-e2e-watch": "mocha --watch --compilers js:babel-core/register test/e2e/**/*.spec.js",
     "lint-check": "standard",
     "lint-fix": "standard --fix",
-    "build":
-      "rollup -c && uglifyjs dist/cep-promise-browser.js -cm -o dist/cep-promise-browser.min.js",
+    "build": "rollup -c && uglifyjs dist/cep-promise-browser.js -cm -o dist/cep-promise-browser.min.js",
     "prepublish": "npm run build"
   },
   "browser": {
@@ -59,7 +52,11 @@
   },
   "standard": {
     "parser": "babel-eslint",
-    "globals": ["describe", "it", "afterEach"]
+    "globals": [
+      "describe",
+      "it",
+      "afterEach"
+    ]
   },
   "dependencies": {
     "isomorphic-fetch": "2.2.1",
