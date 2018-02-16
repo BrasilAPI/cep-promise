@@ -5,7 +5,6 @@
   "main": "dist/cep-promise.js",
   "module": "dist/cep-promise-esm.js",
   "jsnext:main": "dist/cep-promise-esm.js",
-  "browser": "dist/cep-promise-browser.js",
   "scripts": {
     "test": "npm run coverage",
     "coverage": "babel-node node_modules/.bin/babel-istanbul cover _mocha -- --timeout 60000 test/**/*.spec.js",
@@ -27,6 +26,10 @@
   "bugs": {
     "url": "https://github.com/filipedeschamps/cep-promise/issues"
   },
+  "browser": {
+    "./src/services/correios.js": "./src/services/correios-browser.js",
+    "./src/services/cepaberto.js": "./src/services/cepaberto-browser.js"
+  },
   "homepage": "https://github.com/filipedeschamps/cep-promise",
   "devDependencies": {
     "babel-cli": "6.18.0",
@@ -41,7 +44,6 @@
     "mocha": "3.2.0",
     "nock": "9.0.2",
     "rollup": "^0.56.0",
-    "rollup-plugin-alias": "^1.4.0",
     "rollup-plugin-babel": "^3.0.3",
     "rollup-plugin-commonjs": "^8.3.0",
     "rollup-plugin-node-resolve": "^3.0.3",

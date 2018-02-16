@@ -1,7 +1,6 @@
 import fs from 'fs'
 import path from 'path'
 import babel from 'rollup-plugin-babel'
-import alias from 'rollup-plugin-alias'
 import resolve from 'rollup-plugin-node-resolve'
 import commonjs from 'rollup-plugin-commonjs'
 
@@ -24,7 +23,7 @@ export default [
     external: dependencies,
     output: [
       {
-        file: 'dist/cep-promise-browser-esm.js',
+        file: 'dist/cep-promise-esm.js',
         format: 'es'
       },
       {
@@ -37,10 +36,6 @@ export default [
     input,
     plugins: [
       ...defaultPlugins,
-      alias({
-        './services/correios.js': './src/services/correios-browser.js',
-        './services/cepaberto.js': './src/services/cepaberto-browser.js'
-      }),
       resolve({
         browser: true
       }),
