@@ -14,7 +14,7 @@
     "test-e2e-watch": "mocha --watch --compilers js:babel-core/register test/e2e/**/*.spec.js",
     "lint-check": "standard",
     "lint-fix": "standard --fix",
-    "build": "rollup -c && uglifyjs dist/cep-promise-browser.js -cm -o dist/cep-promise-browser.min.js",
+    "build": "rollup -c -r babel-core/register && uglifyjs dist/cep-promise-browser.js -cm -o dist/cep-promise-browser.min.js",
     "prepublish": "npm run build"
   },
   "browser": {
