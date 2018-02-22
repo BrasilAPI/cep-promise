@@ -17,6 +17,9 @@
   <a href="http://standardjs.com/">
     <img src="https://img.shields.io/badge/code%20style-standard-brightgreen.svg">
   </a>
+  <a href="https://snyk.io/test/github/filipedeschamps/cep-promise">
+    <img src="https://snyk.io/test/github/filipedeschamps/cep-promise/badge.svg" alt="Known Vulnerabilities" data-canonical-src="https://snyk.io/test/github/filipedeschamps/cep-promise" style="max-width:100%;">
+  </a>
 </p>
 
 <p align="center">
@@ -30,7 +33,8 @@
  * Sempre retorna a resposta mais rápida por fazer as consultas de forma concorrente.
  * Sem limites de uso (rate limits) conhecidos.
  * Interface de Promise extremamente simples.
- * Suporte ao Node.js `0.10.x`, `0.12.x`, `4.x`, `5.x`, `6.x`, `7.x`, `8.x`, `9.x` e `@stable`.
+ * Suporte ao Node.js `4.x`, `5.x`, `6.x`, `7.x`, `8.x`, `9.x` e `@stable`.
+ * Suportou ao Node.js `0.10.x` e `0.12.x` até cep-promise versão `2.0.8`.
  * 100% de code coverage com testes unitários e E2E.
  * Desenvolvido utilizando ES6.
 
