@@ -17,6 +17,9 @@
   <a href="http://standardjs.com/">
     <img src="https://img.shields.io/badge/code%20style-standard-brightgreen.svg">
   </a>
+  <a href="https://snyk.io/test/github/filipedeschamps/cep-promise">
+    <img src="https://snyk.io/test/github/filipedeschamps/cep-promise/badge.svg" alt="Known Vulnerabilities" data-canonical-src="https://snyk.io/test/github/filipedeschamps/cep-promise" style="max-width:100%;">
+  </a>
 </p>
 
 <p align="center">
@@ -30,7 +33,8 @@
  * Sempre retorna a resposta mais rápida por fazer as consultas de forma concorrente.
  * Sem limites de uso (rate limits) conhecidos.
  * Interface de Promise extremamente simples.
- * Suporte ao Node.js `0.10.x`, `0.12.x`, `4.x`, `5.x`, `6.x`, `7.x`, `8.x`, `9.x` e `@stable`.
+ * Suporte ao Node.js `4.x`, `5.x`, `6.x`, `7.x`, `8.x`, `9.x` e `@stable`.
+ * Suportou ao Node.js `0.10.x` e `0.12.x` até cep-promise versão `2.0.8`.
  * 100% de code coverage com testes unitários e E2E.
  * Desenvolvido utilizando ES6.
 
@@ -184,7 +188,7 @@ Leia nosso guia de contribuição [aqui](CONTRIBUTING.md)
 
 | [<img src="https://avatars1.githubusercontent.com/u/8251208?v=3&s=115"><br><sub>@lucianopf</sub>](https://github.com/lucianopf) | [<img src="https://avatars1.githubusercontent.com/u/7863230?v=3&s=115"><br><sub>@MarcoWorms</sub>](https://github.com/MarcoWorms) | [<img src="https://avatars1.githubusercontent.com/u/551228?v=3&s=115"><br><sub>@caio-ribeiro-pereira</sub>](https://github.com/caio-ribeiro-pereira) | [<img src="https://avatars1.githubusercontent.com/u/1225447?v=3&s=115"><br><sub>@chrisbenseler</sub>](https://github.com/chrisbenseler) | [<img src="https://avatars0.githubusercontent.com/u/3428149?v=3&s=115"><br><sub>@luanmuniz</sub>](https://github.com/luanmuniz) | [<img src="https://avatars3.githubusercontent.com/u/3094496?v=3&s=115"><br><sub>@AlbertoTrindade</sub>](https://github.com/AlbertoTrindade) |
 |:-:|:-:|:-:|:-:|:-:|:-:|
-| [<img src="https://avatars1.githubusercontent.com/u/4137355?v=3&s=115"><br><sub>@pedrro</sub>](https://github.com/pedrro) | [<img src="https://avatars1.githubusercontent.com/u/8260778?v=3&s=115"><br><sub>@petronetto</sub>](https://github.com/Petronetto) | [<img src="https://avatars3.githubusercontent.com/u/434364?v=3&s=115"><br><sub>@olegon</sub>](https://github.com/olegon) | [<img src="https://avatars3.githubusercontent.com/u/2177742?v=3&s=115"><br><sub>@jhonnymoreira</sub>](https://github.com/jhonnymoreira) | [<img src="https://avatars3.githubusercontent.com/u/2955087?s=115&v=4"><br><sub>@claytonsilva</sub>](https://github.com/claytonsilva)
+| [<img src="https://avatars1.githubusercontent.com/u/4137355?v=3&s=115"><br><sub>@pedrro</sub>](https://github.com/pedrro) | [<img src="https://avatars1.githubusercontent.com/u/8260778?v=3&s=115"><br><sub>@petronetto</sub>](https://github.com/Petronetto) | [<img src="https://avatars3.githubusercontent.com/u/434364?v=3&s=115"><br><sub>@olegon</sub>](https://github.com/olegon) | [<img src="https://avatars3.githubusercontent.com/u/2177742?v=3&s=115"><br><sub>@jhonnymoreira</sub>](https://github.com/jhonnymoreira) | [<img src="https://avatars3.githubusercontent.com/u/2955087?s=115&v=4"><br><sub>@claytonsilva</sub>](https://github.com/claytonsilva) | [<img src="https://avatars1.githubusercontent.com/u/13632762?s=115"><br><sub>@thiamsantos</sub>](https://github.com/thiamsantos)
 
 
 ## Autor
