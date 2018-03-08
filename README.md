@@ -171,10 +171,10 @@ require('/dist/cep-promise-browser.min.js')
   }
 ```
 
-#### Angular 2
+#### Angular 2/4/5
 
 ``` ts
-import * as cep from 'cep-promise'
+import cep from 'cep-promise'
 
 cep('05010000')
   .then(console.log)
