@@ -41,7 +41,7 @@
 
 ## Como utilizar
 
-Teste e aprenda <a href="https://npm.runkit.com/cep-promise" target="_blank">aqui</a>
+Teste e aprenda <a href="https://npm.runkit.com/cep-promise" target="_blank">aqui</a>.
 
 ### Realizando uma consulta
 
