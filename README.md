@@ -41,6 +41,9 @@
 
 ## Como utilizar
 
+Teste e aprenda aqui: <a href="https://npm.runkit.com/cep-promise" style="color:#2238EB; background-color:#FFE032; border-radius: 5px; padding: 5px 10px; text-decoration: none; margin: 0 5px; font-weight: bold;
+}">RunKit</a>
+
 ### Realizando uma consulta
 
 Por ser multifornecedor, a biblioteca irá resolver a Promise com o fornecedor que **mais rápido** lhe responder.
