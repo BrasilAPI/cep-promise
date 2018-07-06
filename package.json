@@ -62,5 +62,9 @@
     "isomorphic-fetch": "2.2.1",
     "lodash.get": "4.4.2",
     "xml2js": "0.4.17"
-  }
+  },
+  "files": [
+    "dist",
+    "index.d.ts"
+  ]
 }
