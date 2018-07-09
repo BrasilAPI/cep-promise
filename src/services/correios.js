@@ -34,12 +34,12 @@ function analyzeAndParseResponse (response) {
 
 function parseSuccessXML (xmlString) {
   try {
-    let returnStatement = xmlString.replace(/\r?\n|\r/g, '').match(/<return>(.*)<\/return>/)[0] || ''
-    let cleanReturnStatement = returnStatement.replace('<return>', '').replace('</return>', '')
-    let parsedReturnStatement = cleanReturnStatement
+    const returnStatement = xmlString.replace(/\r?\n|\r/g, '').match(/<return>(.*)<\/return>/)[0] || ''
+    const cleanReturnStatement = returnStatement.replace('<return>', '').replace('</return>', '')
+    const parsedReturnStatement = cleanReturnStatement
       .split(/</)
       .reduce((result, exp) => {
-        let splittenExp = exp.split('>')
+        const splittenExp = exp.split('>')
         if (splittenExp.length > 1 && splittenExp[1].length) {
           result[splittenExp[0]] = splittenExp[1]
         }
@@ -54,8 +54,8 @@ function parseSuccessXML (xmlString) {
 
 function parseAndextractErrorMessage (xmlString) {
   try {
-    let returnStatement = xmlString.match(/<faultstring>(.*)<\/faultstring>/)[0] || ''
-    let cleanReturnStatement = returnStatement.replace('<faultstring>', '').replace('</faultstring>', '')
+    const returnStatement = xmlString.match(/<faultstring>(.*)<\/faultstring>/)[0] || ''
+    const cleanReturnStatement = returnStatement.replace('<faultstring>', '').replace('</faultstring>', '')
     return cleanReturnStatement
   } catch (e) {
     throw new Error('Não foi possível interpretar o XML de resposta.')
