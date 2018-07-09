@@ -389,7 +389,10 @@ function fetchCorreiosService(cepWithLeftPad) {
 
   function parseHeaders(rawHeaders) {
     var headers = new Headers();
-    rawHeaders.split(/\r?\n/).forEach(function (line) {
+    // Replace instances of \r\n and \n followed by at least one space or horizontal tab with a space
+    // https://tools.ietf.org/html/rfc7230#section-3.2
+    var preProcessedHeaders = rawHeaders.replace(/\r?\n[\t ]+/g, ' ');
+    preProcessedHeaders.split(/\r?\n/).forEach(function (line) {
       var parts = line.split(':');
       var key = parts.shift().trim();
       if (key) {
@@ -408,7 +411,7 @@ function fetchCorreiosService(cepWithLeftPad) {
     }
 
     this.type = 'default';
-    this.status = 'status' in options ? options.status : 200;
+    this.status = options.status === undefined ? 200 : options.status;
     this.ok = this.status >= 200 && this.status < 300;
     this.statusText = 'statusText' in options ? options.statusText : 'OK';
     this.headers = new Headers(options.headers);
@@ -475,6 +478,8 @@ function fetchCorreiosService(cepWithLeftPad) {
 
       if (request.credentials === 'include') {
         xhr.withCredentials = true;
+      } else if (request.credentials === 'omit') {
+        xhr.withCredentials = false;
       }
 
       if ('responseType' in xhr && support.blob) {
