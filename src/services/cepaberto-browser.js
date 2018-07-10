@@ -1,6 +1,6 @@
 'use strict'
 
-import fetch from 'isomorphic-fetch'
+import fetch from 'isomorphic-unfetch'
 import ServiceError from '../errors/service.js'
 
 export default function fetchCepAbertoService (cepWithLeftPad) {
