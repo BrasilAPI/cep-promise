@@ -135,7 +135,7 @@ cep('123456789123456789')
 
 #### Browser usando CDN
 ```
-<script src="https://cdn.jsdelivr.net/npm/cep-promise/dist/cep-promise-browser.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/cep-promise/dist/cep-promise.min.js"></script>
 ```
 
 #### npm
@@ -154,7 +154,7 @@ $ bower install --save cep-promise
 Caso você utilize o `browserify` para gerenciamento de dependência no browser, importe a versão **otimizada** com o seguinte path:
 
 ```
-require('/dist/cep-promise-browser.min.js')
+require('/dist/cep-promise.min.js')
 ```
 
 #### Webpack
@@ -166,7 +166,7 @@ require('/dist/cep-promise-browser.min.js')
 
   resolve: {
     alias: {
-      "cep-promise": path.join(__dirname, 'node_modules', 'cep-promise', 'dist', 'cep-promise-browser.min.js')
+      "cep-promise": path.join(__dirname, 'node_modules', 'cep-promise', 'dist', 'cep-promise.min.js')
     }
   }
 ```
