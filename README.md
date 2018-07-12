@@ -150,27 +150,6 @@ $ npm install --save cep-promise
 $ bower install --save cep-promise
 ```
 
-#### Browser
-Caso você utilize o `browserify` para gerenciamento de dependência no browser, importe a versão **otimizada** com o seguinte path:
-
-```
-require('/dist/cep-promise.min.js')
-```
-
-#### Webpack
-É possível configurar o `webpack.config.js` trocando caminho do cep-promise para usar o caminho correto da forma abaixo e com isto o `import cep from 'cep-promise'` deverá funcionar como o esperado:
-
-```
-  const path = require('path')
-  // ...
-
-  resolve: {
-    alias: {
-      "cep-promise": path.join(__dirname, 'node_modules', 'cep-promise', 'dist', 'cep-promise.min.js')
-    }
-  }
-```
-
 #### Angular 2
 
 ``` ts
