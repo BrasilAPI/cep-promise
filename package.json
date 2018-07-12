@@ -2,24 +2,19 @@
   "name": "cep-promise",
   "version": "3.0.1",
   "description": "Busca por CEP integrado diretamente aos serviços dos Correios e ViaCEP",
-  "main": "dist/cep-promise.js",
-  "module": "dist/cep-promise-esm.js",
-  "jsnext:main": "dist/cep-promise-esm.js",
+  "main": "dist/cep-promise.min.js",
+  "module": "dist/cep-promise.min.js",
   "scripts": {
-    "test": "npm run coverage",
+    "test": "npm run build && npm run coverage",
     "coverage": "babel-node node_modules/.bin/babel-istanbul cover _mocha -- --timeout 60000 test/**/*.spec.js",
     "test-unit": "mocha --compilers js:babel-core/register test/unit/**/*.spec.js",
     "test-unit-watch": "mocha --watch --compilers js:babel-core/register test/unit/**/*.spec.js",
-    "test-e2e": "mocha --compilers js:babel-core/register test/e2e/**/*.spec.js",
+    "test-e2e": "npm run build && mocha --compilers js:babel-core/register test/e2e/**/*.spec.js",
     "test-e2e-watch": "mocha --watch --compilers js:babel-core/register test/e2e/**/*.spec.js",
     "lint-check": "standard",
     "lint-fix": "standard --fix",
-    "build": "rollup -c && uglifyjs dist/cep-promise-browser.js -cm -o dist/cep-promise-browser.min.js",
+    "build": "rollup -c && uglifyjs dist/cep-promise.js -cm -o dist/cep-promise.min.js",
     "prepublish": "npm run build"
-  },
-  "browser": {
-    "./src/services/correios.js": "./src/services/correios-browser.js",
-    "./src/services/cepaberto.js": "./src/services/cepaberto-browser.js"
   },
   "repository": {
     "type": "git",
@@ -59,7 +54,7 @@
     ]
   },
   "dependencies": {
-    "isomorphic-fetch": "2.2.1"
+    "isomorphic-unfetch": "^2.0.0"
   },
   "files": [
     "dist",
