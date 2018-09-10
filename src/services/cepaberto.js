@@ -4,7 +4,7 @@ import fetch from 'isomorphic-unfetch'
 import ServiceError from '../errors/service.js'
 
 export default function fetchCepAbertoService (cepWithLeftPad, proxyURL = '') {
-  const url = `${proxyURL}http://www.cepaberto.com/api/v2/ceps.json?cep=${cepWithLeftPad}`
+  const url = `${proxyURL}http://www.cepaberto.com/api/v3/cep?cep=${cepWithLeftPad}`
   const options = {
     method: 'GET',
     mode: 'cors',
