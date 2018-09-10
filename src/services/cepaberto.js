@@ -16,7 +16,6 @@ export default function fetchCepAbertoService (cepWithLeftPad, proxyURL = '') {
 
   return fetch(url, options)
     .then(analyzeAndParseResponse)
-    .then(checkForViaCepError)
     .then(extractCepValuesFromResponse)
     .catch(throwApplicationError)
 }
@@ -26,13 +25,6 @@ function analyzeAndParseResponse (response) {
     return response.json()
   }
   throw Error('Erro ao se conectar com o serviço Cep Aberto.')
-}
-
-function checkForViaCepError (responseObject) {
-  if (!Object.keys(responseObject).length) {
-    throw new Error('CEP não encontrado na base do Cep Aberto.')
-  }
-  return responseObject
 }
 
 function extractCepValuesFromResponse (responseObject) {
