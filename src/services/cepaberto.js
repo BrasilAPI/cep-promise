@@ -38,8 +38,8 @@ function checkForViaCepError (responseObject) {
 function extractCepValuesFromResponse (responseObject) {
   return {
     cep: responseObject.cep,
-    state: responseObject.estado,
-    city: responseObject.cidade,
+    state: responseObject.estado.sigla,
+    city: responseObject.cidade.nome,
     neighborhood: responseObject.bairro,
     street: responseObject.logradouro
   }
