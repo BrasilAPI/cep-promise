@@ -1,9 +1,10 @@
 'use strict'
 
 import fetch from 'isomorphic-unfetch'
-import ServiceError from '../errors/service.js'
+import { ResponseHelpers } from '../helpers/services-response-formatter';
 
-export default function fetchViaCepService (cepWithLeftPad) {
+const ViaCep = (cepWithLeftPad) => {
+  const SERVICE_NAME = 'ViaCEP';
   const url = `https://viacep.com.br/ws/${cepWithLeftPad}/json/`
   const options = {
     method: 'GET',
@@ -12,49 +13,19 @@ export default function fetchViaCepService (cepWithLeftPad) {
       'content-type': 'application/json;charset=utf-8'
     }
   }
-
   return fetch(url, options)
-    .then(analyzeAndParseResponse)
-    .then(checkForViaCepError)
-    .then(extractCepValuesFromResponse)
-    .catch(throwApplicationError)
+    .then((response) => ResponseHelpers.analyzeAndParseResponse(response, SERVICE_NAME))
+    .then((response) => ResponseHelpers.checkForViaCepError(response, SERVICE_NAME))
+    .then((response) => ResponseHelpers.extractCepValuesFromResponse(response, {
+      cep: 'cep',
+      state: 'uf',
+      city: 'localidade',
+      neighborhood: 'bairro',
+      street: 'logradouro',
+    }))
+    .catch((e) => ResponseHelpers.throwApplicationError(e, SERVICE_NAME))
 }
 
-function analyzeAndParseResponse (response) {
-  if (response.ok) {
-    return response.json()
-  }
+export { ViaCep };
 
-  throw Error('Erro ao se conectar com o serviço ViaCEP.')
-}
-
-function checkForViaCepError (responseObject) {
-  if (responseObject.erro === true) {
-    throw new Error('CEP não encontrado na base do ViaCEP.')
-  }
-
-  return responseObject
-}
-
-function extractCepValuesFromResponse (responseObject) {
-  return {
-    cep: responseObject.cep.replace('-', ''),
-    state: responseObject.uf,
-    city: responseObject.localidade,
-    neighborhood: responseObject.bairro,
-    street: responseObject.logradouro
-  }
-}
-
-function throwApplicationError (error) {
-  const serviceError = new ServiceError({
-    message: error.message,
-    service: 'viacep'
-  })
-
-  if (error.name === 'FetchError') {
-    serviceError.message = 'Erro ao se conectar com o serviço ViaCEP.'
-  }
-
-  throw serviceError
-}
+export default ViaCep;

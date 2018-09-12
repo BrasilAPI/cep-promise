@@ -2,8 +2,8 @@
   "name": "cep-promise",
   "version": "3.0.2",
   "description": "Busca por CEP integrado diretamente aos serviços dos Correios e ViaCEP",
-  "main": "dist/cep-promise.min.js",
-  "module": "dist/cep-promise.min.js",
+  "main": "src/index.js",
+  "module": "src/index.js",
   "scripts": {
     "test": "npm run build && npm run coverage",
     "coverage": "babel-node node_modules/.bin/babel-istanbul cover _mocha -- --timeout 60000 test/**/*.spec.js",

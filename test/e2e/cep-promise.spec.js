@@ -4,8 +4,8 @@ import chai from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 import chaiSubset from 'chai-subset'
 
-import cep from '../../src/cep-promise.js'
-import CepPromiseError from '../../src/errors/cep-promise.js'
+import cep from '../../src/index.js'
+import { CepPromiseError } from '../../src/errors/cep-promise.js'
 
 chai.use(chaiAsPromised)
 chai.use(chaiSubset)

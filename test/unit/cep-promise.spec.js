@@ -6,8 +6,8 @@ import chaiSubset from 'chai-subset'
 import nock from 'nock'
 import path from 'path'
 
-import cep from '../../src/cep-promise.js'
-import CepPromiseError from '../../src/errors/cep-promise.js'
+import cep from '../../src/index.js'
+import { CepPromiseError } from '../../src/errors/cep-promise.js'
 
 chai.use(chaiAsPromised)
 chai.use(chaiSubset)
@@ -193,7 +193,7 @@ describe('cep-promise (unit)', () => {
       nock('http://www.cepaberto.com')
         .get('/api/v2/ceps.json?cep=05010000')
         .replyWithFile(200, path.join(__dirname, '/fixtures/cep-aberto-99999999-error.json'))
-        
+
       return expect(cep('5010000')).to.eventually.deep.equal({
         cep: '05010000',
         state: 'SP',
@@ -215,7 +215,7 @@ describe('cep-promise (unit)', () => {
       nock('http://www.cepaberto.com')
         .get('/api/v2/ceps.json?cep=05010000')
         .replyWithFile(200, path.join(__dirname, '/fixtures/cep-aberto-05010000-found.json'))
-        
+
       return expect(cep('5010000')).to.eventually.deep.equal({
         cep: '05010000',
         state: 'SP',
