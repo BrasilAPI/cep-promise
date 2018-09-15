@@ -33,7 +33,7 @@
  * Sempre retorna a resposta mais rápida por fazer as consultas de forma concorrente.
  * Sem limites de uso (rate limits) conhecidos.
  * Interface de Promise extremamente simples.
- * Suporte ao Node.js `4.x`, `5.x`, `6.x`, `7.x`, `8.x`, `9.x` e `@stable`.
+ * Suporte ao Node.js `4.x`, `5.x`, `6.x`, `7.x`, `8.x`, `9.x`, `10.x` e `@stable`.
  * Suportou ao Node.js `0.10.x` e `0.12.x` até cep-promise versão `2.0.8`.
  * 100% de code coverage com testes unitários e E2E.
  * Desenvolvido utilizando ES6.
@@ -137,7 +137,7 @@ cep('123456789123456789')
 
 #### Browser usando CDN
 ```
-<script src="https://cdn.jsdelivr.net/npm/cep-promise/dist/cep-promise-browser.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/cep-promise/dist/cep-promise.min.js"></script>
 ```
 
 #### npm
@@ -150,27 +150,6 @@ $ npm install --save cep-promise
 
 ```
 $ bower install --save cep-promise
-```
-
-#### Browser
-Caso você utilize o `browserify` para gerenciamento de dependência no browser, importe a versão **otimizada** com o seguinte path:
-
-```
-require('/dist/cep-promise-browser.min.js')
-```
-
-#### Webpack
-É possível configurar o `webpack.config.js` trocando caminho do cep-promise para usar o caminho correto da forma abaixo e com isto o `import cep from 'cep-promise'` deverá funcionar como o esperado:
-
-```
-  const path = require('path')
-  // ...
-
-  resolve: {
-    alias: {
-      "cep-promise": path.join(__dirname, 'node_modules', 'cep-promise', 'dist', 'cep-promise-browser.min.js')
-    }
-  }
 ```
 
 #### Angular 2
