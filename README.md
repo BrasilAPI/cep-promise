@@ -41,6 +41,8 @@
 
 ## Como utilizar
 
+Teste e aprenda <a href="https://npm.runkit.com/cep-promise" target="_blank">aqui</a>.
+
 ### Realizando uma consulta
 
 Por ser multifornecedor, a biblioteca irá resolver a Promise com o fornecedor que **mais rápido** lhe responder.

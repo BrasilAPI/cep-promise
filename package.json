@@ -25,6 +25,14 @@
   "bugs": {
     "url": "https://github.com/filipedeschamps/cep-promise/issues"
   },
+  "keywords": [
+    "cep",
+    "correios",
+    "zipcode",
+    "zip",
+    "promise",
+    "viacep"
+  ],
   "homepage": "https://github.com/filipedeschamps/cep-promise",
   "devDependencies": {
     "babel-cli": "6.18.0",
