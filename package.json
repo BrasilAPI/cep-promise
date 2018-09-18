@@ -62,7 +62,7 @@
     ]
   },
   "dependencies": {
-    "isomorphic-unfetch": "^2.0.0"
+    "isomorphic-unfetch": "2.0.0"
   },
   "files": [
     "dist",
