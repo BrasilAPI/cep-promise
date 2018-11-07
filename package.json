@@ -18,10 +18,7 @@
     "build": "npm run build-browser && npm run build-node",
     "prepublish": "npm run build"
   },
-  "browser": {
-    "./src/services/correios.js": "./src/services/browser-mock.js",
-    "./src/services/cepaberto.js": "./src/services/browser-mock.js"
-  },
+  "browser": "dist/cep-promise-browser.min.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/filipedeschamps/cep-promise.git"

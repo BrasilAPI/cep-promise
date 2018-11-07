@@ -32,6 +32,9 @@ function ServiceError() {
 
 ServiceError.prototype = new Error();
 
+var PROXY_URL = 'https://proxier.now.sh/';
+var CEP_ABERTO_TOKEN = '37d718d2984e6452584a76d3d59d3a26';
+
 function fetchCepAbertoService(cepWithLeftPad) {
   var proxyURL = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
 
@@ -41,7 +44,7 @@ function fetchCepAbertoService(cepWithLeftPad) {
     mode: 'cors',
     headers: {
       'content-type': 'application/json;charset=utf-8',
-      'Authorization': 'Token token="37bfda18fd4b423cdb6748d14ba30aa6"'
+      'Authorization': 'Token token=' + CEP_ABERTO_TOKEN
     }
   };
 
@@ -215,8 +218,6 @@ function throwApplicationError$2(error) {
 
   throw serviceError;
 }
-
-var PROXY_URL = 'https://cors-anywhere.herokuapp.com/';
 
 /* istanbul ignore next */
 function injectProxy(Service) {
