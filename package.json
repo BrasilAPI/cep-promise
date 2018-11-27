@@ -3,7 +3,7 @@
   "version": "3.0.3",
   "description": "Busca por CEP integrado diretamente aos serviços dos Correios e ViaCEP",
   "main": "dist/cep-promise.min.js",
-  "module": "dist/cep-promise.min.js",
+  "module": "dist/cep-promise-browser.min.js",
   "scripts": {
     "test": "npm run build && npm run coverage",
     "coverage": "babel-node node_modules/.bin/babel-istanbul cover _mocha -- --timeout 60000 test/**/*.spec.js",
@@ -13,9 +13,12 @@
     "test-e2e-watch": "mocha --watch --compilers js:babel-core/register test/e2e/**/*.spec.js",
     "lint-check": "standard",
     "lint-fix": "standard --fix",
-    "build": "rollup -c && uglifyjs dist/cep-promise.js -cm -o dist/cep-promise.min.js",
+    "build-browser": "rollup -c && uglifyjs dist/cep-promise-browser.js -cm -o dist/cep-promise-browser.min.js",
+    "build-node": "rollup -c && uglifyjs dist/cep-promise.js -cm -o dist/cep-promise.min.js",
+    "build": "npm run build-browser && npm run build-node",
     "prepublish": "npm run build"
   },
+  "browser": "dist/cep-promise-browser.min.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/filipedeschamps/cep-promise.git"

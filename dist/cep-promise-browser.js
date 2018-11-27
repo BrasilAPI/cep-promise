@@ -1,10 +1,8 @@
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('isomorphic-unfetch')) :
-	typeof define === 'function' && define.amd ? define(['isomorphic-unfetch'], factory) :
-	(global.cep = factory(global.fetch));
-}(this, (function (fetch) { 'use strict';
-
-fetch = fetch && fetch.hasOwnProperty('default') ? fetch['default'] : fetch;
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+	typeof define === 'function' && define.amd ? define(factory) :
+	(global.cep = factory());
+}(this, (function () { 'use strict';
 
 function CepPromiseError() {
   var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
@@ -19,6 +17,83 @@ function CepPromiseError() {
 }
 
 CepPromiseError.prototype = new Error();
+
+var index = typeof fetch == 'function' ? fetch.bind() : function (url, options) {
+	options = options || {};
+	return new Promise(function (resolve, reject) {
+		var request = new XMLHttpRequest();
+
+		request.open(options.method || 'get', url);
+
+		for (var i in options.headers) {
+			request.setRequestHeader(i, options.headers[i]);
+		}
+
+		request.withCredentials = options.credentials == 'include';
+
+		request.onload = function () {
+			resolve(response());
+		};
+
+		request.onerror = reject;
+
+		request.send(options.body);
+
+		function response() {
+			var _keys = [],
+			    all = [],
+			    headers = {},
+			    header;
+
+			request.getAllResponseHeaders().replace(/^(.*?):\s*([\s\S]*?)$/gm, function (m, key, value) {
+				_keys.push(key = key.toLowerCase());
+				all.push([key, value]);
+				header = headers[key];
+				headers[key] = header ? header + "," + value : value;
+			});
+
+			return {
+				ok: (request.status / 200 | 0) == 1, // 200-299
+				status: request.status,
+				statusText: request.statusText,
+				url: request.responseURL,
+				clone: response,
+				text: function text() {
+					return Promise.resolve(request.responseText);
+				},
+				json: function json() {
+					return Promise.resolve(request.responseText).then(JSON.parse);
+				},
+				blob: function blob() {
+					return Promise.resolve(new Blob([request.response]));
+				},
+				headers: {
+					keys: function keys() {
+						return _keys;
+					},
+					entries: function entries() {
+						return all;
+					},
+					get: function get(n) {
+						return headers[n.toLowerCase()];
+					},
+					has: function has(n) {
+						return n.toLowerCase() in headers;
+					}
+				}
+			};
+		}
+	});
+};
+
+
+var unfetch_es = Object.freeze({
+	default: index
+});
+
+var require$$0 = ( unfetch_es && index ) || unfetch_es;
+
+var browser = window.fetch || (window.fetch = require$$0.default || require$$0);
 
 function ServiceError() {
   var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
@@ -48,7 +123,7 @@ function fetchCepAbertoService(cepWithLeftPad) {
     }
   };
 
-  return fetch(url, options).then(analyzeAndParseResponse).then(checkForViaCepError).then(extractCepValuesFromResponse).catch(throwApplicationError);
+  return browser(url, options).then(analyzeAndParseResponse).then(checkForViaCepError).then(extractCepValuesFromResponse).catch(throwApplicationError);
 }
 
 function analyzeAndParseResponse(response) {
@@ -101,7 +176,7 @@ function fetchCorreiosService(cepWithLeftPad) {
     }
   };
 
-  return fetch(url, options).then(analyzeAndParseResponse$1).catch(throwApplicationError$1);
+  return browser(url, options).then(analyzeAndParseResponse$1).catch(throwApplicationError$1);
 }
 
 function analyzeAndParseResponse$1(response) {
@@ -177,7 +252,7 @@ function fetchViaCepService(cepWithLeftPad) {
     }
   };
 
-  return fetch(url, options).then(analyzeAndParseResponse$2).then(checkForViaCepError$1).then(extractCepValuesFromResponse$1).catch(throwApplicationError$2);
+  return browser(url, options).then(analyzeAndParseResponse$2).then(checkForViaCepError$1).then(extractCepValuesFromResponse$1).catch(throwApplicationError$2);
 }
 
 function analyzeAndParseResponse$2(response) {

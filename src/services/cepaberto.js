@@ -2,6 +2,7 @@
 
 import fetch from 'isomorphic-unfetch'
 import ServiceError from '../errors/service.js'
+import { CEP_ABERTO_TOKEN } from '../utils/consts'
 
 export default function fetchCepAbertoService (cepWithLeftPad, proxyURL = '') {
   const url = `${proxyURL}http://www.cepaberto.com/api/v2/ceps.json?cep=${cepWithLeftPad}`
@@ -10,7 +11,7 @@ export default function fetchCepAbertoService (cepWithLeftPad, proxyURL = '') {
     mode: 'cors',
     headers: {
       'content-type': 'application/json;charset=utf-8',
-      'Authorization': 'Token token="37bfda18fd4b423cdb6748d14ba30aa6"'
+      'Authorization': `Token token=${CEP_ABERTO_TOKEN}`
     }
   }
 
