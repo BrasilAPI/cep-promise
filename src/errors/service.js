@@ -1,9 +1,11 @@
-function ServiceError ({ message, service } = {}) {
-  this.name = 'ServiceError'
-  this.message = message
-  this.service = service
-}
+class ServiceError extends Error {
+  constructor ({ message, service } = {}) {
+    super()
 
-ServiceError.prototype = new Error()
+    this.name = 'ServiceError'
+    this.message = message
+    this.service = service
+  }
+}
 
 export default ServiceError

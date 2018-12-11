@@ -4,19 +4,74 @@
 	(global.cep = factory());
 }(this, (function () { 'use strict';
 
-function CepPromiseError() {
-  var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-      message = _ref.message,
-      type = _ref.type,
-      errors = _ref.errors;
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
+  return typeof obj;
+} : function (obj) {
+  return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+};
 
-  this.name = 'CepPromiseError';
-  this.message = message;
-  this.type = type;
-  this.errors = errors;
-}
+var classCallCheck = function (instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+};
 
-CepPromiseError.prototype = new Error();
+var inherits = function (subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+  }
+
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      enumerable: false,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+};
+
+var possibleConstructorReturn = function (self, call) {
+  if (!self) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+
+  return call && (typeof call === "object" || typeof call === "function") ? call : self;
+};
+
+var toConsumableArray = function (arr) {
+  if (Array.isArray(arr)) {
+    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
+
+    return arr2;
+  } else {
+    return Array.from(arr);
+  }
+};
+
+var CepPromiseError = function (_Error) {
+  inherits(CepPromiseError, _Error);
+
+  function CepPromiseError() {
+    var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+        message = _ref.message,
+        type = _ref.type,
+        errors = _ref.errors;
+
+    classCallCheck(this, CepPromiseError);
+
+    var _this = possibleConstructorReturn(this, (CepPromiseError.__proto__ || Object.getPrototypeOf(CepPromiseError)).call(this));
+
+    _this.name = 'CepPromiseError';
+    _this.message = message;
+    _this.type = type;
+    _this.errors = errors;
+    return _this;
+  }
+
+  return CepPromiseError;
+}(Error);
 
 var index = typeof fetch == 'function' ? fetch.bind() : function (url, options) {
 	options = options || {};
@@ -95,17 +150,26 @@ var require$$0 = ( unfetch_es && index ) || unfetch_es;
 
 var browser = window.fetch || (window.fetch = require$$0.default || require$$0);
 
-function ServiceError() {
-  var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-      message = _ref.message,
-      service = _ref.service;
+var ServiceError = function (_Error) {
+  inherits(ServiceError, _Error);
 
-  this.name = 'ServiceError';
-  this.message = message;
-  this.service = service;
-}
+  function ServiceError() {
+    var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+        message = _ref.message,
+        service = _ref.service;
 
-ServiceError.prototype = new Error();
+    classCallCheck(this, ServiceError);
+
+    var _this = possibleConstructorReturn(this, (ServiceError.__proto__ || Object.getPrototypeOf(ServiceError)).call(this));
+
+    _this.name = 'ServiceError';
+    _this.message = message;
+    _this.service = service;
+    return _this;
+  }
+
+  return ServiceError;
+}(Error);
 
 var PROXY_URL = 'https://proxier.now.sh/';
 var CEP_ABERTO_TOKEN = '37d718d2984e6452584a76d3d59d3a26';
@@ -304,22 +368,6 @@ function injectProxy(Service) {
 var CepAbertoService = typeof process === 'undefined' ? injectProxy(fetchCepAbertoService) : fetchCepAbertoService;
 var CorreiosService = typeof process === 'undefined' ? injectProxy(fetchCorreiosService) : fetchCorreiosService;
 var ViaCepService = fetchViaCepService;
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
-  return typeof obj;
-} : function (obj) {
-  return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-};
-
-var toConsumableArray = function (arr) {
-  if (Array.isArray(arr)) {
-    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
-
-    return arr2;
-  } else {
-    return Array.from(arr);
-  }
-};
 
 var reverse = function reverse(promise) {
   return new Promise(function (resolve, reject) {
