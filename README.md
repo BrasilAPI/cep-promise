@@ -34,7 +34,7 @@
  * Sem limites de uso (rate limits) conhecidos.
  * Interface de Promise extremamente simples.
  * Suporte ao Node.js `4.x`, `5.x`, `6.x`, `7.x`, `8.x`, `9.x`, `10.x` e `@stable`.
- * Suportou ao Node.js `0.10.x` e `0.12.x` até cep-promise versão `2.0.8`.
+ * Suporte ao Node.js `0.10.x` e `0.12.x` até cep-promise versão `2.0.8`.
  * 100% de code coverage com testes unitários e E2E.
  * Desenvolvido utilizando ES6.
 
