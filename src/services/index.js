@@ -5,15 +5,15 @@ import { PROXY_URL } from '../utils/consts'
 import { type } from 'os';
 
 function isBrowser(){
-  return typeof window !== undefined;
+  return typeof window !== 'undefined';
 }
 
 function isHttps(){
-  return location && location.protocol === 'https:';
+  return typeof location !== 'undefined' && location.protocol === 'https:';
 }
 
 function shouldUseProxy(){
-  return isBrowser && !isHttps();
+  return isBrowser() && !isHttps();
 }
 
 /* istanbul ignore next */
