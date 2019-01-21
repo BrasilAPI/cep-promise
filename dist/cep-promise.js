@@ -1,8 +1,8 @@
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('isomorphic-unfetch')) :
-	typeof define === 'function' && define.amd ? define(['isomorphic-unfetch'], factory) :
-	(global.cep = factory(global.fetch));
-}(this, (function (fetch) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('isomorphic-unfetch'), require('os')) :
+	typeof define === 'function' && define.amd ? define(['isomorphic-unfetch', 'os'], factory) :
+	(global.cep = factory(global.fetch,global.os));
+}(this, (function (fetch,os) { 'use strict';
 
 fetch = fetch && fetch.hasOwnProperty('default') ? fetch['default'] : fetch;
 
@@ -283,6 +283,18 @@ function throwApplicationError$2(error) {
   throw serviceError;
 }
 
+function isBrowser() {
+  return (typeof window === 'undefined' ? 'undefined' : _typeof(window)) !== undefined;
+}
+
+function isHttps() {
+  return location && location.protocol === 'https:';
+}
+
+function shouldUseProxy() {
+  return isBrowser && !isHttps();
+}
+
 /* istanbul ignore next */
 function injectProxy(Service) {
   return function (cepWithLeftPad) {
@@ -290,8 +302,8 @@ function injectProxy(Service) {
   };
 }
 
-var CepAbertoService = typeof process === 'undefined' ? injectProxy(fetchCepAbertoService) : fetchCepAbertoService;
-var CorreiosService = typeof process === 'undefined' ? injectProxy(fetchCorreiosService) : fetchCorreiosService;
+var CepAbertoService = shouldUseProxy() ? injectProxy(fetchCepAbertoService) : fetchCepAbertoService;
+var CorreiosService = shouldUseProxy() ? injectProxy(fetchCorreiosService) : fetchCorreiosService;
 var ViaCepService = fetchViaCepService;
 
 var reverse = function reverse(promise) {
