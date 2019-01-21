@@ -9,11 +9,11 @@ function isBrowser(){
 }
 
 function isHttps(){
-  return typeof location !== 'undefined' && location.protocol === 'https:';
+  return typeof location !== 'undefined' && location.protocol === 'https:'
 }
 
 function shouldUseProxy(){
-  return isBrowser() && !isHttps();
+  return isBrowser() && !isHttps()
 }
 
 /* istanbul ignore next */
