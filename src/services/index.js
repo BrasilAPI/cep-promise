@@ -3,14 +3,17 @@ import Correios from './correios'
 import ViaCep from './viacep'
 import { PROXY_URL } from '../utils/consts'
 
+/* istanbul ignore next */
 function isBrowser(){
   return typeof window !== 'undefined';
 }
 
+/* istanbul ignore next */
 function isHttps(){
   return typeof location !== 'undefined' && location.protocol === 'https:'
 }
 
+/* istanbul ignore next */
 function shouldUseProxy(){
   return isBrowser() && !isHttps()
 }
