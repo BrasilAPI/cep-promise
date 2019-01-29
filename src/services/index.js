@@ -2,7 +2,6 @@ import CepAberto from './cepaberto'
 import Correios from './correios'
 import ViaCep from './viacep'
 import { PROXY_URL } from '../utils/consts'
-import { type } from 'os';
 
 function isBrowser(){
   return typeof window !== 'undefined';
