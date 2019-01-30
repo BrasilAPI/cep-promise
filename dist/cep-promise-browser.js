@@ -1,8 +1,8 @@
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('os')) :
-	typeof define === 'function' && define.amd ? define(['os'], factory) :
-	(global.cep = factory(global.os));
-}(this, (function (os) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+	typeof define === 'function' && define.amd ? define(factory) :
+	(global.cep = factory());
+}(this, (function () { 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
   return typeof obj;
@@ -358,16 +358,9 @@ function throwApplicationError$2(error) {
   throw serviceError;
 }
 
+/* istanbul ignore next */
 function isBrowser() {
   return typeof window !== 'undefined';
-}
-
-function isHttps() {
-  return typeof location !== 'undefined' && location.protocol === 'https:';
-}
-
-function shouldUseProxy() {
-  return isBrowser() && !isHttps();
 }
 
 /* istanbul ignore next */
@@ -377,8 +370,8 @@ function injectProxy(Service) {
   };
 }
 
-var CepAbertoService = shouldUseProxy() ? injectProxy(fetchCepAbertoService) : fetchCepAbertoService;
-var CorreiosService = shouldUseProxy() ? injectProxy(fetchCorreiosService) : fetchCorreiosService;
+var CepAbertoService = isBrowser() ? injectProxy(fetchCepAbertoService) : fetchCepAbertoService;
+var CorreiosService = isBrowser() ? injectProxy(fetchCorreiosService) : fetchCorreiosService;
 var ViaCepService = fetchViaCepService;
 
 var reverse = function reverse(promise) {
