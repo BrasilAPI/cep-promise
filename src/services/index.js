@@ -9,20 +9,10 @@ function isBrowser(){
 }
 
 /* istanbul ignore next */
-function isHttps(){
-  return typeof location !== 'undefined' && location.protocol === 'https:'
-}
-
-/* istanbul ignore next */
-function shouldUseProxy(){
-  return isBrowser() && !isHttps()
-}
-
-/* istanbul ignore next */
 function injectProxy (Service) {
   return (cepWithLeftPad) => Service(cepWithLeftPad, PROXY_URL)
 }
 
-export const CepAbertoService = shouldUseProxy() ? injectProxy(CepAberto) : CepAberto
-export const CorreiosService = shouldUseProxy() ? injectProxy(Correios) : Correios
+export const CepAbertoService = isBrowser() ? injectProxy(CepAberto) : CepAberto
+export const CorreiosService = isBrowser() ? injectProxy(Correios) : Correios
 export const ViaCepService = ViaCep
