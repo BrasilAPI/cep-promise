@@ -284,14 +284,19 @@ function throwApplicationError$2(error) {
 }
 
 /* istanbul ignore next */
+function isBrowser() {
+  return typeof window !== 'undefined';
+}
+
+/* istanbul ignore next */
 function injectProxy(Service) {
   return function (cepWithLeftPad) {
     return Service(cepWithLeftPad, PROXY_URL);
   };
 }
 
-var CepAbertoService = typeof process === 'undefined' ? injectProxy(fetchCepAbertoService) : fetchCepAbertoService;
-var CorreiosService = typeof process === 'undefined' ? injectProxy(fetchCorreiosService) : fetchCorreiosService;
+var CepAbertoService = isBrowser() ? injectProxy(fetchCepAbertoService) : fetchCepAbertoService;
+var CorreiosService = isBrowser() ? injectProxy(fetchCorreiosService) : fetchCorreiosService;
 var ViaCepService = fetchViaCepService;
 
 var reverse = function reverse(promise) {
