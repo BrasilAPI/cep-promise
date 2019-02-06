@@ -5,7 +5,7 @@
 <h1 align="center">CEP Promise</h1>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/cep-promise">
+  <a href="https://npm-stat.com/charts.html?package=cep-promise">
     <img src="https://img.shields.io/npm/dm/cep-promise.svg">
   </a>
   <a href="https://coveralls.io/github/filipedeschamps/cep-promise?branch=master">
