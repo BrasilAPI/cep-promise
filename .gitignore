@@ -35,3 +35,6 @@ dist/*
 
 #Yarn
 yarn.lock
+
+# Website
+website/dist

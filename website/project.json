@@ -1,0 +1,69 @@
+{
+  "index": {
+    "source": {
+      "file": "src/index.html"
+    },
+    "dist": {
+      "root": "dist"
+    }
+  },
+  "scripts": {
+    "source": {
+      "root": "src/scripts/",
+      "files": "src/scripts/**/*.js",
+      "entry": "src/scripts/app.js"
+    },
+    "dist": {
+      "root": "dist",
+      "filename": {
+        "prod": "[name]-[hash].js",
+        "dev": "[name].js"
+      }
+    }
+  },
+  "styles": {
+    "source": {
+      "root": "src/styles/"
+    },
+    "dist": {
+      "filename": {
+        "prod": "[name]-[hash].css",
+        "dev": "[name].css"
+      }
+    }
+  },
+  "images": {
+    "source": {
+      "root": "src/images/",
+      "context": "src"
+    },
+    "dist": {
+      "filename": "[path][name].[ext]"
+    }
+  },
+  "fonts": {
+    "dist": {
+      "root": "fonts/[name].[ext]"
+    }
+  },
+  "favicon": {
+    "source": {
+      "file": "src/images/favicon-cep-promise_26x26.png"
+    }
+  },
+  "tests": {
+    "source": {
+      "files": "src/scripts/**/!(app|routes).js"
+    }
+  },
+  "mocks": {
+    "source": {
+      "root": "src/mocks/"
+    }
+  },
+  "environments": {
+    "source": {
+      "root": "environments"
+    }
+  }
+}
