@@ -1,0 +1,19 @@
+@require '_variables'
+@require '_mixins'
+
+.slice
+  padding 60px 0
+  overflow hidden
+  &.slice-angled
+    background: $color-purple;
+    background: linear-gradient(45deg, $color-green-light 0%, $color-purple 100%);
+    &:after
+      position absolute
+      content ' '
+      top 100%
+      left 0
+      width 102%
+      height 1000px
+      background-color $color-lightest
+      transform-origin 0 0
+      transform('skewY(-10deg)')
