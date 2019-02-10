@@ -1,0 +1,15 @@
+$viewport-content-padding-top = 160px
+
+.viewport
+  position relative
+
+.viewport-content
+  padding-top $viewport-content-padding-top
+  .slice
+    &.slice-angled
+      &:first-child
+        position absolute
+        top 0
+        left 0
+        width 100%
+        padding-top $viewport-content-padding-top
