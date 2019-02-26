@@ -11,5 +11,13 @@ export default {
     logo,
     navmenu
   },
+  props: ['theme'],
+  computed: {
+    classes() {
+      return {
+        [`topbar-${this.theme}`]: ['negative'].includes(this.theme)
+      };
+    },
+  },
   template
 };
