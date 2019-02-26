@@ -1,0 +1,37 @@
+@require '_variables'
+@require '_mixins'
+
+$row-item-padding = 10px
+$row-item-max-size = 12
+
+.row-item
+  float left
+  padding 0 $row-item-padding
+  box-sizing border-box
+  input,
+  textarea
+    width 100%
+
+.row-item-label,
+.row-item-value
+  white-space nowrap
+  text-overflow ellipsis
+  overflow hidden
+
+.row-item-label
+  margin-bottom 5px
+  color $color-grey-semi-dark
+  font-size $font-size-xxs
+
+for $size in (1..$row-item-max-size)
+  .row-item-size-{$size}
+    width ($size/$row-item-max-size) * 100%
+
++breakpoint('xs')
+  .row-item
+    float left
+    width 100%
+  & + .row-item
+    margin-top 12px
+  .row-item
+    width 100%
