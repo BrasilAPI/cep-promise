@@ -7,5 +7,6 @@ export default {
   components: {
     topbar
   },
+  props: ['topbarTheme'],
   template
 };
