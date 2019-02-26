@@ -1,0 +1,38 @@
+@require '_variables'
+@require '_mixins'
+
+.btn
+  position relative
+  padding 0 15px
+  color $color-blue
+  background-color transparent
+  font-size $font-size-sm
+  text-align center
+  line-height 40px
+  border-width 1px
+  border-style solid
+  border-color $color-grey
+  cursor pointer
+  webkit-appearance(none)
+  box-sizing(border-box)
+  transition(all, 300ms)
+  border-radius(3px)
+  &:hover,
+  &:focus,
+  &:active
+    outline 0
+  &:hover,
+  &:active
+    color $color-lightest
+  &.btn-small
+    padding 0 10px
+    line-height 25px
+    font-size $font-size-xxs
+  &.btn-primary
+    background-color $color-blue
+    color $color-lightest
+    border-color $color-blue
+    &:hover,
+    &:active
+      background-color $color-blue
+      color $color-lightest
