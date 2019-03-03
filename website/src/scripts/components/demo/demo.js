@@ -3,17 +3,19 @@ import '@glorious/demo/dist/gdemo.min.css';
 import 'prismjs/themes/prism-tomorrow.css';
 import GDemo from '@glorious/demo';
 import Prism from 'prismjs';
+import githubButtonWidget from '@scripts/components/github-button-widget/github-button-widget';
 import row from '@scripts/components/row/row';
 import rowItem from '@scripts/components/row-item/row-item';
-// import tweetBtn from '@scripts/base/components/tweet-btn/tweet-btn';
+import tweetBtn from '@scripts/components/tweet-btn/tweet-btn';
 import template from './demo.html';
 
 export default {
   name: 'demo',
   components: {
+    githubButtonWidget,
     row,
     rowItem,
-    // tweetBtn,
+    tweetBtn,
   },
   data(){
     return {

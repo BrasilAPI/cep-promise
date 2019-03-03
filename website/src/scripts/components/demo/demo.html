@@ -1,17 +1,26 @@
 <div class="demo">
   <row>
     <row-item size="12">
-      <div class="demo-container" data-demo-container></div>
+      <div class="demo-wrapper">
+        <div class="demo-container" data-demo-container></div>
+      </div>
     </row-item>
   </row>
-  <!-- <row>
+  <row>
     <row-item size="12">
-      <code-demo-toolbar>
-        <p slot="left">
-          Powered by <base-link route-name="demo">Glorious Demo</base-link>
-        </p>
-        <tweet-btn :tweet="tweet" size="small" slot="right"/>
-      </code-demo-toolbar>
+      <div class="demo-toolbar-container">
+        <div class="demo-toolbar">
+          <div class="demo-toolbar-buttons">
+            <tweet-btn :tweet="tweet" size="small" />
+            <github-button-widget
+              username="filipedeschamps"
+              repository-name="cep-promise" />
+          </div>
+          <div class="demo-toolbar-credits">
+            <p>Powered by <a href="https://glorious.codes/demo" target="_blank">Glorious Demo</a></p>
+          </div>
+        </div>
+      </div>
     </row-item>
-  </row> -->
+  </row>
 </div>
