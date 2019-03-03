@@ -11,7 +11,7 @@
   line-height 40px
   border-width 1px
   border-style solid
-  border-color $color-grey
+  border-color $color-blue
   cursor pointer
   webkit-appearance(none)
   box-sizing(border-box)
@@ -23,10 +23,11 @@
     outline 0
   &:hover,
   &:active
+    background-color $color-blue
     color $color-lightest
   &.btn-small
     padding 0 10px
-    line-height 25px
+    line-height 18px
     font-size $font-size-xxs
   &.btn-primary
     background-color $color-blue
@@ -34,5 +35,5 @@
     border-color $color-blue
     &:hover,
     &:active
-      background-color $color-blue
+      background-color $color-blue-dark
       color $color-lightest
