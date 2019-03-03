@@ -15,10 +15,20 @@ describe('Home View', () => {
 
   it('should contain a angled slice', () => {
     const wrapper = mountComponent();
-    expect(wrapper.find('slice-stub').attributes('theme')).toBe('angled');
+    expect(wrapper.findAll('slice-stub').at(0).attributes('theme')).toBe('angled');
   });
 
   it('should contain a intro', () => {
+    const wrapper = mountComponent();
+    expect(wrapper.find(intro)).toBeDefined();
+  });
+
+  it('should contain a simple slice', () => {
+    const wrapper = mountComponent();
+    expect(wrapper.findAll('slice-stub').at(1).attributes('theme')).toBe(undefined);
+  });
+
+  it('should contain an intro feature list', () => {
     const wrapper = mountComponent();
     expect(wrapper.find(intro)).toBeDefined();
   });
