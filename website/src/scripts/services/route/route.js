@@ -18,4 +18,18 @@ _public.goTo = (routeName, options = {}) => {
   });
 };
 
+_public.openUrl = (url, params) => {
+  window.open(buildFullUrl(url, params));
+};
+
+function buildFullUrl(url, params){
+  return params ? `${url}?${stringifyUrlParams(params)}` : url;
+}
+
+function stringifyUrlParams(params){
+  return Object.entries(params).map(([key, value]) => {
+    return `${key}=${encodeURI(value)}`;
+  }).join('&');
+}
+
 export default _public;
