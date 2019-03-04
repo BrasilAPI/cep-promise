@@ -1,10 +1,12 @@
 import '@styles/viewport.styl';
+import credits from '@scripts/components/credits/credits';
 import topbar from '@scripts/components/topbar/topbar';
 import template from './viewport.html';
 
 export default {
   name: 'viewport',
   components: {
+    credits,
     topbar
   },
   props: ['topbarTheme'],
