@@ -144,6 +144,12 @@ cep('123456789123456789')
 $ npm install --save cep-promise
 ```
 
+#### yarn
+
+```
+$ yarn add cep-promise
+```
+
 #### Bower
 
 ```
