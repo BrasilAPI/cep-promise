@@ -99,7 +99,7 @@ cep('99999999')
   //     message: 'Todos os serviços de CEP retornaram erro.',
   //     type: 'service_error',
   //     errors: [{
-  //       message: 'CEP NAO ENCONTRADO',
+  //       message: 'CEP INVÁLIDO',
   //       service: 'correios'
   //     }, {
   //       message: 'CEP não encontrado na base do ViaCEP.',

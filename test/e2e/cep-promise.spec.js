@@ -47,7 +47,7 @@ describe('[e2e] cep-promise', () => {
     })
   })
 
-  describe('when invoked with an inexistent "99999999" CEP', () => {
+  describe('when invoked with an invalid number "99999999" CEP', () => {
     it('should reject with "service_error"', () => {
       return cep('99999999').catch(error => {
         return expect(error)
@@ -80,7 +80,7 @@ describe('[e2e] cep-promise', () => {
     })
   })
 
-  describe('when invoked with an invalid "123456789" CEP', () => {
+  describe('when invoked with an invalid length "123456789" CEP', () => {
     it('should reject with "validation_error"', () => {
       return cep('123456789').catch(error => {
         return expect(error)
@@ -97,6 +97,28 @@ describe('[e2e] cep-promise', () => {
             ]
           })
       })
+    })
+  })
+
+  describe('when invoked with an inexistent "87330120" CEP', () => {
+    it('should reject with "service_error"', () => {
+      return cep('87330120')
+        .catch((error) => {
+          return expect(error)
+            .to.be.an.instanceOf(CepPromiseError)
+            .and.containSubset({
+              name: 'CepPromiseError',
+              message: 'Todos os serviços de CEP retornaram erro.',
+              type: 'service_error',
+              errors: [{
+                message: 'CEP NAO ENCONTRADO',
+                service: 'correios'
+              }, {
+                message: 'CEP não encontrado na base do ViaCEP.',
+                service: 'viacep'
+              }]
+            })
+        })
     })
   })
 })
