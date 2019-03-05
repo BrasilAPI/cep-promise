@@ -27,7 +27,7 @@ function analyzeAndParseResponse (response) {
   }
 
   return response.text()
-    .then(parseAndextractErrorMessage)
+    .then(parseAndExtractErrorMessage)
     .then(throwCorreiosError)
 }
 
@@ -51,7 +51,7 @@ function parseSuccessXML (xmlString) {
   }
 }
 
-function parseAndextractErrorMessage (xmlString) {
+function parseAndExtractErrorMessage (xmlString) {
   try {
     const returnStatement = xmlString.match(/<faultstring>(.*)<\/faultstring>/)[0] ?? ''
     const cleanReturnStatement = returnStatement.replace('<faultstring>', '').replace('</faultstring>', '')
