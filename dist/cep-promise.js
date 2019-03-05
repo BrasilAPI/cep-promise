@@ -321,7 +321,7 @@
       return response.text().then(parseSuccessXML).then(extractValuesFromSuccessResponse);
     }
 
-    return response.text().then(parseAndextractErrorMessage).then(throwCorreiosError);
+    return response.text().then(parseAndExtractErrorMessage).then(throwCorreiosError);
   }
 
   function parseSuccessXML(xmlString) {
@@ -345,7 +345,7 @@
     }
   }
 
-  function parseAndextractErrorMessage(xmlString) {
+  function parseAndExtractErrorMessage(xmlString) {
     try {
       var _xmlString$match$;
 
