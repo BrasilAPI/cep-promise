@@ -6,7 +6,7 @@ import viewport from '@scripts/components/viewport/viewport';
 import template from './home.html';
 
 export default {
-  name: 'home',
+  name: 'home-view',
   components: {
     featureList,
     installation,
