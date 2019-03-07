@@ -1,5 +1,4 @@
 import '@styles/code-sample.styl';
-import 'prismjs/themes/prism.css';
 import Prism from 'prismjs';
 import template from './code-sample.html';
 
