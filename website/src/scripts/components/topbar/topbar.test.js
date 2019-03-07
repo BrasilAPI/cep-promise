@@ -1,4 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
+import { localVueMock, routerMock } from '@mocks/router';
 import container from '@scripts/components/container/container';
 import logo from '@scripts/components/logo/logo';
 import navmenu from '@scripts/components/navmenu/navmenu';
@@ -6,7 +7,11 @@ import topbar from './topbar';
 
 describe('Topbar', () => {
   function mountComponent(propsData){
-    return shallowMount(topbar, { propsData });
+    return shallowMount(topbar, {
+      propsData,
+      localVue: localVueMock,
+      router: routerMock
+    });
   }
 
   it('should have appropriate css classes', () => {

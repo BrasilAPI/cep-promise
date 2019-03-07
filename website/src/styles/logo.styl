@@ -1,4 +1,5 @@
 @require '_variables'
+@require '_mixins'
 
 .logo
   margin 0 auto
@@ -6,4 +7,4 @@
   height 80px
   background-position center center
   background-repeat no-repeat
-  background-image url($path-images + '/logo.svg')
+  background-image('logo.svg')
