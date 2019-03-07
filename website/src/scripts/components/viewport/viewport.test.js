@@ -1,12 +1,16 @@
-import Vue from 'vue';
 import { shallowMount } from '@vue/test-utils';
 import topbar from '@scripts/components/topbar/topbar';
+import sliceService from '@scripts/services/slice/slice';
 import viewport from './viewport';
 
 describe('Viewport', () => {
   function mountComponent(slots){
     return shallowMount(viewport, { slots });
   }
+
+  beforeEach(() => {
+    sliceService.positionNotAngledSlices = jest.fn();
+  });
 
   it('should have appropriate css classes', () => {
     const wrapper = mountComponent();
@@ -23,17 +27,8 @@ describe('Viewport', () => {
     expect(wrapper.find('p').text()).toEqual('Hello!');
   });
 
-  it('should offset slices siblings to angled slices', () => {
-    const topbarMock = { offsetHeight: 50 };
-    const slicesMock = [
-      { classList: { contains: jest.fn(() => true) }, offsetHeight: 400 },
-      { classList: { contains: jest.fn(() => false) }, style: {} }
-    ];
-    const Constructor = Vue.extend(viewport);
-    const vm = new Constructor().$mount();
-    vm.$el.querySelectorAll = jest.fn(() => slicesMock);
-    vm.$el.querySelector = jest.fn(() => topbarMock);
-    vm.$mount();
-    expect(slicesMock[1].style.marginTop).toEqual('350px');
+  it('should offset slices adjacent to angled slices', () => {
+    const wrapper = mountComponent();
+    expect(sliceService.positionNotAngledSlices).toHaveBeenCalledWith(wrapper.element);
   });
 });
