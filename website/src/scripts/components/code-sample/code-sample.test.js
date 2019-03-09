@@ -39,4 +39,13 @@ describe('Code Sample', () => {
     expect(Prism.highlight.mock.calls[1][2]).toEqual('html');
     expect(vm.$el.querySelector('code').innerText).toEqual(code);
   });
+
+  it('should update highlighted code on code update', () => {
+    const code = 'function greet(){ alert("Hello!"); }';
+    const wrapper = mountComponent({language: 'javascript'});
+    wrapper.setProps({ code });
+    expect(Prism.highlight.mock.calls[1][0]).toEqual(code);
+    expect(typeof Prism.highlight.mock.calls[1][1]).toEqual('object');
+    expect(Prism.highlight.mock.calls[1][2]).toEqual('javascript');
+  });
 });

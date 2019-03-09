@@ -4,14 +4,22 @@ import template from './code-sample.html';
 
 export default {
   name: 'code-sample',
-  props: ['language'],
+  props: ['language', 'code'],
+  watch: {
+    'code': function(){
+      this.handleCodeSample();
+    }
+  },
   mounted(){
-    if(this.language)
-      this.renderCodeSample(this.highlightCode(this.getCodeSample(), this.language));
+    this.handleCodeSample();
   },
   methods: {
+    handleCodeSample(){
+      if(this.language)
+        this.renderCodeSample(this.highlightCode(this.getCodeSample(), this.language));
+    },
     getCodeSample(){
-      return this.getCodeSampleContainer().innerText;
+      return this.code || this.getCodeSampleContainer().innerText;
     },
     highlightCode(code, language){
       return Prism.highlight(code, Prism.languages[language], language);
