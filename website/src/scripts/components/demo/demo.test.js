@@ -11,7 +11,7 @@ function buildExpectedHighlightedCode(){
   const code = `
 const cep = require('cep-promise');
 
-cep('04551-010').then(console.log);
+cep('04.551-010').then(console.log);
 `;
   return Prism.highlight(
     code,
