@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat:500,700');
 @require '_variables'
+@require '_mixins'
 
 html, body
   margin 0
@@ -28,3 +29,13 @@ a
   text-decoration none
   &:visited
     color $color-blue
+
+input
+  padding 10px
+  font-size $font-size-sm
+  border 1px solid $color-grey
+  outline 0
+  border-radius(3px)
+  &:focus,
+  &:active
+    border 1px solid alpha($color-blue, .3)

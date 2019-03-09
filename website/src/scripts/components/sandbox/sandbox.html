@@ -1,0 +1,39 @@
+<div class="sandbox">
+  <form @submit="query">
+    <row>
+      <row-item size="12">
+        <input
+          type="text"
+          placeholder="Digite um CEP"
+          v-model="cep" />
+      </row-item>
+    </row>
+    <row>
+      <row-item size="12">
+        <btn type="submit">Consultar</btn>
+      </row-item>
+    </row>
+  </form>
+  <div class="sandbox-content-container">
+    <row>
+      <row-item size="6">
+        <div class="sandbox-content sandbox-content-code">
+          <code-sample
+            language="javascript"
+            :code="code">
+          </code-sample>
+        </div>
+      </row-item>
+      <row-item size="6">
+        <div class="sandbox-content sandbox-content-response">
+          <loader v-if="shouldShowLoader" />
+          <code-sample
+            language="javascript"
+            :code="response"
+            v-if="!shouldShowLoader">
+          </code-sample>
+        </div>
+      </row-item>
+    </row>
+  </div>
+</div>
