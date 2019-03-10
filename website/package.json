@@ -39,6 +39,7 @@
     "@glorious/demo": "^0.8.1",
     "prismjs": "^1.15.0",
     "vue": "^2.5.22",
+    "vue-head": "^2.1.1",
     "vue-router": "^3.0.2"
   }
 }
