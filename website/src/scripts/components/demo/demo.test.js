@@ -30,6 +30,11 @@ describe('Demo', () => {
     expect(wrapper.classes()).toEqual(['demo']);
   });
 
+  it('should contain a tweet sharing message', () => {
+    const wrapper = mountComponent();
+    expect(wrapper.vm.tweet).toEqual('Consulte endereços postais da maneira mais fácil que você já viu! http://localhost:7000');
+  });
+
   it('should contain container attribute', () => {
     const wrapper = mountComponent();
     const container = wrapper.element;

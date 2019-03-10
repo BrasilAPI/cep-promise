@@ -3,6 +3,7 @@ import '@glorious/demo/dist/gdemo.min.css';
 import 'prismjs/themes/prism-tomorrow.css';
 import GDemo from '@glorious/demo';
 import Prism from 'prismjs';
+import ENV from '@environment';
 import githubButtonWidget from '@scripts/components/github-button-widget/github-button-widget';
 import row from '@scripts/components/row/row';
 import rowItem from '@scripts/components/row-item/row-item';
@@ -19,7 +20,7 @@ export default {
   },
   data(){
     return {
-      tweet: 'Consulte endereços postais da maneira mais fácil que você já viu!'
+      tweet: `Consulte endereços postais da maneira mais fácil que você já viu! ${ENV.APP.BASE_URL}`
     };
   },
   mounted(){
