@@ -10,4 +10,13 @@
     float left
     margin-left 40px
   a
+    padding-bottom 5px
     color $color-blue
+    &.router-link-exact-active
+      border-bottom 1px solid $color-blue
+      cursor default
+      pointer-events none
+
++breakpoint('xs')
+  .navmenu
+    display none

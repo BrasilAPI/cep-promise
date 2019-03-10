@@ -2,6 +2,7 @@
 @require '_mixins'
 
 $sandobox-content-min-height = 300px
+$sandobox-content-min-height-mobile = 150px
 
 .sandbox
   input
@@ -44,3 +45,12 @@ $sandobox-content-min-height = 300px
       top 50px
       left 50%
       transform('translateX(-50%)')
+
++breakpoint('xs')
+  .sandbox
+    .code-sample
+      min-height $sandobox-content-min-height-mobile
+  .sandbox-content
+    min-height $sandobox-content-min-height-mobile
+    &.sandbox-content-response
+      margin-top 30px

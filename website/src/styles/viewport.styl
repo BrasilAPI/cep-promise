@@ -1,4 +1,7 @@
+@require '_mixins'
+
 $viewport-content-padding-top = 160px
+$viewport-content-padding-top-mobile = 130px
 
 .viewport
   position relative
@@ -13,3 +16,11 @@ $viewport-content-padding-top = 160px
         left 0
         width 100%
         padding-top $viewport-content-padding-top
+
++breakpoint('xs')
+  .viewport-content
+    padding-top $viewport-content-padding-top-mobile
+    .slice
+      &.slice-angled
+        &:first-child
+          padding-top $viewport-content-padding-top-mobile

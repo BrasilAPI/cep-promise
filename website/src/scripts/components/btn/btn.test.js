@@ -17,6 +17,11 @@ describe('Btn', () => {
     expect(wrapper.classes()).toContain('btn-primary');
   });
 
+  it('should render a secondary btn', () => {
+    const wrapper = createComponent({theme: 'secondary'});
+    expect(wrapper.classes()).toContain('btn-secondary');
+  });
+
   it('should render a small btn', () => {
     const wrapper = createComponent({size: 'small'});
     expect(wrapper.classes()).toContain('btn-small');

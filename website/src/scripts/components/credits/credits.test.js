@@ -11,13 +11,13 @@ describe('Credits', () => {
     expect(wrapper.classes()).toEqual(['credits']);
   });
 
-  it('should contain one paragraph', () => {
+  it('should contain two paragraph', () => {
     const wrapper = mountComponent();
-    expect(wrapper.findAll('p').length).toEqual(1);
+    expect(wrapper.findAll('p').length).toEqual(2);
   });
 
-  it('should contain three links', () => {
+  it('should contain four links', () => {
     const wrapper = mountComponent();
-    expect(wrapper.findAll('a').length).toEqual(3);
+    expect(wrapper.findAll('a').length).toEqual(4);
   });
 });

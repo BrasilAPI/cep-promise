@@ -10,3 +10,19 @@
   border 1px solid $color-grey
   border-radius(6px)
   box-sizing(border-box)
+  .credits-contribute-button-link
+    display none
+
++breakpoint('xs')
+  .credits
+    margin 50px auto 20px
+    width 100%
+    border 0
+    border-top 1px solid $color-grey
+    border-radius(0)
+    p
+      &:not(:first-child)
+        margin-top 30px
+    .credits-contribute-button-link
+      display inline-block
+      margin-top 15px

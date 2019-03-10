@@ -4,6 +4,7 @@
 .btn
   position relative
   padding 0 15px
+  min-width 100px
   color $color-blue
   background-color transparent
   font-size $font-size-sm
@@ -37,3 +38,11 @@
     &:active
       background-color $color-blue-dark
       color $color-lightest
+  &.btn-secondary
+    background-color transparent
+    color alpha($color-lightest, 0.7)
+    border-color alpha($color-lightest, 0.7)
+    &:hover,
+    &:active
+      background-color transparent
+      color alpha($color-lightest, 0.7)

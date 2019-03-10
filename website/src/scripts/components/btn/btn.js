@@ -10,7 +10,7 @@ export default {
   computed: {
     classes() {
       return {
-        [`btn-${this.theme}`]: ['primary'].includes(this.theme),
+        [`btn-${this.theme}`]: ['primary', 'secondary'].includes(this.theme),
         [`btn-${this.size}`]: ['small'].includes(this.size)
       };
     },

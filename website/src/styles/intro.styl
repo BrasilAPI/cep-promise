@@ -1,4 +1,5 @@
 @require '_variables'
+@require '_mixins'
 
 .intro-copy
   padding 100px 0
@@ -6,5 +7,19 @@
     color $color-pink-light
   p
     max-width 300px
+  a
+    & + a
+      display none
   .btn
     margin-top 35px
+
++breakpoint('xs')
+  .intro-copy
+    padding 0 0 30px
+    text-align center
+    p
+      max-width 100%
+    a
+      & + a
+        display inline-block
+        margin-left 15px
