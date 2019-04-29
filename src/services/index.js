@@ -15,4 +15,4 @@ function injectProxy (Service) {
 
 export const CepAbertoService = isBrowser() ? injectProxy(CepAberto) : CepAberto
 export const CorreiosService = isBrowser() ? injectProxy(Correios) : Correios
-export const ViaCepService = ViaCep
+export const ViaCepService = isBrowser() ? injectProxy(ViaCep) : ViaCep
