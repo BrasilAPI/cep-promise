@@ -23,12 +23,12 @@
 </p>
 
 <p align="center">
-  Busca por CEP integrado diretamente aos serviços dos Correios, ViaCEP e outros (Node.js e Browser)
+  Busca por CEP integrado diretamente aos serviços dos Correios e ViaCEP (Node.js e Browser)
 </p>
 
 ## Features
 
- * Sempre atualizado em tempo-real por se conectar diretamente aos serviços dos Correios, ViaCEP e outros.
+ * Sempre atualizado em tempo-real por se conectar diretamente aos serviços dos Correios e ViaCEP.
  * Possui alta disponibilidade por usar vários serviços como fallback.
  * Sempre retorna a resposta mais rápida por fazer as consultas de forma concorrente.
  * Sem limites de uso (rate limits) conhecidos.
@@ -103,9 +103,6 @@ cep('99999999')
   //     }, {
   //       message: 'CEP não encontrado na base do ViaCEP.',
   //       service: 'viacep'
-  //     }, {
-  //       message: 'CEP não encontrado na base do Cep Aberto.',
-  //       service: 'cepaberto'
   //     }]
   // }
 
