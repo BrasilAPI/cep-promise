@@ -5,7 +5,7 @@
   "main": "dist/cep-promise.min.js",
   "module": "dist/cep-promise-browser.min.js",
   "scripts": {
-    "test": "npm run build && npm run coverage",
+    "test": "npm run coverage",
     "coverage": "babel-node node_modules/.bin/babel-istanbul cover _mocha -- --timeout 60000 test/**/*.spec.js",
     "test-unit": "mocha --compilers js:babel-core/register test/unit/**/*.spec.js",
     "test-unit-watch": "mocha --watch --compilers js:babel-core/register test/unit/**/*.spec.js",
@@ -16,7 +16,7 @@
     "build-browser": "rollup -c && uglifyjs dist/cep-promise-browser.js -cm -o dist/cep-promise-browser.min.js",
     "build-node": "rollup -c && uglifyjs dist/cep-promise.js -cm -o dist/cep-promise.min.js",
     "build": "npm run build-browser && npm run build-node",
-    "prepublish": "npm run build"
+    "prepublishOnly": "npm run build"
   },
   "browser": "dist/cep-promise-browser.min.js",
   "repository": {
