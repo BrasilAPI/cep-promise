@@ -78,7 +78,7 @@ var index = typeof fetch == 'function' ? fetch.bind() : function (url, options) 
 	return new Promise(function (resolve, reject) {
 		var request = new XMLHttpRequest();
 
-		request.open(options.method || 'get', url, true);
+		request.open(options.method || 'get', url);
 
 		for (var i in options.headers) {
 			request.setRequestHeader(i, options.headers[i]);
@@ -92,7 +92,7 @@ var index = typeof fetch == 'function' ? fetch.bind() : function (url, options) 
 
 		request.onerror = reject;
 
-		request.send(options.body || null);
+		request.send(options.body);
 
 		function response() {
 			var _keys = [],
@@ -100,7 +100,7 @@ var index = typeof fetch == 'function' ? fetch.bind() : function (url, options) 
 			    headers = {},
 			    header;
 
-			request.getAllResponseHeaders().replace(/^(.*?):[^\S\n]*([\s\S]*?)$/gm, function (m, key, value) {
+			request.getAllResponseHeaders().replace(/^(.*?):\s*([\s\S]*?)$/gm, function (m, key, value) {
 				_keys.push(key = key.toLowerCase());
 				all.push([key, value]);
 				header = headers[key];
@@ -108,7 +108,7 @@ var index = typeof fetch == 'function' ? fetch.bind() : function (url, options) 
 			});
 
 			return {
-				ok: (request.status / 100 | 0) == 2, // 200-299
+				ok: (request.status / 200 | 0) == 1, // 200-299
 				status: request.status,
 				statusText: request.statusText,
 				url: request.responseURL,
@@ -171,62 +171,6 @@ var ServiceError = function (_Error) {
   return ServiceError;
 }(Error);
 
-var PROXY_URL = 'https://proxier.now.sh/';
-var CEP_ABERTO_TOKEN = '37d718d2984e6452584a76d3d59d3a26';
-
-function fetchCepAbertoService(cepWithLeftPad) {
-  var proxyURL = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
-
-  var url = proxyURL + 'http://www.cepaberto.com/api/v2/ceps.json?cep=' + cepWithLeftPad;
-  var options = {
-    method: 'GET',
-    mode: 'cors',
-    headers: {
-      'content-type': 'application/json;charset=utf-8',
-      'Authorization': 'Token token=' + CEP_ABERTO_TOKEN
-    }
-  };
-
-  return browser(url, options).then(analyzeAndParseResponse).then(checkForViaCepError).then(extractCepValuesFromResponse).catch(throwApplicationError);
-}
-
-function analyzeAndParseResponse(response) {
-  if (response.ok) {
-    return response.json();
-  }
-  throw Error('Erro ao se conectar com o serviço Cep Aberto.');
-}
-
-function checkForViaCepError(responseObject) {
-  if (!Object.keys(responseObject).length) {
-    throw new Error('CEP não encontrado na base do Cep Aberto.');
-  }
-  return responseObject;
-}
-
-function extractCepValuesFromResponse(responseObject) {
-  return {
-    cep: responseObject.cep,
-    state: responseObject.estado,
-    city: responseObject.cidade,
-    neighborhood: responseObject.bairro,
-    street: responseObject.logradouro
-  };
-}
-
-function throwApplicationError(error) {
-  var serviceError = new ServiceError({
-    message: error.message,
-    service: 'cepaberto'
-  });
-
-  if (error.name === 'FetchError') {
-    serviceError.message = 'Erro ao se conectar com o serviço Cep Aberto.';
-  }
-
-  throw serviceError;
-}
-
 function fetchCorreiosService(cepWithLeftPad) {
   var proxyURL = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
 
@@ -240,10 +184,10 @@ function fetchCorreiosService(cepWithLeftPad) {
     }
   };
 
-  return browser(url, options).then(analyzeAndParseResponse$1).catch(throwApplicationError$1);
+  return browser(url, options).then(analyzeAndParseResponse).catch(throwApplicationError);
 }
 
-function analyzeAndParseResponse$1(response) {
+function analyzeAndParseResponse(response) {
   if (response.ok) {
     return response.text().then(parseSuccessXML).then(extractValuesFromSuccessResponse);
   }
@@ -293,7 +237,7 @@ function extractValuesFromSuccessResponse(xmlObject) {
   };
 }
 
-function throwApplicationError$1(error) {
+function throwApplicationError(error) {
   var serviceError = new ServiceError({
     message: error.message,
     service: 'correios'
@@ -307,7 +251,9 @@ function throwApplicationError$1(error) {
 }
 
 function fetchViaCepService(cepWithLeftPad) {
-  var url = 'https://viacep.com.br/ws/' + cepWithLeftPad + '/json/';
+  var proxyURL = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+
+  var url = proxyURL + 'https://viacep.com.br/ws/' + cepWithLeftPad + '/json/';
   var options = {
     method: 'GET',
     mode: 'cors',
@@ -316,10 +262,10 @@ function fetchViaCepService(cepWithLeftPad) {
     }
   };
 
-  return browser(url, options).then(analyzeAndParseResponse$2).then(checkForViaCepError$1).then(extractCepValuesFromResponse$1).catch(throwApplicationError$2);
+  return browser(url, options).then(analyzeAndParseResponse$1).then(checkForViaCepError).then(extractCepValuesFromResponse).catch(throwApplicationError$1);
 }
 
-function analyzeAndParseResponse$2(response) {
+function analyzeAndParseResponse$1(response) {
   if (response.ok) {
     return response.json();
   }
@@ -327,7 +273,7 @@ function analyzeAndParseResponse$2(response) {
   throw Error('Erro ao se conectar com o serviço ViaCEP.');
 }
 
-function checkForViaCepError$1(responseObject) {
+function checkForViaCepError(responseObject) {
   if (responseObject.erro === true) {
     throw new Error('CEP não encontrado na base do ViaCEP.');
   }
@@ -335,7 +281,7 @@ function checkForViaCepError$1(responseObject) {
   return responseObject;
 }
 
-function extractCepValuesFromResponse$1(responseObject) {
+function extractCepValuesFromResponse(responseObject) {
   return {
     cep: responseObject.cep.replace('-', ''),
     state: responseObject.uf,
@@ -345,7 +291,7 @@ function extractCepValuesFromResponse$1(responseObject) {
   };
 }
 
-function throwApplicationError$2(error) {
+function throwApplicationError$1(error) {
   var serviceError = new ServiceError({
     message: error.message,
     service: 'viacep'
@@ -357,6 +303,8 @@ function throwApplicationError$2(error) {
 
   throw serviceError;
 }
+
+var PROXY_URL = 'https://proxier.now.sh/';
 
 /* istanbul ignore next */
 function isBrowser() {
@@ -370,9 +318,8 @@ function injectProxy(Service) {
   };
 }
 
-var CepAbertoService = isBrowser() ? injectProxy(fetchCepAbertoService) : fetchCepAbertoService;
 var CorreiosService = isBrowser() ? injectProxy(fetchCorreiosService) : fetchCorreiosService;
-var ViaCepService = fetchViaCepService;
+var ViaCepService = isBrowser() ? injectProxy(fetchViaCepService) : fetchViaCepService;
 
 var reverse = function reverse(promise) {
   return new Promise(function (resolve, reject) {
@@ -387,7 +334,7 @@ Promise.any = function (iterable) {
 var CEP_SIZE = 8;
 
 function cepPromise (cepRawValue) {
-  return Promise.resolve(cepRawValue).then(validateInputType).then(removeSpecialCharacters).then(validateInputLength).then(leftPadWithZeros).then(fetchCepFromServices).catch(handleServicesError).catch(throwApplicationError$3);
+  return Promise.resolve(cepRawValue).then(validateInputType).then(removeSpecialCharacters).then(validateInputLength).then(leftPadWithZeros).then(fetchCepFromServices).catch(handleServicesError).catch(throwApplicationError$2);
 }
 
 function validateInputType(cepRawValue) {
@@ -431,7 +378,7 @@ function validateInputLength(cepWithLeftPad) {
 }
 
 function fetchCepFromServices(cepWithLeftPad) {
-  return Promise.any([CepAbertoService(cepWithLeftPad), CorreiosService(cepWithLeftPad), ViaCepService(cepWithLeftPad)]);
+  return Promise.any([CorreiosService(cepWithLeftPad), ViaCepService(cepWithLeftPad)]);
 }
 
 function handleServicesError(aggregatedErrors) {
@@ -445,7 +392,7 @@ function handleServicesError(aggregatedErrors) {
   throw aggregatedErrors;
 }
 
-function throwApplicationError$3(_ref) {
+function throwApplicationError$2(_ref) {
   var message = _ref.message,
       type = _ref.type,
       errors = _ref.errors;

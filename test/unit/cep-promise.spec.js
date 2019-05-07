@@ -29,9 +29,6 @@ describe('cep-promise (unit)', () => {
       nock('https://viacep.com.br')
         .get('/ws/05010000/json/')
         .replyWithFile(200, path.join(__dirname, '/fixtures/viacep-cep-05010000-found.json'))
-      nock('http://www.cepaberto.com')
-        .get('/api/v2/ceps.json?cep=05010000')
-        .replyWithFile(200, path.join(__dirname, '/fixtures/cep-aberto-05010000-found.json'))
 
       const cepPromise = cep('05010000')
       expect(cepPromise.then).to.be.a('function')
@@ -124,9 +121,6 @@ describe('cep-promise (unit)', () => {
       nock('https://viacep.com.br')
         .get('/ws/05010000/json/')
         .replyWithFile(200, path.join(__dirname, '/fixtures/viacep-cep-05010000-found.json'))
-      nock('http://www.cepaberto.com')
-        .get('/api/v2/ceps.json?cep=05010000')
-        .replyWithFile(200, path.join(__dirname, '/fixtures/cep-aberto-05010000-found.json'))
 
       return expect(cep('05010000')).to.eventually.deep.equal({
         cep: '05010000',
@@ -146,9 +140,6 @@ describe('cep-promise (unit)', () => {
       nock('https://viacep.com.br')
         .get('/ws/05010000/json/')
         .replyWithFile(200, path.join(__dirname, '/fixtures/viacep-cep-05010000-found.json'))
-      nock('http://www.cepaberto.com')
-        .get('/api/v2/ceps.json?cep=05010000')
-        .replyWithFile(200, path.join(__dirname, '/fixtures/cep-aberto-05010000-found.json'))
 
       return expect(cep(5010000)).to.eventually.deep.equal({
         cep: '05010000',
@@ -168,9 +159,6 @@ describe('cep-promise (unit)', () => {
       nock('https://viacep.com.br')
         .get('/ws/05010000/json/')
         .replyWithFile(200, path.join(__dirname, '/fixtures/viacep-cep-99999999-error.json'))
-      nock('http://www.cepaberto.com')
-        .get('/api/v2/ceps.json?cep=05010000')
-        .replyWithFile(200, path.join(__dirname, '/fixtures/cep-aberto-99999999-error.json'))
 
       return expect(cep('5010000')).to.eventually.deep.equal({
         cep: '05010000',
@@ -190,32 +178,7 @@ describe('cep-promise (unit)', () => {
       nock('https://viacep.com.br')
         .get('/ws/05010000/json/')
         .replyWithFile(200, path.join(__dirname, '/fixtures/viacep-cep-05010000-found.json'))
-      nock('http://www.cepaberto.com')
-        .get('/api/v2/ceps.json?cep=05010000')
-        .replyWithFile(200, path.join(__dirname, '/fixtures/cep-aberto-99999999-error.json'))
-        
-      return expect(cep('5010000')).to.eventually.deep.equal({
-        cep: '05010000',
-        state: 'SP',
-        city: 'São Paulo',
-        neighborhood: 'Perdizes',
-        street: 'Rua Caiubi'
-      })
-    })
-  })
 
-  describe('Should succeed only with cep aberto service', () => {
-    it('should fulfill with correct address', () => {
-      nock('https://apps.correios.com.br')
-        .post('/SigepMasterJPA/AtendeClienteService/AtendeCliente')
-        .replyWithFile(500, path.join(__dirname, '/fixtures/response-unknown-format.xml'))
-      nock('https://viacep.com.br')
-        .get('/ws/05010000/json/')
-        .replyWithFile(200, path.join(__dirname, '/fixtures/viacep-cep-99999999-error.json'))
-      nock('http://www.cepaberto.com')
-        .get('/api/v2/ceps.json?cep=05010000')
-        .replyWithFile(200, path.join(__dirname, '/fixtures/cep-aberto-05010000-found.json'))
-        
       return expect(cep('5010000')).to.eventually.deep.equal({
         cep: '05010000',
         state: 'SP',
@@ -234,9 +197,6 @@ describe('cep-promise (unit)', () => {
       nock('https://viacep.com.br')
         .get('/ws/05010000/json/')
         .replyWithFile(200, path.join(__dirname, '/fixtures/viacep-cep-05010000-found.json'))
-      nock('http://www.cepaberto.com')
-        .get('/api/v2/ceps.json?cep=05010000')
-        .replyWithFile(200, path.join(__dirname, '/fixtures/cep-aberto-05010000-found.json'))
 
       return expect(cep('5010000')).to.eventually.deep.equal({
         cep: '05010000',
@@ -256,9 +216,6 @@ describe('cep-promise (unit)', () => {
       nock('https://viacep.com.br')
         .get('/ws/05010000/json/')
         .replyWithFile(200, path.join(__dirname, '/fixtures/viacep-cep-05010000-found.json'))
-      nock('http://www.cepaberto.com')
-        .get('/api/v2/ceps.json?cep=05010000')
-        .replyWithFile(200, path.join(__dirname, '/fixtures/cep-aberto-05010000-found.json'))
 
       return expect(cep('5010000')).to.eventually.deep.equal({
         cep: '05010000',
@@ -278,9 +235,6 @@ describe('cep-promise (unit)', () => {
       nock('https://viacep.com.br')
         .get('/ws/99999999/json/')
         .replyWithFile(200, path.join(__dirname, '/fixtures/viacep-cep-99999999-error.json'))
-      nock('http://www.cepaberto.com')
-        .get('/api/v2/ceps.json?cep=99999999')
-        .replyWithFile(200, path.join(__dirname, '/fixtures/cep-aberto-99999999-error.json'))
 
       return cep('99999999')
         .catch((error) => {
@@ -296,9 +250,6 @@ describe('cep-promise (unit)', () => {
               }, {
                 message: 'CEP não encontrado na base do ViaCEP.',
                 service: 'viacep'
-              }, {
-                message: 'CEP não encontrado na base do Cep Aberto.',
-                service: 'cepaberto'
               }]
             })
         })
@@ -332,9 +283,6 @@ describe('cep-promise (unit)', () => {
       nock('https://viacep.com.br')
         .get('/ws/05010000/json/')
         .reply(400, '<h2>Bad Request (400)</h2>')
-      nock('http://www.cepaberto.com')
-        .get('/api/v2/ceps.json?cep=05010000')
-        .reply(400, '<h2>Bad Request (400)</h2>')
 
       return cep('05010000')
         .catch((error) => {
@@ -350,9 +298,6 @@ describe('cep-promise (unit)', () => {
               }, {
                 message: 'Erro ao se conectar com o serviço ViaCEP.',
                 service: 'viacep'
-              }, {
-                message: 'Erro ao se conectar com o serviço Cep Aberto.',
-                service: 'cepaberto'
               }]
             })
         })
@@ -366,9 +311,6 @@ describe('cep-promise (unit)', () => {
         .replyWithFile(200, path.join(__dirname, '/fixtures/response-bad-xml.xml'))
       nock('https://viacep.com.br')
         .get('/ws/05010000/json/')
-        .reply(400, '<h2>Bad Request (400)</h2>')
-      nock('http://www.cepaberto.com')
-        .get('/api/v2/ceps.json?cep=05010000')
         .reply(400, '<h2>Bad Request (400)</h2>')
 
       return cep('05010000')
@@ -385,9 +327,6 @@ describe('cep-promise (unit)', () => {
               }, {
                 message: 'Erro ao se conectar com o serviço ViaCEP.',
                 service: 'viacep'
-              }, {
-                message: 'Erro ao se conectar com o serviço Cep Aberto.',
-                service: 'cepaberto'
               }]
             })
         })
@@ -401,9 +340,6 @@ describe('cep-promise (unit)', () => {
         .replyWithError('getaddrinfo ENOTFOUND apps.correios.com.br apps.correios.com.br:443')
       nock('https://viacep.com.br')
         .get('/ws/05010000/json/')
-        .replyWithError('getaddrinfo ENOTFOUND apps.correios.com.br apps.correios.com.br:443')
-      nock('http://www.cepaberto.com')
-        .get('/api/v2/ceps.json?cep=05010000')
         .replyWithError('getaddrinfo ENOTFOUND apps.correios.com.br apps.correios.com.br:443')
 
       return cep('05010000')
@@ -420,9 +356,6 @@ describe('cep-promise (unit)', () => {
               }, {
                 message: 'Erro ao se conectar com o serviço ViaCEP.',
                 service: 'viacep'
-              }, {
-                message: 'Erro ao se conectar com o serviço Cep Aberto.',
-                service: 'cepaberto'
               }]
             })
         })
