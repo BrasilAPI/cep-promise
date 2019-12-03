@@ -304,7 +304,7 @@ function throwApplicationError$1(error) {
   throw serviceError;
 }
 
-var PROXY_URL = 'https://proxier.now.sh/';
+var PROXY_URL = 'https://proxier.now.sh/api?url=';
 
 /* istanbul ignore next */
 function isBrowser() {
