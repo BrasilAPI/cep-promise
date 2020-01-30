@@ -304,7 +304,7 @@ function throwApplicationError$1(error) {
   throw serviceError;
 }
 
-var PROXY_URL = 'https://proxier.now.sh/';
+var PROXY_URL = 'https://proxier.now.sh/api?url=';
 
 /* istanbul ignore next */
 function isBrowser() {
@@ -319,7 +319,7 @@ function injectProxy(Service) {
 }
 
 var CorreiosService = isBrowser() ? injectProxy(fetchCorreiosService) : fetchCorreiosService;
-var ViaCepService = isBrowser() ? injectProxy(fetchViaCepService) : fetchViaCepService;
+var ViaCepService = fetchViaCepService;
 
 var reverse = function reverse(promise) {
   return new Promise(function (resolve, reject) {

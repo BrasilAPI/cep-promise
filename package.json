@@ -1,6 +1,6 @@
 {
   "name": "cep-promise",
-  "version": "3.0.7",
+  "version": "3.0.9",
   "description": "Busca por CEP integrado diretamente aos serviços dos Correios e ViaCEP",
   "main": "dist/cep-promise.min.js",
   "module": "dist/cep-promise-browser.min.js",
