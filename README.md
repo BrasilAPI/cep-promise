@@ -148,6 +148,11 @@ $ npm install --save cep-promise
 ```
 $ bower install --save cep-promise
 ```
+#### yarn
+
+```
+$ yarn add cep-promise
+```
 
 #### Angular 2
 
