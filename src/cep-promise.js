@@ -1,7 +1,11 @@
 'use strict'
 
 import CepPromiseError from './errors/cep-promise.js'
-import { CorreiosService, ViaCepService } from './services/index.js'
+import {
+  CorreiosService,
+  ViaCepService,
+  WideNetService
+} from './services/index.js'
 import Promise from './utils/promise-any.js'
 
 const CEP_SIZE = 8
@@ -27,10 +31,13 @@ function validateInputType (cepRawValue) {
   throw new CepPromiseError({
     message: 'Erro ao inicializar a instância do CepPromise.',
     type: 'validation_error',
-    errors: [{
-      message: 'Você deve chamar o construtor utilizando uma String ou um Number.',
-      service: 'cep_validation'
-    }]
+    errors: [
+      {
+        message:
+          'Você deve chamar o construtor utilizando uma String ou um Number.',
+        service: 'cep_validation'
+      }
+    ]
   })
 }
 
@@ -50,15 +57,18 @@ function validateInputLength (cepWithLeftPad) {
   throw new CepPromiseError({
     message: `CEP deve conter exatamente ${CEP_SIZE} caracteres.`,
     type: 'validation_error',
-    errors: [{
-      message: `CEP informado possui mais do que ${CEP_SIZE} caracteres.`,
-      service: 'cep_validation'
-    }]
+    errors: [
+      {
+        message: `CEP informado possui mais do que ${CEP_SIZE} caracteres.`,
+        service: 'cep_validation'
+      }
+    ]
   })
 }
 
 function fetchCepFromServices (cepWithLeftPad) {
   return Promise.any([
+    WideNetService(cepWithLeftPad),
     CorreiosService(cepWithLeftPad),
     ViaCepService(cepWithLeftPad)
   ])

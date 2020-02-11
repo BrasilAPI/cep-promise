@@ -23,12 +23,12 @@
 </p>
 
 <p align="center">
-  Busca por CEP integrado diretamente aos serviços dos Correios e ViaCEP (Node.js e Browser)
+  Busca por CEP integrado diretamente aos serviços dos Correios, ViaCEP e WideNet (Node.js e Browser)
 </p>
 
 ## Features
 
- * Sempre atualizado em tempo-real por se conectar diretamente aos serviços dos Correios e ViaCEP.
+ * Sempre atualizado em tempo-real por se conectar diretamente aos serviços dos Correios, ViaCEP e WideNet.
  * Possui alta disponibilidade por usar vários serviços como fallback.
  * Sempre retorna a resposta mais rápida por fazer as consultas de forma concorrente.
  * Sem limites de uso (rate limits) conhecidos.
