@@ -4,7 +4,7 @@ import CepPromiseError from './errors/cep-promise.js'
 import {
   CorreiosService,
   ViaCepService,
-  WideNetService
+  WideNetService,
 } from './services/index.js'
 import Promise from './utils/promise-any.js'
 
