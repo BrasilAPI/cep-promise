@@ -1,0 +1,10 @@
+{
+  "status": 200,
+  "ok": true,
+  "code": "05010-000",
+  "state": "SP",
+  "city": "São Paulo",
+  "district": "Perdizes",
+  "address": "Rua Caiubi",
+  "statusText": "ok"
+}

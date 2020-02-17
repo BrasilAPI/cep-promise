@@ -229,6 +229,60 @@ function throwApplicationError$1(error) {
   throw serviceError;
 }
 
+function fetchWideNetService(cepWithLeftPad) {
+  var proxyURL = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+
+  var url = proxyURL + 'https://cep.widenet.host/busca-cep/api/cep/' + cepWithLeftPad + '.json';
+  var options = {
+    method: 'GET',
+    mode: 'cors',
+    headers: {
+      'content-type': 'application/json;charset=utf-8'
+    }
+  };
+
+  return fetch(url, options).then(analyzeAndParseResponse$2).then(checkForWideNetError).then(extractCepValuesFromResponse$1).catch(throwApplicationError$2);
+}
+
+function analyzeAndParseResponse$2(response) {
+  if (response.ok) {
+    return response.json();
+  }
+
+  throw Error('Erro ao se conectar com o serviço WideNet.');
+}
+
+function checkForWideNetError(object) {
+  if (object.ok === false || object.status !== 200) {
+    throw new Error('CEP não encontrado na base do WideNet.');
+  }
+
+  return object;
+}
+
+function extractCepValuesFromResponse$1(object) {
+  return {
+    cep: object.code.replace('-', ''),
+    state: object.state,
+    city: object.city,
+    neighborhood: object.district,
+    street: object.address
+  };
+}
+
+function throwApplicationError$2(error) {
+  var serviceError = new ServiceError({
+    message: error.message,
+    service: 'widenet'
+  });
+
+  if (error.name === 'FetchError') {
+    serviceError.message = 'Erro ao se conectar com o serviço WideNet.';
+  }
+
+  throw serviceError;
+}
+
 var PROXY_URL = 'https://proxier.now.sh/api?url=';
 
 /* istanbul ignore next */
@@ -245,6 +299,7 @@ function injectProxy(Service) {
 
 var CorreiosService = isBrowser() ? injectProxy(fetchCorreiosService) : fetchCorreiosService;
 var ViaCepService = fetchViaCepService;
+var WideNetService = fetchWideNetService;
 
 var reverse = function reverse(promise) {
   return new Promise(function (resolve, reject) {
@@ -259,7 +314,7 @@ Promise.any = function (iterable) {
 var CEP_SIZE = 8;
 
 function cepPromise (cepRawValue) {
-  return Promise.resolve(cepRawValue).then(validateInputType).then(removeSpecialCharacters).then(validateInputLength).then(leftPadWithZeros).then(fetchCepFromServices).catch(handleServicesError).catch(throwApplicationError$2);
+  return Promise.resolve(cepRawValue).then(validateInputType).then(removeSpecialCharacters).then(validateInputLength).then(leftPadWithZeros).then(fetchCepFromServices).catch(handleServicesError).catch(throwApplicationError$3);
 }
 
 function validateInputType(cepRawValue) {
@@ -303,7 +358,7 @@ function validateInputLength(cepWithLeftPad) {
 }
 
 function fetchCepFromServices(cepWithLeftPad) {
-  return Promise.any([CorreiosService(cepWithLeftPad), ViaCepService(cepWithLeftPad)]);
+  return Promise.any([WideNetService(cepWithLeftPad), CorreiosService(cepWithLeftPad), ViaCepService(cepWithLeftPad)]);
 }
 
 function handleServicesError(aggregatedErrors) {
@@ -317,7 +372,7 @@ function handleServicesError(aggregatedErrors) {
   throw aggregatedErrors;
 }
 
-function throwApplicationError$2(_ref) {
+function throwApplicationError$3(_ref) {
   var message = _ref.message,
       type = _ref.type,
       errors = _ref.errors;
