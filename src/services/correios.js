@@ -22,6 +22,7 @@ export default function fetchCorreiosService (cepWithLeftPad, proxyURL = '') {
 function analyzeAndParseResponse (response) {
   if (response.ok) {
     return response.text()
+      .then(checkResponseAndResultStatement)
       .then(parseSuccessXML)
       .then(extractValuesFromSuccessResponse)
   }
@@ -31,7 +32,15 @@ function analyzeAndParseResponse (response) {
     .then(throwCorreiosError)
 }
 
-function parseSuccessXML (xmlString) {
+function checkResponseAndResultStatement(xmlString) {
+  if (xmlString.includes('consultaCEPResponse') && !xmlString.includes('<return>')) {
+    throw new Error('CEP NAO ENCONTRADO')
+  }
+
+  return xmlString;
+}
+
+function parseSuccessXML(xmlString) {
   try {
     const returnStatement = xmlString.replace(/\r?\n|\r/g, '').match(/<return>(.*)<\/return>/)[0] ?? ''
     const cleanReturnStatement = returnStatement.replace('<return>', '').replace('</return>', '')
