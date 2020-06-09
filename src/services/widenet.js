@@ -42,7 +42,8 @@ function extractCepValuesFromResponse (object) {
     state: object.state,
     city: object.city,
     neighborhood: object.district,
-    street: object.address
+    street: object.address,
+    service: 'widenet'
   }
 }
 
