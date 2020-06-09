@@ -14,26 +14,30 @@ let expect = chai.expect
 
 describe('cep-promise (E2E)', () => {
   describe('when invoked with a valid "05010000" string', () => {
-    it('should fulfill with correct address', () => {
-      return expect(cep('05010000')).to.eventually.deep.equal({
-        cep: '05010000',
-        state: 'SP',
-        city: 'São Paulo',
-        neighborhood: 'Perdizes',
-        street: 'Rua Caiubi'
-      })
-    })
+    it('should fulfill with correct address', () => cep('05010000')
+        .then(address => expect(address).to.deep.equal({
+            cep: '05010000',
+            state: 'SP',
+            city: 'São Paulo',
+            neighborhood: 'Perdizes',
+            street: 'Rua Caiubi',
+            service: address.service
+        }))
+    )
   })
 
-  describe('when invoked with a valid 5010000 number', () => {
-    it('should fulfill with correct address', () => {
-      return expect(cep(5010000)).to.eventually.deep.equal({
-        cep: '05010000',
-        state: 'SP',
-        city: 'São Paulo',
-        neighborhood: 'Perdizes',
-        street: 'Rua Caiubi'
-      })
+  describe('when invoked with a valid 05010000 number', () => {
+    it('should fulfill with correct address', async () => {
+      const address = await cep(5010000)
+
+      expect(address).to.deep.equal({
+            cep: '05010000',
+            state: 'SP',
+            city: 'São Paulo',
+            neighborhood: 'Perdizes',
+            street: 'Rua Caiubi',
+            service: address.service
+          })
     })
   })
 
