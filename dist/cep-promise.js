@@ -158,7 +158,8 @@ function extractValuesFromSuccessResponse(xmlObject) {
     state: xmlObject.uf,
     city: xmlObject.cidade,
     neighborhood: xmlObject.bairro,
-    street: xmlObject.end
+    street: xmlObject.end,
+    service: 'correios'
   };
 }
 
@@ -212,7 +213,8 @@ function extractCepValuesFromResponse(responseObject) {
     state: responseObject.uf,
     city: responseObject.localidade,
     neighborhood: responseObject.bairro,
-    street: responseObject.logradouro
+    street: responseObject.logradouro,
+    service: 'viacep'
   };
 }
 
@@ -266,7 +268,8 @@ function extractCepValuesFromResponse$1(object) {
     state: object.state,
     city: object.city,
     neighborhood: object.district,
-    street: object.address
+    street: object.address,
+    service: 'widenet'
   };
 }
 
