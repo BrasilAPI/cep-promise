@@ -10,15 +10,56 @@ import Promise from './utils/promise-any.js'
 
 const CEP_SIZE = 8
 
-export default function (cepRawValue) {
+export default function (cepRawValue, providers = []) {
   return Promise.resolve(cepRawValue)
     .then(validateInputType)
+    .then(zipcode => {
+      validateProviders(providers)
+
+      return zipcode
+    })
     .then(removeSpecialCharacters)
     .then(validateInputLength)
     .then(leftPadWithZeros)
-    .then(fetchCepFromServices)
+    .then((cepWithLeftPad) => fetchCepFromServices(cepWithLeftPad, providers) )
     .catch(handleServicesError)
     .catch(throwApplicationError)
+}
+
+function validateProviders (providers) {
+  let availableProviders = ['correios', 'viacep', 'widenet']
+
+  if (!Array.isArray(providers)) {
+    throw new CepPromiseError({
+      message: 'Erro ao inicializar a instância do CepPromise.',
+      type: 'validation_error',
+      errors: [
+        {
+          message:
+            `O parâmetro providers deve ser uma lista.`,
+          service: 'cep_validation'
+        }
+      ]
+    })
+  }
+
+  return providers.map(provider => {
+    if (!availableProviders.includes(provider)) {
+      throw new CepPromiseError({
+        message: 'Erro ao inicializar a instância do CepPromise.',
+        type: 'validation_error',
+        errors: [
+          {
+            message:
+              `O provider "${provider}" é inválido. Os providers disponíveis são: ${availableProviders.join(", ")}.`,
+            service: 'cep_validation'
+          }
+        ]
+      })
+    }
+
+    return provider
+  })
 }
 
 function validateInputType (cepRawValue) {
@@ -66,12 +107,25 @@ function validateInputLength (cepWithLeftPad) {
   })
 }
 
-function fetchCepFromServices (cepWithLeftPad) {
-  return Promise.any([
-    WideNetService(cepWithLeftPad),
-    CorreiosService(cepWithLeftPad),
-    ViaCepService(cepWithLeftPad)
-  ])
+function fetchCepFromServices (cepWithLeftPad, providers) {
+  const providersServices = {
+    correios: CorreiosService,
+    widenet: WideNetService,
+    viacep: ViaCepService,
+  }
+
+  if (providers.length === 0) {
+    return Promise.any(
+      Object.keys(providersServices)
+        .map(provider => providersServices[provider](cepWithLeftPad))
+    )
+  }
+
+  return Promise.any(
+    providers.map(provider => {
+      return providersServices[provider](cepWithLeftPad)
+    })
+  )
 }
 
 function handleServicesError (aggregatedErrors) {
