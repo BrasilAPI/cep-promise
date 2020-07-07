@@ -39,7 +39,7 @@
   "homepage": "https://github.com/filipedeschamps/cep-promise",
   "devDependencies": {
     "@babel/cli": "^7.10.4",
-    "@babel/core": "^7.0.0",
+    "@babel/core": "^7.10.4",
     "@babel/node": "^7.10.4",
     "@babel/preset-env": "^7.10.4",
     "@babel/register": "^7.10.4",
