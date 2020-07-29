@@ -1,6 +1,7 @@
 import babel from 'rollup-plugin-babel'
 import commonjs from 'rollup-plugin-commonjs'
 import resolve from 'rollup-plugin-node-resolve'
+import replace from '@rollup/plugin-replace'
 
 const input = 'src/cep-promise.js'
 const defaultPlugins = [
@@ -14,7 +15,11 @@ const defaultPlugins = [
 export default [
   {
     input,
-    plugins: [].concat(defaultPlugins, [
+    plugins: [
+      replace({
+        'isomorphic-unfetch': 'node-fetch',
+      })
+    ].concat(defaultPlugins, [
       commonjs()
     ]),
     output: {
@@ -25,7 +30,11 @@ export default [
   },
   {
     input,
-    plugins: [].concat(defaultPlugins, [
+    plugins: [
+      replace({
+        'isomorphic-unfetch': 'unfetch',
+      })
+    ].concat(defaultPlugins, [
       resolve({
         browser: true
       }),

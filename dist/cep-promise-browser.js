@@ -73,7 +73,7 @@ var CepPromiseError = function (_Error) {
   return CepPromiseError;
 }(Error);
 
-function unfetch (e, n) {
+function fetch (e, n) {
   return n = n || {}, new Promise(function (t, r) {
     var s = new XMLHttpRequest(),
         o = [],
@@ -104,15 +104,6 @@ function unfetch (e, n) {
     }s.send(n.body || null);
   });
 }
-
-
-var unfetch$1 = Object.freeze({
-	default: unfetch
-});
-
-var require$$0 = ( unfetch$1 && unfetch ) || unfetch$1;
-
-var browser = window.fetch || (window.fetch = require$$0.default || require$$0);
 
 var ServiceError = function (_Error) {
   inherits(ServiceError, _Error);
@@ -148,7 +139,7 @@ function fetchCorreiosService(cepWithLeftPad) {
     }
   };
 
-  return browser(url, options).then(analyzeAndParseResponse).catch(throwApplicationError);
+  return fetch(url, options).then(analyzeAndParseResponse).catch(throwApplicationError);
 }
 
 function analyzeAndParseResponse(response) {
@@ -226,7 +217,7 @@ function fetchViaCepService(cepWithLeftPad) {
     }
   };
 
-  return browser(url, options).then(analyzeAndParseResponse$1).then(checkForViaCepError).then(extractCepValuesFromResponse).catch(throwApplicationError$1);
+  return fetch(url, options).then(analyzeAndParseResponse$1).then(checkForViaCepError).then(extractCepValuesFromResponse).catch(throwApplicationError$1);
 }
 
 function analyzeAndParseResponse$1(response) {
@@ -280,7 +271,7 @@ function fetchWideNetService(cepWithLeftPad) {
     }
   };
 
-  return browser(url, options).then(analyzeAndParseResponse$2).then(checkForWideNetError).then(extractCepValuesFromResponse$1).catch(throwApplicationError$2);
+  return fetch(url, options).then(analyzeAndParseResponse$2).then(checkForWideNetError).then(extractCepValuesFromResponse$1).catch(throwApplicationError$2);
 }
 
 function analyzeAndParseResponse$2(response) {
