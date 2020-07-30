@@ -67,8 +67,8 @@
     ]
   },
   "dependencies": {
-    "node-fetch": "2.2.0",
-    "unfetch": "4.0.0"
+    "node-fetch": "2.6.0",
+    "unfetch": "4.1.0"
   },
   "files": [
     "dist",
