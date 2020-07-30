@@ -75,33 +75,32 @@ var CepPromiseError = function (_Error) {
 
 function fetch (e, n) {
   return n = n || {}, new Promise(function (t, r) {
-    var s = new XMLHttpRequest(),
-        o = [],
-        u = [],
-        i = {},
-        a = function a() {
-      return { ok: 2 == (s.status / 100 | 0), statusText: s.statusText, status: s.status, url: s.responseURL, text: function text() {
+    var s = new XMLHttpRequest();for (var o in s.open(n.method || "get", e, !0), n.headers) {
+      s.setRequestHeader(o, n.headers[o]);
+    }function u() {
+      var e,
+          n = [],
+          t = [],
+          r = {};return s.getAllResponseHeaders().replace(/^(.*?):[^\S\n]*([\s\S]*?)$/gm, function (s, o, u) {
+        n.push(o = o.toLowerCase()), t.push([o, u]), r[o] = (e = r[o]) ? e + "," + u : u;
+      }), { ok: 2 == (s.status / 100 | 0), status: s.status, statusText: s.statusText, url: s.responseURL, clone: u, text: function text() {
           return Promise.resolve(s.responseText);
         }, json: function json() {
-          return Promise.resolve(JSON.parse(s.responseText));
+          return Promise.resolve(s.responseText).then(JSON.parse);
         }, blob: function blob() {
           return Promise.resolve(new Blob([s.response]));
-        }, clone: a, headers: { keys: function keys() {
-            return o;
+        }, headers: { keys: function keys() {
+            return n;
           }, entries: function entries() {
-            return u;
+            return t;
           }, get: function get(e) {
-            return i[e.toLowerCase()];
+            return r[e.toLowerCase()];
           }, has: function has(e) {
-            return e.toLowerCase() in i;
+            return e.toLowerCase() in r;
           } } };
-    };for (var l in s.open(n.method || "get", e, !0), s.onload = function () {
-      s.getAllResponseHeaders().replace(/^(.*?):[^\S\n]*([\s\S]*?)$/gm, function (e, n, t) {
-        o.push(n = n.toLowerCase()), u.push([n, t]), i[n] = i[n] ? i[n] + "," + t : t;
-      }), t(a());
-    }, s.onerror = r, s.withCredentials = "include" == n.credentials, n.headers) {
-      s.setRequestHeader(l, n.headers[l]);
-    }s.send(n.body || null);
+    }s.withCredentials = "include" == n.credentials, s.onload = function () {
+      t(u());
+    }, s.onerror = r, s.send(n.body || null);
   });
 }
 
