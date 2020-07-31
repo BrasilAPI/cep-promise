@@ -73,46 +73,36 @@ var CepPromiseError = function (_Error) {
   return CepPromiseError;
 }(Error);
 
-function unfetch (e, n) {
+function fetch (e, n) {
   return n = n || {}, new Promise(function (t, r) {
-    var s = new XMLHttpRequest(),
-        o = [],
-        u = [],
-        i = {},
-        a = function a() {
-      return { ok: 2 == (s.status / 100 | 0), statusText: s.statusText, status: s.status, url: s.responseURL, text: function text() {
+    var s = new XMLHttpRequest();for (var o in s.open(n.method || "get", e, !0), n.headers) {
+      s.setRequestHeader(o, n.headers[o]);
+    }function u() {
+      var e,
+          n = [],
+          t = [],
+          r = {};return s.getAllResponseHeaders().replace(/^(.*?):[^\S\n]*([\s\S]*?)$/gm, function (s, o, u) {
+        n.push(o = o.toLowerCase()), t.push([o, u]), r[o] = (e = r[o]) ? e + "," + u : u;
+      }), { ok: 2 == (s.status / 100 | 0), status: s.status, statusText: s.statusText, url: s.responseURL, clone: u, text: function text() {
           return Promise.resolve(s.responseText);
         }, json: function json() {
-          return Promise.resolve(JSON.parse(s.responseText));
+          return Promise.resolve(s.responseText).then(JSON.parse);
         }, blob: function blob() {
           return Promise.resolve(new Blob([s.response]));
-        }, clone: a, headers: { keys: function keys() {
-            return o;
+        }, headers: { keys: function keys() {
+            return n;
           }, entries: function entries() {
-            return u;
+            return t;
           }, get: function get(e) {
-            return i[e.toLowerCase()];
+            return r[e.toLowerCase()];
           }, has: function has(e) {
-            return e.toLowerCase() in i;
+            return e.toLowerCase() in r;
           } } };
-    };for (var l in s.open(n.method || "get", e, !0), s.onload = function () {
-      s.getAllResponseHeaders().replace(/^(.*?):[^\S\n]*([\s\S]*?)$/gm, function (e, n, t) {
-        o.push(n = n.toLowerCase()), u.push([n, t]), i[n] = i[n] ? i[n] + "," + t : t;
-      }), t(a());
-    }, s.onerror = r, s.withCredentials = "include" == n.credentials, n.headers) {
-      s.setRequestHeader(l, n.headers[l]);
-    }s.send(n.body || null);
+    }s.withCredentials = "include" == n.credentials, s.onload = function () {
+      t(u());
+    }, s.onerror = r, s.send(n.body || null);
   });
 }
-
-
-var unfetch$1 = Object.freeze({
-	default: unfetch
-});
-
-var require$$0 = ( unfetch$1 && unfetch ) || unfetch$1;
-
-var browser = window.fetch || (window.fetch = require$$0.default || require$$0);
 
 var ServiceError = function (_Error) {
   inherits(ServiceError, _Error);
@@ -148,7 +138,7 @@ function fetchCorreiosService(cepWithLeftPad) {
     }
   };
 
-  return browser(url, options).then(analyzeAndParseResponse).catch(throwApplicationError);
+  return fetch(url, options).then(analyzeAndParseResponse).catch(throwApplicationError);
 }
 
 function analyzeAndParseResponse(response) {
@@ -226,7 +216,7 @@ function fetchViaCepService(cepWithLeftPad) {
     }
   };
 
-  return browser(url, options).then(analyzeAndParseResponse$1).then(checkForViaCepError).then(extractCepValuesFromResponse).catch(throwApplicationError$1);
+  return fetch(url, options).then(analyzeAndParseResponse$1).then(checkForViaCepError).then(extractCepValuesFromResponse).catch(throwApplicationError$1);
 }
 
 function analyzeAndParseResponse$1(response) {
@@ -280,7 +270,7 @@ function fetchWideNetService(cepWithLeftPad) {
     }
   };
 
-  return browser(url, options).then(analyzeAndParseResponse$2).then(checkForWideNetError).then(extractCepValuesFromResponse$1).catch(throwApplicationError$2);
+  return fetch(url, options).then(analyzeAndParseResponse$2).then(checkForWideNetError).then(extractCepValuesFromResponse$1).catch(throwApplicationError$2);
 }
 
 function analyzeAndParseResponse$2(response) {
