@@ -3,7 +3,7 @@
   "version": "3.0.9",
   "description": "Busca por CEP integrado diretamente aos serviços dos Correios e ViaCEP",
   "main": "dist/cep-promise.min.js",
-  "module": "dist/cep-promise-browser.min.js",
+  "module": "dist/cep-promise.min.js",
   "scripts": {
     "test": "npm run coverage",
     "coverage": "babel-node node_modules/.bin/babel-istanbul cover _mocha -- --timeout 60000 test/**/*.spec.js",
@@ -54,6 +54,7 @@
     "rollup-plugin-babel": "3.0.3",
     "rollup-plugin-commonjs": "8.3.0",
     "rollup-plugin-node-resolve": "3.0.3",
+    "rollup-plugin-replace": "2.2.0",
     "standard": "8.6.0",
     "uglify-js": "2.7.5"
   },
@@ -66,7 +67,8 @@
     ]
   },
   "dependencies": {
-    "isomorphic-unfetch": "3.0.0"
+    "node-fetch": "2.6.0",
+    "unfetch": "4.1.0"
   },
   "files": [
     "dist",
