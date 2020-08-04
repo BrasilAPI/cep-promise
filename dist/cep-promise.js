@@ -314,7 +314,45 @@ Promise.any = function (iterable) {
 var CEP_SIZE = 8;
 
 function cepPromise (cepRawValue) {
-  return Promise.resolve(cepRawValue).then(validateInputType).then(removeSpecialCharacters).then(validateInputLength).then(leftPadWithZeros).then(fetchCepFromServices).catch(handleServicesError).catch(throwApplicationError$3);
+  var providers = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+
+  return Promise.resolve(cepRawValue).then(validateInputType).then(function (zipcode) {
+    validateProviders(providers);
+
+    return zipcode;
+  }).then(removeSpecialCharacters).then(validateInputLength).then(leftPadWithZeros).then(function (cepWithLeftPad) {
+    return fetchCepFromServices(cepWithLeftPad, providers);
+  }).catch(handleServicesError).catch(throwApplicationError$3);
+}
+
+function validateProviders(providers) {
+  var availableProviders = ['correios', 'viacep', 'widenet'];
+
+  if (!Array.isArray(providers)) {
+    throw new CepPromiseError({
+      message: 'Erro ao inicializar a instância do CepPromise.',
+      type: 'validation_error',
+      errors: [{
+        message: 'O par\xE2metro providers deve ser uma lista.',
+        service: 'cep_validation'
+      }]
+    });
+  }
+
+  return providers.map(function (provider) {
+    if (!availableProviders.includes(provider)) {
+      throw new CepPromiseError({
+        message: 'Erro ao inicializar a instância do CepPromise.',
+        type: 'validation_error',
+        errors: [{
+          message: 'O provider "' + provider + '" \xE9 inv\xE1lido. Os providers dispon\xEDveis s\xE3o: ' + availableProviders.join(", ") + '.',
+          service: 'cep_validation'
+        }]
+      });
+    }
+
+    return provider;
+  });
 }
 
 function validateInputType(cepRawValue) {
@@ -357,8 +395,22 @@ function validateInputLength(cepWithLeftPad) {
   });
 }
 
-function fetchCepFromServices(cepWithLeftPad) {
-  return Promise.any([WideNetService(cepWithLeftPad), CorreiosService(cepWithLeftPad), ViaCepService(cepWithLeftPad)]);
+function fetchCepFromServices(cepWithLeftPad, providers) {
+  var providersServices = {
+    correios: CorreiosService,
+    widenet: WideNetService,
+    viacep: ViaCepService
+  };
+
+  if (providers.length === 0) {
+    return Promise.any(Object.keys(providersServices).map(function (provider) {
+      return providersServices[provider](cepWithLeftPad);
+    }));
+  }
+
+  return Promise.any(providers.map(function (provider) {
+    return providersServices[provider](cepWithLeftPad);
+  }));
 }
 
 function handleServicesError(aggregatedErrors) {
