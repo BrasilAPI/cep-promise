@@ -1,9 +1,9 @@
 {
   "name": "cep-promise",
-  "version": "3.0.9",
+  "version": "3.0.10",
   "description": "Busca por CEP integrado diretamente aos serviços dos Correios e ViaCEP",
   "main": "dist/cep-promise.min.js",
-  "module": "dist/cep-promise-browser.min.js",
+  "module": "dist/cep-promise.min.js",
   "scripts": {
     "dev": "nodemon --watch src/ --exec \"npm run build\"",
     "test": "npm run coverage",
@@ -58,6 +58,7 @@
     "rollup-plugin-babel": "4.4.0",
     "rollup-plugin-commonjs": "10.1.0",
     "rollup-plugin-node-resolve": "5.2.0",
+    "rollup-plugin-replace": "2.2.0",
     "standard": "14.3.4",
     "uglify-js": "3.10.0"
   },
@@ -70,7 +71,8 @@
     ]
   },
   "dependencies": {
-    "isomorphic-unfetch": "3.0.0"
+    "node-fetch": "2.6.0",
+    "unfetch": "4.1.0"
   },
   "files": [
     "dist",

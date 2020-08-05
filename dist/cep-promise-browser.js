@@ -276,7 +276,7 @@
     return CepPromiseError;
   }( /*#__PURE__*/_wrapNativeSuper(Error));
 
-  function unfetch (e, n) {
+  function fetch (e, n) {
     return n = n || {}, new Promise(function (t, r) {
       var s = new XMLHttpRequest(),
           o = [],
@@ -327,19 +327,6 @@
     });
   }
 
-  var unfetch$1 = /*#__PURE__*/Object.freeze({
-    __proto__: null,
-    'default': unfetch
-  });
-
-  function getCjsExportFromNamespace (n) {
-  	return n && n['default'] || n;
-  }
-
-  var require$$0 = getCjsExportFromNamespace(unfetch$1);
-
-  var browser = window.fetch || (window.fetch = require$$0["default"] || require$$0);
-
   var ServiceError = /*#__PURE__*/function (_Error) {
     _inherits(ServiceError, _Error);
 
@@ -375,7 +362,7 @@
         'cache-control': 'no-cache'
       }
     };
-    return browser(url, options).then(analyzeAndParseResponse)["catch"](throwApplicationError);
+    return fetch(url, options).then(analyzeAndParseResponse)["catch"](throwApplicationError);
   }
 
   function analyzeAndParseResponse(response) {
@@ -457,7 +444,7 @@
         'content-type': 'application/json;charset=utf-8'
       }
     };
-    return browser(url, options).then(analyzeAndParseResponse$1).then(checkForViaCepError).then(extractCepValuesFromResponse)["catch"](throwApplicationError$1);
+    return fetch(url, options).then(analyzeAndParseResponse$1).then(checkForViaCepError).then(extractCepValuesFromResponse)["catch"](throwApplicationError$1);
   }
 
   function analyzeAndParseResponse$1(response) {
@@ -510,7 +497,7 @@
         'content-type': 'application/json;charset=utf-8'
       }
     };
-    return browser(url, options).then(analyzeAndParseResponse$2).then(checkForWideNetError).then(extractCepValuesFromResponse$1)["catch"](throwApplicationError$2);
+    return fetch(url, options).then(analyzeAndParseResponse$2).then(checkForWideNetError).then(extractCepValuesFromResponse$1)["catch"](throwApplicationError$2);
   }
 
   function analyzeAndParseResponse$2(response) {

@@ -1,6 +1,6 @@
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('isomorphic-unfetch')) :
-  typeof define === 'function' && define.amd ? define(['isomorphic-unfetch'], factory) :
+  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('node-fetch')) :
+  typeof define === 'function' && define.amd ? define(['node-fetch'], factory) :
   (global = global || self, global.cep = factory(global.fetch));
 }(this, (function (fetch) { 'use strict';
 
