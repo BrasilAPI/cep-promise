@@ -143,7 +143,8 @@ describe('when invoked with providers parameter', () => {
             state: 'SP',
             city: 'São Paulo',
             neighborhood: 'Perdizes',
-            street: 'Rua Caiubi'
+            street: 'Rua Caiubi',
+            service: 'viacep'
           })
 
           expect(viaCepMock.isDone()).to.be.equal(true)
@@ -183,7 +184,8 @@ describe('when invoked with providers parameter', () => {
             state: 'SP',
             city: 'São Paulo',
             neighborhood: 'Perdizes',
-            street: 'Rua Caiubi'
+            street: 'Rua Caiubi',
+            service: 'widenet'
           })
 
           expect(wideNetMock.isDone()).to.be.equal(true)
@@ -223,7 +225,8 @@ describe('when invoked with providers parameter', () => {
             state: 'SP',
             city: 'São Paulo',
             neighborhood: 'Perdizes',
-            street: 'Rua Caiubi'
+            street: 'Rua Caiubi',
+            service: 'correios'
           })
 
           expect(correiosMock.isDone()).to.be.equal(true)
@@ -263,7 +266,8 @@ describe('when invoked with providers parameter', () => {
             state: 'SP',
             city: 'São Paulo',
             neighborhood: 'Perdizes',
-            street: 'Rua Caiubi'
+            street: 'Rua Caiubi',
+            service: address.service
           })
 
           expect(viaCepMock.isDone()).to.be.equal(true)
@@ -303,7 +307,8 @@ describe('when invoked with providers parameter', () => {
             state: 'SP',
             city: 'São Paulo',
             neighborhood: 'Perdizes',
-            street: 'Rua Caiubi'
+            street: 'Rua Caiubi',
+            service: address.service
           })
 
           expect(viaCepMock.isDone()).to.be.equal(true)
