@@ -15,13 +15,14 @@ export default function (cepRawValue, providers = []) {
     .then(validateInputType)
     .then(zipcode => {
       validateProviders(providers)
-
       return zipcode
     })
     .then(removeSpecialCharacters)
     .then(validateInputLength)
     .then(leftPadWithZeros)
-    .then((cepWithLeftPad) => fetchCepFromServices(cepWithLeftPad, providers) )
+    .then((cepWithLeftPad) => {
+      return fetchCepFromServices(cepWithLeftPad, providers)
+    })
     .catch(handleServicesError)
     .catch(throwApplicationError)
 }
@@ -37,13 +38,13 @@ function validateProviders (providers) {
         {
           message:
             `O parâmetro providers deve ser uma lista.`,
-          service: 'cep_validation'
+          service: 'providers_validation'
         }
       ]
     })
   }
 
-  return providers.map(provider => {
+  for (const provider of providers) {
     if (!availableProviders.includes(provider)) {
       throw new CepPromiseError({
         message: 'Erro ao inicializar a instância do CepPromise.',
@@ -52,14 +53,14 @@ function validateProviders (providers) {
           {
             message:
               `O provider "${provider}" é inválido. Os providers disponíveis são: ${availableProviders.join(", ")}.`,
-            service: 'cep_validation'
+            service: 'providers_validation'
           }
         ]
       })
     }
 
     return provider
-  })
+  }
 }
 
 function validateInputType (cepRawValue) {
@@ -116,8 +117,7 @@ function fetchCepFromServices (cepWithLeftPad, providers) {
 
   if (providers.length === 0) {
     return Promise.any(
-      Object.keys(providersServices)
-        .map(provider => providersServices[provider](cepWithLeftPad))
+      Object.values(providersServices).map(provider => provider(cepWithLeftPad))
     )
   }
 

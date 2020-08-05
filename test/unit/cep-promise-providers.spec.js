@@ -24,7 +24,7 @@ describe('when invoked with providers parameter', () => {
             type: 'validation_error',
             errors: [
               {
-                service: 'cep_validation',
+                service: 'providers_validation',
                 message: 'O parâmetro providers deve ser uma lista.'
               }
             ]
@@ -44,7 +44,7 @@ describe('when invoked with providers parameter', () => {
             type: 'validation_error',
             errors: [
               {
-                service: 'cep_validation',
+                service: 'providers_validation',
                 message: 'O parâmetro providers deve ser uma lista.'
               }
             ]
@@ -64,7 +64,7 @@ describe('when invoked with providers parameter', () => {
             type: 'validation_error',
             errors: [
               {
-                service: 'cep_validation',
+                service: 'providers_validation',
                 message: 'O parâmetro providers deve ser uma lista.'
               }
             ]
@@ -84,7 +84,7 @@ describe('when invoked with providers parameter', () => {
             type: 'validation_error',
             errors: [
               {
-                service: 'cep_validation',
+                service: 'providers_validation',
                 message: 'O parâmetro providers deve ser uma lista.'
               }
             ]
@@ -105,7 +105,7 @@ describe('when invoked with providers parameter', () => {
               {
                 message:
                   'O provider "123" é inválido. Os providers disponíveis são: correios, viacep, widenet.',
-                service: 'cep_validation'
+                service: 'providers_validation'
               }
             ]
           })
