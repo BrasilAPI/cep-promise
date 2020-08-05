@@ -33,7 +33,7 @@ function analyzeAndParseResponse (response) {
 
 function parseSuccessXML (xmlString) {
   try {
-    const returnStatement = xmlString.replace(/\r?\n|\r/g, '').match(/<return>(.*)<\/return>/)[0] || ''
+    const returnStatement = xmlString.replace(/\r?\n|\r/g, '').match(/<return>(.*)<\/return>/)[0] ?? ''
     const cleanReturnStatement = returnStatement.replace('<return>', '').replace('</return>', '')
     const parsedReturnStatement = cleanReturnStatement
       .split(/</)
@@ -53,7 +53,7 @@ function parseSuccessXML (xmlString) {
 
 function parseAndextractErrorMessage (xmlString) {
   try {
-    const returnStatement = xmlString.match(/<faultstring>(.*)<\/faultstring>/)[0] || ''
+    const returnStatement = xmlString.match(/<faultstring>(.*)<\/faultstring>/)[0] ?? ''
     const cleanReturnStatement = returnStatement.replace('<faultstring>', '').replace('</faultstring>', '')
     return cleanReturnStatement
   } catch (e) {
@@ -71,7 +71,8 @@ function extractValuesFromSuccessResponse (xmlObject) {
     state: xmlObject.uf,
     city: xmlObject.cidade,
     neighborhood: xmlObject.bairro,
-    street: xmlObject.end
+    street: xmlObject.end,
+    service: 'correios',
   }
 }
 
