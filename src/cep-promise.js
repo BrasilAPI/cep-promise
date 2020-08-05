@@ -10,18 +10,20 @@ import Promise from './utils/promise-any.js'
 
 const CEP_SIZE = 8
 
-export default function (cepRawValue, providers = []) {
+export default function (cepRawValue, configurations = {}) {
   return Promise.resolve(cepRawValue)
     .then(validateInputType)
-    .then(zipcode => {
-      validateProviders(providers)
-      return zipcode
+    .then(cepRawValue => {
+      configurations.providers = configurations.providers ? configurations.providers : []
+      validateProviders(configurations.providers)
+      
+      return cepRawValue
     })
     .then(removeSpecialCharacters)
     .then(validateInputLength)
     .then(leftPadWithZeros)
     .then((cepWithLeftPad) => {
-      return fetchCepFromServices(cepWithLeftPad, providers)
+      return fetchCepFromServices(cepWithLeftPad, configurations)
     })
     .catch(handleServicesError)
     .catch(throwApplicationError)
@@ -108,21 +110,21 @@ function validateInputLength (cepWithLeftPad) {
   })
 }
 
-function fetchCepFromServices (cepWithLeftPad, providers) {
+function fetchCepFromServices (cepWithLeftPad, configurations) {
   const providersServices = {
     correios: CorreiosService,
     widenet: WideNetService,
     viacep: ViaCepService,
   }
 
-  if (providers.length === 0) {
+  if (configurations.providers.length === 0) {
     return Promise.any(
       Object.values(providersServices).map(provider => provider(cepWithLeftPad))
     )
   }
 
   return Promise.any(
-    providers.map(provider => {
+    configurations.providers.map(provider => {
       return providersServices[provider](cepWithLeftPad)
     })
   )

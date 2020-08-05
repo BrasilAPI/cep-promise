@@ -15,7 +15,7 @@ let expect = chai.expect
 describe('when invoked with providers parameter', () => {
   describe('and the providers param is a string', () => {
     it('should reject with "validation_error"', () => {
-      return cep('05010000', 'viacep').catch(error => {
+      return cep('05010000', { providers: 'viacep' }).catch(error => {
         return expect(error)
           .to.be.an.instanceOf(CepPromiseError)
           .and.containSubset({
@@ -35,7 +35,7 @@ describe('when invoked with providers parameter', () => {
 
   describe('and the providers param is a integer', () => {
     it('should reject with "validation_error"', () => {
-      return cep('05010000', 123).catch(error => {
+      return cep('05010000', { providers: 123 }).catch(error => {
         return expect(error)
           .to.be.an.instanceOf(CepPromiseError)
           .and.containSubset({
@@ -55,7 +55,7 @@ describe('when invoked with providers parameter', () => {
 
   describe('and the providers param is a object', () => {
     it('should reject with "validation_error"', () => {
-      return cep('05010000', {}).catch(error => {
+      return cep('05010000', { providers: {} }).catch(error => {
         return expect(error)
           .to.be.an.instanceOf(CepPromiseError)
           .and.containSubset({
@@ -75,7 +75,7 @@ describe('when invoked with providers parameter', () => {
 
   describe('and the providers param is a function', () => {
     it('should reject with "validation_error"', () => {
-      return cep('05010000', () => () => {}).catch(error => {
+      return cep('05010000', { providers: () => () => {}}).catch(error => {
         return expect(error)
           .to.be.an.instanceOf(CepPromiseError)
           .and.containSubset({
@@ -95,7 +95,7 @@ describe('when invoked with providers parameter', () => {
 
   describe('and the providers param is a invalid array', () => {
     it('should reject with "validation_error"', () => {
-      return cep('05010000', [ 123, 'viacep']).catch(error => {
+      return cep('05010000', { providers: [123, 'viacep']}).catch(error => {
         return expect(error)
           .to.be.an.instanceOf(CepPromiseError)
           .and.containSubset({
@@ -136,7 +136,7 @@ describe('when invoked with providers parameter', () => {
           path.join(__dirname, '/fixtures/widenet-cep-05010000-found.json')
         )
 
-      return cep('05010000', ['viacep'])
+      return cep('05010000', { providers: ['viacep']})
         .then(address => {
           expect(address).to.deep.equal({
             cep: '05010000',
@@ -176,7 +176,7 @@ describe('when invoked with providers parameter', () => {
           path.join(__dirname, '/fixtures/widenet-cep-05010000-found.json')
         )
 
-      return cep('05010000', ['widenet'])
+      return cep('05010000', { providers: ['widenet']})
         .then(address => {
           expect(address).to.deep.equal({
             cep: '05010000',
@@ -216,7 +216,7 @@ describe('when invoked with providers parameter', () => {
           path.join(__dirname, '/fixtures/widenet-cep-05010000-found.json')
         )
 
-      return cep('05010000', ['correios'])
+      return cep('05010000', { providers: ['correios']})
         .then(address => {
           expect(address).to.deep.equal({
             cep: '05010000',
@@ -256,7 +256,7 @@ describe('when invoked with providers parameter', () => {
           path.join(__dirname, '/fixtures/widenet-cep-05010000-found.json')
         )
 
-      return cep('05010000', ['correios', 'viacep'])
+      return cep('05010000', { providers: ['correios', 'viacep']})
         .then(address => {
           expect(address).to.deep.equal({
             cep: '05010000',
