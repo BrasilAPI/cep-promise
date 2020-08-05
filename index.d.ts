@@ -4,7 +4,8 @@ declare module 'cep-promise' {
     state: string,
     city: string,
     street: string,
-    neighborhood: string
+    neighborhood: string,
+    service: string
   }
 
   // this workarround is because this : https://github.com/Microsoft/TypeScript/issues/5073
@@ -14,5 +15,3 @@ declare module 'cep-promise' {
 
   export = cep
 }
-
-

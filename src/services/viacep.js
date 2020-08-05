@@ -42,7 +42,8 @@ function extractCepValuesFromResponse (responseObject) {
     state: responseObject.uf,
     city: responseObject.localidade,
     neighborhood: responseObject.bairro,
-    street: responseObject.logradouro
+    street: responseObject.logradouro,
+    service: 'viacep',
   }
 }
 

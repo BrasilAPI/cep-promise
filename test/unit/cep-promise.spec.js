@@ -159,13 +159,16 @@ describe('cep-promise (unit)', () => {
           path.join(__dirname, '/fixtures/widenet-cep-05010000-found.json')
         )
 
-      return expect(cep('05010000')).to.eventually.deep.equal({
-        cep: '05010000',
-        state: 'SP',
-        city: 'São Paulo',
-        neighborhood: 'Perdizes',
-        street: 'Rua Caiubi'
-      })
+      return cep('05010000')
+        .then(address => expect(address).to.deep.equal({
+            cep: '05010000',
+            state: 'SP',
+            city: 'São Paulo',
+            neighborhood: 'Perdizes',
+            street: 'Rua Caiubi',
+            service: address.service
+          })
+        )
     })
   })
 
@@ -192,13 +195,16 @@ describe('cep-promise (unit)', () => {
           path.join(__dirname, '/fixtures/widenet-cep-05010000-found.json')
         )
 
-      return expect(cep(5010000)).to.eventually.deep.equal({
-        cep: '05010000',
-        state: 'SP',
-        city: 'São Paulo',
-        neighborhood: 'Perdizes',
-        street: 'Rua Caiubi'
-      })
+        return cep(5010000)
+          .then(address => expect(address).to.deep.equal({
+            cep: '05010000',
+            state: 'SP',
+            city: 'São Paulo',
+            neighborhood: 'Perdizes',
+            street: 'Rua Caiubi',
+            service: address.service
+          })
+        )
     })
   })
 
@@ -225,13 +231,16 @@ describe('cep-promise (unit)', () => {
           path.join(__dirname, '/fixtures/widenet-cep-99999999-error.json')
         )
 
-      return expect(cep('5010000')).to.eventually.deep.equal({
-        cep: '05010000',
-        state: 'SP',
-        city: 'São Paulo',
-        neighborhood: 'Perdizes',
-        street: 'Rua Caiubi'
-      })
+        return cep('05010000')
+          .then(address => expect(address).to.deep.equal({
+            cep: '05010000',
+            state: 'SP',
+            city: 'São Paulo',
+            neighborhood: 'Perdizes',
+            street: 'Rua Caiubi',
+            service: 'correios'
+          })
+        )
     })
   })
 
@@ -258,13 +267,16 @@ describe('cep-promise (unit)', () => {
           path.join(__dirname, '/fixtures/widenet-cep-99999999-error.json')
         )
 
-      return expect(cep('5010000')).to.eventually.deep.equal({
-        cep: '05010000',
-        state: 'SP',
-        city: 'São Paulo',
-        neighborhood: 'Perdizes',
-        street: 'Rua Caiubi'
-      })
+        return cep('05010000')
+          .then(address => expect(address).to.deep.equal({
+            cep: '05010000',
+            state: 'SP',
+            city: 'São Paulo',
+            neighborhood: 'Perdizes',
+            street: 'Rua Caiubi',
+            service: 'viacep'
+          })
+        )
     })
   })
 
@@ -291,14 +303,16 @@ describe('cep-promise (unit)', () => {
           path.join(__dirname, '/fixtures/widenet-cep-05010000-found.json')
         )
 
-      return expect(cep('5010000')).to.eventually.deep.equal({
-        cep: '05010000',
-        state: 'SP',
-        city: 'São Paulo',
-        neighborhood: 'Perdizes',
-        street: 'Rua Caiubi'
+      return cep('5010000')
+        .then(address => expect(address).to.deep.equal({
+          cep: '05010000',
+          state: 'SP',
+          city: 'São Paulo',
+          neighborhood: 'Perdizes',
+          street: 'Rua Caiubi',
+          service: 'widenet'
+        }))
       })
-    })
   })
 
   describe('when its not possible to parse the returned XML and then succeed to one failover service', () => {
@@ -324,13 +338,15 @@ describe('cep-promise (unit)', () => {
           path.join(__dirname, '/fixtures/widenet-cep-05010000-found.json')
         )
 
-      return expect(cep('5010000')).to.eventually.deep.equal({
-        cep: '05010000',
-        state: 'SP',
-        city: 'São Paulo',
-        neighborhood: 'Perdizes',
-        street: 'Rua Caiubi'
-      })
+      return cep('5010000')
+        .then(address => expect(address).to.deep.equal({
+          cep: '05010000',
+          state: 'SP',
+          city: 'São Paulo',
+          neighborhood: 'Perdizes',
+          street: 'Rua Caiubi',
+          service: address.service
+        }))
     })
   })
 
@@ -356,13 +372,15 @@ describe('cep-promise (unit)', () => {
           path.join(__dirname, '/fixtures/widenet-cep-05010000-found.json')
         )
 
-      return expect(cep('5010000')).to.eventually.deep.equal({
-        cep: '05010000',
-        state: 'SP',
-        city: 'São Paulo',
-        neighborhood: 'Perdizes',
-        street: 'Rua Caiubi'
-      })
+      return cep('5010000')
+        .then(address => expect(address).to.deep.equal({
+          cep: '05010000',
+          state: 'SP',
+          city: 'São Paulo',
+          neighborhood: 'Perdizes',
+          street: 'Rua Caiubi',
+          service: address.service
+        }))
     })
   })
 
