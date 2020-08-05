@@ -238,7 +238,7 @@ describe('cep-promise (unit)', () => {
             city: 'São Paulo',
             neighborhood: 'Perdizes',
             street: 'Rua Caiubi',
-            service: address.service
+            service: 'correios'
           })
         )
     })
@@ -274,7 +274,7 @@ describe('cep-promise (unit)', () => {
             city: 'São Paulo',
             neighborhood: 'Perdizes',
             street: 'Rua Caiubi',
-            service: address.service
+            service: 'viacep'
           })
         )
     })
@@ -310,7 +310,7 @@ describe('cep-promise (unit)', () => {
           city: 'São Paulo',
           neighborhood: 'Perdizes',
           street: 'Rua Caiubi',
-          service: address.service
+          service: 'widenet'
         }))
       })
   })
