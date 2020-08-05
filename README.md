@@ -33,7 +33,8 @@
  * Sempre retorna a resposta mais rápida por fazer as consultas de forma concorrente.
  * Sem limites de uso (rate limits) conhecidos.
  * Interface de Promise extremamente simples.
- * Suporte ao Node.js `4.x`, `5.x`, `6.x`, `7.x`, `8.x`, `9.x`, `10.x` e `@stable`.
+ * Suporte ao Node.js `10.x`, `11.x`, `12.x`, `13.x`, `14.x` e `@stable`.
+ * Suporte ao Node.js `4.x`, `5.x`, `6.x`, `7.x`, `8.x`, `9.x`, até cep-promise versão `3.0.9`.
  * Suporte ao Node.js `0.10.x` e `0.12.x` até cep-promise versão `2.0.8`.
  * 100% de code coverage com testes unitários e E2E.
  * Desenvolvido utilizando ES6.

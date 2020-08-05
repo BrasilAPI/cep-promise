@@ -3,14 +3,12 @@ cache:
   directories:
     - node_modules
 node_js:
-  - "node"
   - "10"
-  - "9"
-  - "8"
-  - "7"
-  - "6"
-  - "5"
-  - "4"
+  - "11"
+  - "12"
+  - "13"
+  - "14"
+  - "node"
 after_script:
   - npm install -g coveralls
   - coveralls < coverage/lcov.info
