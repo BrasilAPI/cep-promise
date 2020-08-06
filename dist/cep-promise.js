@@ -491,6 +491,50 @@
     throw serviceError;
   }
 
+  function fetchBrasilAPIService(cepWithLeftPad) {
+    var url = "https://brasilapi.com.br/api/cep/v1/".concat(cepWithLeftPad);
+    var options = {
+      method: 'GET',
+      mode: 'cors',
+      headers: {
+        'content-type': 'application/json;charset=utf-8'
+      }
+    };
+    return fetch(url, options).then(parseResponse).then(extractCepValuesFromResponse$2)["catch"](throwApplicationError$3);
+  }
+
+  function parseResponse(response) {
+    if (response.ok === false || response.status !== 200) {
+      throw new Error('CEP não encontrado na base do BrasilAPI.');
+    }
+
+    return response.json();
+  }
+
+  function extractCepValuesFromResponse$2(response) {
+    return {
+      cep: response.cep,
+      state: response.state,
+      city: response.city,
+      neighborhood: response.neighborhood,
+      street: response.street,
+      service: 'brasilapi'
+    };
+  }
+
+  function throwApplicationError$3(error) {
+    var serviceError = new ServiceError({
+      message: error.message,
+      service: 'brasilapi'
+    });
+
+    if (error.name === 'FetchError') {
+      serviceError.message = 'Erro ao se conectar com o serviço BrasilAPI.';
+    }
+
+    throw serviceError;
+  }
+
   var PROXY_URL = 'https://proxier.now.sh/api?url=';
 
   /* istanbul ignore next */
@@ -510,6 +554,7 @@
   var CorreiosService = isBrowser() ? injectProxy(fetchCorreiosService) : fetchCorreiosService;
   var ViaCepService = fetchViaCepService;
   var WideNetService = fetchWideNetService;
+  var BrasilAPIService = fetchBrasilAPIService;
 
   var reverse = function reverse(promise) {
     return new Promise(function (resolve, reject) {
@@ -532,11 +577,11 @@
       return cepRawValue;
     }).then(removeSpecialCharacters).then(validateInputLength).then(leftPadWithZeros).then(function (cepWithLeftPad) {
       return fetchCepFromServices(cepWithLeftPad, configurations);
-    })["catch"](handleServicesError)["catch"](throwApplicationError$3);
+    })["catch"](handleServicesError)["catch"](throwApplicationError$4);
   }
 
   function validateProviders(providers) {
-    var availableProviders = ['correios', 'viacep', 'widenet'];
+    var availableProviders = ['brasilapi', 'correios', 'viacep', 'widenet'];
 
     if (!Array.isArray(providers)) {
       throw new CepPromiseError({
@@ -561,7 +606,7 @@
             message: 'Erro ao inicializar a instância do CepPromise.',
             type: 'validation_error',
             errors: [{
-              message: "O provider \"".concat(provider, "\" \xE9 inv\xE1lido. Os providers dispon\xEDveis s\xE3o: ").concat(availableProviders.join(", "), "."),
+              message: "O provider \"".concat(provider, "\" \xE9 inv\xE1lido. Os providers dispon\xEDveis s\xE3o: [\"").concat(availableProviders.join('", "'), "\"]."),
               service: 'providers_validation'
             }]
           });
@@ -618,9 +663,10 @@
 
   function fetchCepFromServices(cepWithLeftPad, configurations) {
     var providersServices = {
-      correios: CorreiosService,
+      brasilapi: BrasilAPIService,
+      viacep: ViaCepService,
       widenet: WideNetService,
-      viacep: ViaCepService
+      correios: CorreiosService
     };
 
     if (configurations.providers.length === 0) {
@@ -646,7 +692,7 @@
     throw aggregatedErrors;
   }
 
-  function throwApplicationError$3(_ref) {
+  function throwApplicationError$4(_ref) {
     var message = _ref.message,
         type = _ref.type,
         errors = _ref.errors;

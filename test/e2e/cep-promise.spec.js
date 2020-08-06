@@ -3,6 +3,7 @@
 import chai from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 import chaiSubset from 'chai-subset'
+import nock from 'nock'
 
 import cep from '../../src/cep-promise.js'
 import CepPromiseError from '../../src/errors/cep-promise.js'
@@ -12,17 +13,22 @@ chai.use(chaiSubset)
 
 let expect = chai.expect
 
-describe('cep-promise (E2E)', () => {
+describe('[e2e] cep-promise', () => {
+  before(() => {
+    nock.enableNetConnect()
+  })
+  
   describe('when invoked with a valid "05010000" string', () => {
     it('should fulfill with correct address', () => cep('05010000')
-        .then(address => expect(address).to.deep.equal({
+        .then(address => {
+          expect(address).to.deep.equal({
             cep: '05010000',
             state: 'SP',
             city: 'São Paulo',
             neighborhood: 'Perdizes',
             street: 'Rua Caiubi',
             service: address.service
-        }))
+        })})
     )
   })
 
@@ -62,6 +68,11 @@ describe('cep-promise (E2E)', () => {
               {
                 message: 'CEP não encontrado na base do WideNet.',
                 service: 'widenet'
+              },
+              {
+                name: 'ServiceError',
+                message: 'CEP não encontrado na base do BrasilAPI.',
+                service: 'brasilapi'
               }
             ]
           })

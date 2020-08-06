@@ -5,6 +5,7 @@ import {
   CorreiosService,
   ViaCepService,
   WideNetService,
+  BrasilAPIService
 } from './services/index.js'
 import Promise from './utils/promise-any.js'
 
@@ -30,7 +31,7 @@ export default function (cepRawValue, configurations = {}) {
 }
 
 function validateProviders (providers) {
-  let availableProviders = ['correios', 'viacep', 'widenet']
+  let availableProviders = ['brasilapi', 'correios', 'viacep', 'widenet']
 
   if (!Array.isArray(providers)) {
     throw new CepPromiseError({
@@ -54,7 +55,7 @@ function validateProviders (providers) {
         errors: [
           {
             message:
-              `O provider "${provider}" é inválido. Os providers disponíveis são: ${availableProviders.join(", ")}.`,
+              `O provider "${provider}" é inválido. Os providers disponíveis são: ["${availableProviders.join('", "')}"].`,
             service: 'providers_validation'
           }
         ]
@@ -112,9 +113,10 @@ function validateInputLength (cepWithLeftPad) {
 
 function fetchCepFromServices (cepWithLeftPad, configurations) {
   const providersServices = {
-    correios: CorreiosService,
-    widenet: WideNetService,
+    brasilapi: BrasilAPIService,
     viacep: ViaCepService,
+    widenet: WideNetService,
+    correios: CorreiosService
   }
 
   if (configurations.providers.length === 0) {
