@@ -535,26 +535,24 @@
     throw serviceError;
   }
 
-  var PROXY_URL = 'https://proxier.now.sh/api?url=';
+  function getAvailableServices() {
+    var isBrowser = typeof window !== 'undefined';
 
-  /* istanbul ignore next */
+    if (isBrowser) {
+      return {
+        brasilapi: fetchBrasilAPIService,
+        viacep: fetchViaCepService,
+        widenet: fetchWideNetService
+      };
+    }
 
-  function isBrowser() {
-    return typeof window !== 'undefined';
-  }
-  /* istanbul ignore next */
-
-
-  function injectProxy(Service) {
-    return function (cepWithLeftPad) {
-      return Service(cepWithLeftPad, PROXY_URL);
+    return {
+      brasilapi: fetchBrasilAPIService,
+      viacep: fetchViaCepService,
+      widenet: fetchWideNetService,
+      correios: fetchCorreiosService
     };
   }
-
-  var CorreiosService = isBrowser() ? injectProxy(fetchCorreiosService) : fetchCorreiosService;
-  var ViaCepService = fetchViaCepService;
-  var WideNetService = fetchWideNetService;
-  var BrasilAPIService = fetchBrasilAPIService;
 
   var reverse = function reverse(promise) {
     return new Promise(function (resolve, reject) {
@@ -662,12 +660,7 @@
   }
 
   function fetchCepFromServices(cepWithLeftPad, configurations) {
-    var providersServices = {
-      brasilapi: BrasilAPIService,
-      viacep: ViaCepService,
-      widenet: WideNetService,
-      correios: CorreiosService
-    };
+    var providersServices = getAvailableServices();
 
     if (configurations.providers.length === 0) {
       return Promise$1.any(Object.values(providersServices).map(function (provider) {
