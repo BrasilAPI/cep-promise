@@ -1,6 +1,7 @@
 import Correios from './correios'
 import ViaCep from './viacep'
 import WideNet from './widenet'
+import BrasilAPI from './brasilapi.js'
 import { PROXY_URL } from '../utils/consts'
 
 /* istanbul ignore next */
@@ -16,3 +17,4 @@ function injectProxy (Service) {
 export const CorreiosService = isBrowser() ? injectProxy(Correios) : Correios
 export const ViaCepService = ViaCep
 export const WideNetService = WideNet
+export const BrasilAPIService = BrasilAPI

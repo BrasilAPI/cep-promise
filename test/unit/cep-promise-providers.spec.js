@@ -13,6 +13,10 @@ chai.use(chaiSubset)
 let expect = chai.expect
 
 describe('when invoked with providers parameter', () => {
+  before(() => {
+    nock.disableNetConnect()
+  })
+
   describe('and the providers param is a string', () => {
     it('should reject with "validation_error"', () => {
       return cep('05010000', { providers: 'viacep' }).catch(error => {
@@ -104,7 +108,7 @@ describe('when invoked with providers parameter', () => {
             errors: [
               {
                 message:
-                  'O provider "123" é inválido. Os providers disponíveis são: correios, viacep, widenet.',
+                  'O provider "123" é inválido. Os providers disponíveis são: ["brasilapi", "correios", "viacep", "widenet"].',
                 service: 'providers_validation'
               }
             ]
@@ -232,6 +236,55 @@ describe('when invoked with providers parameter', () => {
           expect(correiosMock.isDone()).to.be.equal(true)
           expect(viaCepMock.isDone()).to.be.equal(false)
           expect(wideNetMock.isDone()).to.be.equal(false)
+      })
+    })
+  })
+
+  describe('and the providers param is [\'brasilapi\']', () => {
+    it('should call only brasilapi service', () => {
+      const correiosMock = nock('https://apps.correios.com.br')
+        .post('/SigepMasterJPA/AtendeClienteService/AtendeCliente')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/response-cep-05010000-found.xml')
+        )
+
+      const viaCepMock = nock('https://viacep.com.br')
+        .get('/ws/05010000/json/')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/viacep-cep-05010000-found.json')
+        )
+
+      const wideNetMock = nock('https://cep.widenet.host')
+        .get('/busca-cep/api/cep/05010000.json')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/widenet-cep-05010000-found.json')
+        )
+
+      const brasilAPIMock = nock('https://brasilapi.com.br/')
+        .get('/api/cep/v1/05010000')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/brasilapi-cep-05010000-found.json')
+        )
+
+      return cep('05010000', { providers: ['brasilapi']})
+        .then(address => {
+          expect(address).to.deep.equal({
+            cep: '05010000',
+            state: 'SP',
+            city: 'São Paulo',
+            neighborhood: 'Perdizes',
+            street: 'Rua Caiubi',
+            service: 'brasilapi'
+          })
+
+          expect(correiosMock.isDone()).to.be.equal(false)
+          expect(viaCepMock.isDone()).to.be.equal(false)
+          expect(wideNetMock.isDone()).to.be.equal(false)
+          expect(brasilAPIMock.isDone()).to.be.equal(true)
       })
     })
   })
