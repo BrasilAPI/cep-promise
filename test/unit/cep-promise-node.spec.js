@@ -14,7 +14,11 @@ chai.use(chaiSubset)
 
 let expect = chai.expect
 
-describe('cep-promise (unit)', () => {
+describe('[unit] cep-promise for node', () => {
+  before(() => {
+    nock.disableNetConnect()
+  })
+
   describe('when imported', () => {
     it('should return a Function', () => {
       expect(cep).to.be.a('function')
@@ -42,6 +46,13 @@ describe('cep-promise (unit)', () => {
         .replyWithFile(
           200,
           path.join(__dirname, '/fixtures/widenet-cep-05010000-found.json')
+        )
+
+      nock('https://brasilapi.com.br/')
+        .get('/api/cep/v1/05010000')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/brasilapi-cep-05010000-found.json')
         )
 
       const cepPromise = cep('05010000')
@@ -159,13 +170,23 @@ describe('cep-promise (unit)', () => {
           path.join(__dirname, '/fixtures/widenet-cep-05010000-found.json')
         )
 
-      return expect(cep('05010000')).to.eventually.deep.equal({
-        cep: '05010000',
-        state: 'SP',
-        city: 'São Paulo',
-        neighborhood: 'Perdizes',
-        street: 'Rua Caiubi'
-      })
+      nock('https://brasilapi.com.br/')
+        .get('/api/cep/v1/05010000')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/brasilapi-cep-05010000-found.json')
+        )
+
+      return cep('05010000')
+        .then(address => expect(address).to.deep.equal({
+            cep: '05010000',
+            state: 'SP',
+            city: 'São Paulo',
+            neighborhood: 'Perdizes',
+            street: 'Rua Caiubi',
+            service: address.service
+          })
+        )
     })
   })
 
@@ -192,13 +213,23 @@ describe('cep-promise (unit)', () => {
           path.join(__dirname, '/fixtures/widenet-cep-05010000-found.json')
         )
 
-      return expect(cep(5010000)).to.eventually.deep.equal({
-        cep: '05010000',
-        state: 'SP',
-        city: 'São Paulo',
-        neighborhood: 'Perdizes',
-        street: 'Rua Caiubi'
-      })
+      nock('https://brasilapi.com.br/')
+        .get('/api/cep/v1/05010000')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/brasilapi-cep-05010000-found.json')
+        )
+
+        return cep(5010000)
+          .then(address => expect(address).to.deep.equal({
+            cep: '05010000',
+            state: 'SP',
+            city: 'São Paulo',
+            neighborhood: 'Perdizes',
+            street: 'Rua Caiubi',
+            service: address.service
+          })
+        )
     })
   })
 
@@ -225,13 +256,24 @@ describe('cep-promise (unit)', () => {
           path.join(__dirname, '/fixtures/widenet-cep-99999999-error.json')
         )
 
-      return expect(cep('5010000')).to.eventually.deep.equal({
-        cep: '05010000',
-        state: 'SP',
-        city: 'São Paulo',
-        neighborhood: 'Perdizes',
-        street: 'Rua Caiubi'
-      })
+      nock('https://brasilapi.com.br/')
+        .get('/api/cep/v1/99999999')
+        .replyWithFile(
+          404,
+          path.join(__dirname, '/fixtures/brasilapi-cep-99999999-error.json')
+        )
+
+
+        return cep('05010000')
+          .then(address => expect(address).to.deep.equal({
+            cep: '05010000',
+            state: 'SP',
+            city: 'São Paulo',
+            neighborhood: 'Perdizes',
+            street: 'Rua Caiubi',
+            service: 'correios'
+          })
+        )
     })
   })
 
@@ -258,13 +300,23 @@ describe('cep-promise (unit)', () => {
           path.join(__dirname, '/fixtures/widenet-cep-99999999-error.json')
         )
 
-      return expect(cep('5010000')).to.eventually.deep.equal({
-        cep: '05010000',
-        state: 'SP',
-        city: 'São Paulo',
-        neighborhood: 'Perdizes',
-        street: 'Rua Caiubi'
-      })
+      nock('https://brasilapi.com.br/')
+        .get('/api/cep/v1/99999999')
+        .replyWithFile(
+          404,
+          path.join(__dirname, '/fixtures/brasilapi-cep-99999999-error.json')
+        )
+
+        return cep('05010000')
+          .then(address => expect(address).to.deep.equal({
+            cep: '05010000',
+            state: 'SP',
+            city: 'São Paulo',
+            neighborhood: 'Perdizes',
+            street: 'Rua Caiubi',
+            service: 'viacep'
+          })
+        )
     })
   })
 
@@ -291,14 +343,65 @@ describe('cep-promise (unit)', () => {
           path.join(__dirname, '/fixtures/widenet-cep-05010000-found.json')
         )
 
-      return expect(cep('5010000')).to.eventually.deep.equal({
-        cep: '05010000',
-        state: 'SP',
-        city: 'São Paulo',
-        neighborhood: 'Perdizes',
-        street: 'Rua Caiubi'
+      nock('https://brasilapi.com.br/')
+        .get('/api/cep/v1/99999999')
+        .replyWithFile(
+          404,
+          path.join(__dirname, '/fixtures/brasilapi-cep-99999999-error.json')
+        )
+
+      return cep('5010000')
+        .then(address => expect(address).to.deep.equal({
+          cep: '05010000',
+          state: 'SP',
+          city: 'São Paulo',
+          neighborhood: 'Perdizes',
+          street: 'Rua Caiubi',
+          service: 'widenet'
+        }))
       })
-    })
+  })
+
+  describe('Should succeed only with brasilapi service', () => {
+    it('should fulfill with correct address', () => {
+      nock('https://apps.correios.com.br')
+        .post('/SigepMasterJPA/AtendeClienteService/AtendeCliente')
+        .replyWithFile(
+          500,
+          path.join(__dirname, '/fixtures/response-unknown-format.xml')
+        )
+
+      nock('https://viacep.com.br')
+        .get('/ws/05010000/json/')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/viacep-cep-99999999-error.json')
+        )
+
+      nock('https://cep.widenet.host')
+        .get('/busca-cep/api/cep/05010000.json')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/widenet-cep-99999999-error.json')
+        )
+
+      nock('https://brasilapi.com.br/')
+        .get('/api/cep/v1/05010000')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/brasilapi-cep-05010000-found.json')
+        )
+
+      return cep('5010000')
+        .then(address => expect(address).to.deep.equal({
+          cep: '05010000',
+          state: 'SP',
+          city: 'São Paulo',
+          neighborhood: 'Perdizes',
+          street: 'Rua Caiubi',
+          service: 'brasilapi'
+        }))
+      })
   })
 
   describe('when its not possible to parse the returned XML and then succeed to one failover service', () => {
@@ -324,13 +427,22 @@ describe('cep-promise (unit)', () => {
           path.join(__dirname, '/fixtures/widenet-cep-05010000-found.json')
         )
 
-      return expect(cep('5010000')).to.eventually.deep.equal({
-        cep: '05010000',
-        state: 'SP',
-        city: 'São Paulo',
-        neighborhood: 'Perdizes',
-        street: 'Rua Caiubi'
-      })
+      nock('https://brasilapi.com.br/')
+        .get('/api/cep/v1/05010000')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/brasilapi-cep-05010000-found.json')
+        )
+
+      return cep('5010000')
+        .then(address => expect(address).to.deep.equal({
+          cep: '05010000',
+          state: 'SP',
+          city: 'São Paulo',
+          neighborhood: 'Perdizes',
+          street: 'Rua Caiubi',
+          service: address.service
+        }))
     })
   })
 
@@ -356,13 +468,22 @@ describe('cep-promise (unit)', () => {
           path.join(__dirname, '/fixtures/widenet-cep-05010000-found.json')
         )
 
-      return expect(cep('5010000')).to.eventually.deep.equal({
-        cep: '05010000',
-        state: 'SP',
-        city: 'São Paulo',
-        neighborhood: 'Perdizes',
-        street: 'Rua Caiubi'
-      })
+      nock('https://brasilapi.com.br/')
+        .get('/api/cep/v1/05010000')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/brasilapi-cep-05010000-found.json')
+        )
+
+      return cep('5010000')
+        .then(address => expect(address).to.deep.equal({
+          cep: '05010000',
+          state: 'SP',
+          city: 'São Paulo',
+          neighborhood: 'Perdizes',
+          street: 'Rua Caiubi',
+          service: address.service
+        }))
     })
   })
 
@@ -387,6 +508,13 @@ describe('cep-promise (unit)', () => {
         .replyWithFile(
           200,
           path.join(__dirname, '/fixtures/widenet-cep-99999999-error.json')
+        )
+
+      nock('https://brasilapi.com.br/')
+        .get('/api/cep/v1/99999999')
+        .replyWithFile(
+          404,
+          path.join(__dirname, '/fixtures/brasilapi-cep-99999999-error.json')
         )
 
       return cep('99999999').catch(error => {
@@ -451,6 +579,10 @@ describe('cep-promise (unit)', () => {
         .get('/busca-cep/api/cep/05010000.json')
         .reply(400, '<h2>Bad Request (400)</h2>')
 
+        nock('https://brasilapi.com.br/')
+        .get('/api/cep/v1/05010000')
+        .reply(400, '<h2>Bad Request (400)</h2>')
+
       return cep('05010000').catch(error => {
         return expect(error)
           .to.be.an.instanceOf(CepPromiseError)
@@ -470,6 +602,11 @@ describe('cep-promise (unit)', () => {
               {
                 message: 'Erro ao se conectar com o serviço WideNet.',
                 service: 'widenet'
+              },
+              {
+                name: 'ServiceError',
+                message: 'CEP não encontrado na base do BrasilAPI.',
+                service: 'brasilapi'
               }
             ]
           })
@@ -494,6 +631,10 @@ describe('cep-promise (unit)', () => {
         .get('/busca-cep/api/cep/05010000.json')
         .reply(400, '<h2>Bad Request (400)</h2>')
 
+      nock('https://brasilapi.com.br/')
+        .get('/api/cep/v1/05010000')
+        .reply(400, '<h2>Bad Request (400)</h2>')
+
       return cep('05010000').catch(error => {
         return expect(error)
           .to.be.an.instanceOf(CepPromiseError)
@@ -513,6 +654,11 @@ describe('cep-promise (unit)', () => {
               {
                 message: 'Erro ao se conectar com o serviço WideNet.',
                 service: 'widenet'
+              },
+              {
+                name: 'ServiceError',
+                message: 'CEP não encontrado na base do BrasilAPI.',
+                service: 'brasilapi'
               }
             ]
           })
@@ -540,6 +686,12 @@ describe('cep-promise (unit)', () => {
           'getaddrinfo ENOTFOUND apps.correios.com.br apps.correios.com.br:443'
         )
 
+      nock('https://brasilapi.com.br/')
+        .get('/api/cep/v1/05010000')
+        .replyWithError(
+          'getaddrinfo ENOTFOUND apps.correios.com.br apps.correios.com.br:443'
+        )
+
       return cep('05010000').catch(error => {
         return expect(error)
           .to.be.an.instanceOf(CepPromiseError)
@@ -559,6 +711,10 @@ describe('cep-promise (unit)', () => {
               {
                 message: 'Erro ao se conectar com o serviço WideNet.',
                 service: 'widenet'
+              },
+              {
+                message: 'Erro ao se conectar com o serviço BrasilAPI.',
+                service: 'brasilapi'
               }
             ]
           })

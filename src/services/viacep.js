@@ -1,6 +1,6 @@
 'use strict'
 
-import fetch from 'isomorphic-unfetch'
+import fetch from 'node-fetch'
 import ServiceError from '../errors/service.js'
 
 export default function fetchViaCepService (cepWithLeftPad, proxyURL = '') {
@@ -42,7 +42,8 @@ function extractCepValuesFromResponse (responseObject) {
     state: responseObject.uf,
     city: responseObject.localidade,
     neighborhood: responseObject.bairro,
-    street: responseObject.logradouro
+    street: responseObject.logradouro,
+    service: 'viacep',
   }
 }
 

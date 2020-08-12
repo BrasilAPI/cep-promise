@@ -1,24 +1,64 @@
 'use strict'
 
 import CepPromiseError from './errors/cep-promise.js'
-import {
-  CorreiosService,
-  ViaCepService,
-  WideNetService,
-} from './services/index.js'
+import { getAvailableServices } from './services/index.js'
 import Promise from './utils/promise-any.js'
 
 const CEP_SIZE = 8
 
-export default function (cepRawValue) {
+export default function (cepRawValue, configurations = {}) {
   return Promise.resolve(cepRawValue)
     .then(validateInputType)
+    .then(cepRawValue => {
+      configurations.providers = configurations.providers ? configurations.providers : []
+      validateProviders(configurations.providers)
+      
+      return cepRawValue
+    })
     .then(removeSpecialCharacters)
     .then(validateInputLength)
     .then(leftPadWithZeros)
-    .then(fetchCepFromServices)
+    .then((cepWithLeftPad) => {
+      return fetchCepFromServices(cepWithLeftPad, configurations)
+    })
     .catch(handleServicesError)
     .catch(throwApplicationError)
+}
+
+function validateProviders (providers) {
+  let availableProviders = ['brasilapi', 'correios', 'viacep', 'widenet']
+
+  if (!Array.isArray(providers)) {
+    throw new CepPromiseError({
+      message: 'Erro ao inicializar a instância do CepPromise.',
+      type: 'validation_error',
+      errors: [
+        {
+          message:
+            `O parâmetro providers deve ser uma lista.`,
+          service: 'providers_validation'
+        }
+      ]
+    })
+  }
+
+  for (const provider of providers) {
+    if (!availableProviders.includes(provider)) {
+      throw new CepPromiseError({
+        message: 'Erro ao inicializar a instância do CepPromise.',
+        type: 'validation_error',
+        errors: [
+          {
+            message:
+              `O provider "${provider}" é inválido. Os providers disponíveis são: ["${availableProviders.join('", "')}"].`,
+            service: 'providers_validation'
+          }
+        ]
+      })
+    }
+
+    return provider
+  }
 }
 
 function validateInputType (cepRawValue) {
@@ -66,12 +106,20 @@ function validateInputLength (cepWithLeftPad) {
   })
 }
 
-function fetchCepFromServices (cepWithLeftPad) {
-  return Promise.any([
-    WideNetService(cepWithLeftPad),
-    CorreiosService(cepWithLeftPad),
-    ViaCepService(cepWithLeftPad)
-  ])
+function fetchCepFromServices (cepWithLeftPad, configurations) {
+  let providersServices = getAvailableServices()
+
+  if (configurations.providers.length === 0) {
+    return Promise.any(
+      Object.values(providersServices).map(provider => provider(cepWithLeftPad))
+    )
+  }
+
+  return Promise.any(
+    configurations.providers.map(provider => {
+      return providersServices[provider](cepWithLeftPad)
+    })
+  )
 }
 
 function handleServicesError (aggregatedErrors) {

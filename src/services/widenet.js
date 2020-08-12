@@ -1,6 +1,6 @@
 'use strict'
 
-import fetch from 'isomorphic-unfetch'
+import fetch from 'node-fetch'
 import ServiceError from '../errors/service.js'
 
 export default function fetchWideNetService (cepWithLeftPad, proxyURL = '') {
@@ -42,7 +42,8 @@ function extractCepValuesFromResponse (object) {
     state: object.state,
     city: object.city,
     neighborhood: object.district,
-    street: object.address
+    street: object.address,
+    service: 'widenet'
   }
 }
 

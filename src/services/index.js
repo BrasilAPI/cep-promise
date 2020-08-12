@@ -1,18 +1,23 @@
 import Correios from './correios'
 import ViaCep from './viacep'
 import WideNet from './widenet'
-import { PROXY_URL } from '../utils/consts'
+import BrasilAPI from './brasilapi.js'
 
-/* istanbul ignore next */
-function isBrowser () {
-  return typeof window !== 'undefined'
+export function getAvailableServices () {
+  const isBrowser = typeof window !== 'undefined'
+
+  if (isBrowser) {
+    return {
+      brasilapi: BrasilAPI,
+      viacep: ViaCep,
+      widenet: WideNet,
+    }
+  }
+
+  return {
+    brasilapi: BrasilAPI,
+    viacep: ViaCep,
+    widenet: WideNet,
+    correios: Correios
+  }
 }
-
-/* istanbul ignore next */
-function injectProxy (Service) {
-  return cepWithLeftPad => Service(cepWithLeftPad, PROXY_URL)
-}
-
-export const CorreiosService = isBrowser() ? injectProxy(Correios) : Correios
-export const ViaCepService = ViaCep
-export const WideNetService = WideNet

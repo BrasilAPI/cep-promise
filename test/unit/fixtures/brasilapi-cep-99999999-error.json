@@ -1,0 +1,17 @@
+{
+    "name": "CepPromiseError",
+    "message": "Todos os serviços de CEP retornaram erro.",
+    "type": "service_error",
+    "errors": [
+      {
+        "name": "ServiceError",
+        "message": "CEP INVÁLIDO",
+        "service": "correios"
+      },
+      {
+        "name": "ServiceError",
+        "message": "CEP não encontrado na base do ViaCEP.",
+        "service": "viacep"
+      }
+    ]
+  }
