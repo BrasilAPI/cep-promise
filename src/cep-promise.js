@@ -1,12 +1,7 @@
 'use strict'
 
 import CepPromiseError from './errors/cep-promise.js'
-import {
-  CorreiosService,
-  ViaCepService,
-  WideNetService,
-  BrasilAPIService
-} from './services/index.js'
+import { getAvailableServices } from './services/index.js'
 import Promise from './utils/promise-any.js'
 
 const CEP_SIZE = 8
@@ -112,12 +107,7 @@ function validateInputLength (cepWithLeftPad) {
 }
 
 function fetchCepFromServices (cepWithLeftPad, configurations) {
-  const providersServices = {
-    brasilapi: BrasilAPIService,
-    viacep: ViaCepService,
-    widenet: WideNetService,
-    correios: CorreiosService
-  }
+  let providersServices = getAvailableServices()
 
   if (configurations.providers.length === 0) {
     return Promise.any(

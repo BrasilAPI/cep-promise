@@ -14,7 +14,7 @@ chai.use(chaiSubset)
 
 let expect = chai.expect
 
-describe('[unit] cep-promise', () => {
+describe('[unit] cep-promise for node', () => {
   before(() => {
     nock.disableNetConnect()
   })
