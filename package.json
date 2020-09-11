@@ -71,7 +71,7 @@
     ]
   },
   "dependencies": {
-    "node-fetch": "2.6.0",
+    "node-fetch": "2.6.1",
     "unfetch": "4.1.0"
   },
   "files": [
