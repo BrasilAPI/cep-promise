@@ -9,7 +9,8 @@ export default function fetchViaCepService (cepWithLeftPad, proxyURL = '') {
     method: 'GET',
     mode: 'cors',
     headers: {
-      'content-type': 'application/json;charset=utf-8'
+      'content-type': 'application/json;charset=utf-8',
+      'user-agent': ''
     }
   }
 

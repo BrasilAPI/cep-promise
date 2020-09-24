@@ -8,16 +8,16 @@ export function getAvailableServices () {
 
   if (isBrowser) {
     return {
-      brasilapi: BrasilAPI,
       viacep: ViaCep,
       widenet: WideNet,
+      brasilapi: BrasilAPI
     }
   }
 
   return {
-    brasilapi: BrasilAPI,
+    correios: Correios,
     viacep: ViaCep,
     widenet: WideNet,
-    correios: Correios
+    brasilapi: BrasilAPI
   }
 }
