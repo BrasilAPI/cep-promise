@@ -1,8 +1,10 @@
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-  typeof define === 'function' && define.amd ? define(factory) :
-  (global = global || self, global.cep = factory());
-}(this, (function () { 'use strict';
+  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('unfetch')) :
+  typeof define === 'function' && define.amd ? define(['unfetch'], factory) :
+  (global = global || self, global.cep = factory(global.fetch));
+}(this, (function (fetch) { 'use strict';
+
+  fetch = fetch && Object.prototype.hasOwnProperty.call(fetch, 'default') ? fetch['default'] : fetch;
 
   function _typeof(obj) {
     "@babel/helpers - typeof";
@@ -276,57 +278,6 @@
     return CepPromiseError;
   }( /*#__PURE__*/_wrapNativeSuper(Error));
 
-  function fetch (e, n) {
-    return n = n || {}, new Promise(function (t, r) {
-      var s = new XMLHttpRequest(),
-          o = [],
-          u = [],
-          i = {},
-          a = function a() {
-        return {
-          ok: 2 == (s.status / 100 | 0),
-          statusText: s.statusText,
-          status: s.status,
-          url: s.responseURL,
-          text: function text() {
-            return Promise.resolve(s.responseText);
-          },
-          json: function json() {
-            return Promise.resolve(JSON.parse(s.responseText));
-          },
-          blob: function blob() {
-            return Promise.resolve(new Blob([s.response]));
-          },
-          clone: a,
-          headers: {
-            keys: function keys() {
-              return o;
-            },
-            entries: function entries() {
-              return u;
-            },
-            get: function get(e) {
-              return i[e.toLowerCase()];
-            },
-            has: function has(e) {
-              return e.toLowerCase() in i;
-            }
-          }
-        };
-      };
-
-      for (var l in s.open(n.method || "get", e, !0), s.onload = function () {
-        s.getAllResponseHeaders().replace(/^(.*?):[^\S\n]*([\s\S]*?)$/gm, function (e, n, t) {
-          o.push(n = n.toLowerCase()), u.push([n, t]), i[n] = i[n] ? i[n] + "," + t : t;
-        }), t(a());
-      }, s.onerror = r, s.withCredentials = "include" == n.credentials, n.headers) {
-        s.setRequestHeader(l, n.headers[l]);
-      }
-
-      s.send(n.body || null);
-    });
-  }
-
   var ServiceError = /*#__PURE__*/function (_Error) {
     _inherits(ServiceError, _Error);
 
@@ -441,7 +392,8 @@
       method: 'GET',
       mode: 'cors',
       headers: {
-        'content-type': 'application/json;charset=utf-8'
+        'content-type': 'application/json;charset=utf-8',
+        'user-agent': ''
       }
     };
     return fetch(url, options).then(analyzeAndParseResponse$1).then(checkForViaCepError).then(extractCepValuesFromResponse)["catch"](throwApplicationError$1);
@@ -589,17 +541,17 @@
 
     if (isBrowser) {
       return {
-        brasilapi: fetchBrasilAPIService,
         viacep: fetchViaCepService,
-        widenet: fetchWideNetService
+        widenet: fetchWideNetService,
+        brasilapi: fetchBrasilAPIService
       };
     }
 
     return {
-      brasilapi: fetchBrasilAPIService,
+      correios: fetchCorreiosService,
       viacep: fetchViaCepService,
       widenet: fetchWideNetService,
-      correios: fetchCorreiosService
+      brasilapi: fetchBrasilAPIService
     };
   }
 

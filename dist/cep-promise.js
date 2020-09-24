@@ -392,7 +392,8 @@
       method: 'GET',
       mode: 'cors',
       headers: {
-        'content-type': 'application/json;charset=utf-8'
+        'content-type': 'application/json;charset=utf-8',
+        'user-agent': ''
       }
     };
     return fetch(url, options).then(analyzeAndParseResponse$1).then(checkForViaCepError).then(extractCepValuesFromResponse)["catch"](throwApplicationError$1);
@@ -540,17 +541,17 @@
 
     if (isBrowser) {
       return {
-        brasilapi: fetchBrasilAPIService,
         viacep: fetchViaCepService,
-        widenet: fetchWideNetService
+        widenet: fetchWideNetService,
+        brasilapi: fetchBrasilAPIService
       };
     }
 
     return {
-      brasilapi: fetchBrasilAPIService,
+      correios: fetchCorreiosService,
       viacep: fetchViaCepService,
       widenet: fetchWideNetService,
-      correios: fetchCorreiosService
+      brasilapi: fetchBrasilAPIService
     };
   }
 
