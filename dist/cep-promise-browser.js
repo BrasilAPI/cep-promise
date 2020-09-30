@@ -360,7 +360,8 @@
       headers: {
         'Content-Type': 'text/xml;charset=UTF-8',
         'cache-control': 'no-cache'
-      }
+      },
+      timeout: 5000
     };
     return fetch(url, options).then(analyzeAndParseResponse)["catch"](throwApplicationError);
   }
@@ -443,7 +444,8 @@
       headers: {
         'content-type': 'application/json;charset=utf-8',
         'user-agent': ''
-      }
+      },
+      timeout: 2000
     };
     return fetch(url, options).then(analyzeAndParseResponse$1).then(checkForViaCepError).then(extractCepValuesFromResponse)["catch"](throwApplicationError$1);
   }
@@ -496,7 +498,8 @@
       mode: 'cors',
       headers: {
         'content-type': 'application/json;charset=utf-8'
-      }
+      },
+      timeout: 2000
     };
     return fetch(url, options).then(analyzeAndParseResponse$2).then(checkForWideNetError).then(extractCepValuesFromResponse$1)["catch"](throwApplicationError$2);
   }
@@ -548,7 +551,8 @@
       mode: 'cors',
       headers: {
         'content-type': 'application/json;charset=utf-8'
-      }
+      },
+      timeout: 2000
     };
     return fetch(url, options).then(parseResponse).then(extractCepValuesFromResponse$2)["catch"](throwApplicationError$3);
   }
