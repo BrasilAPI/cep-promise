@@ -11,7 +11,8 @@ export default function fetchViaCepService (cepWithLeftPad, proxyURL = '') {
     headers: {
       'content-type': 'application/json;charset=utf-8',
       'user-agent': ''
-    }
+    },
+    timeout: 2000,
   }
 
   return fetch(url, options)

@@ -10,7 +10,8 @@ export default function fetchBrasilAPIService (cepWithLeftPad) {
     mode: 'cors',
     headers: {
       'content-type': 'application/json;charset=utf-8'
-    }
+    },
+    timeout: 2000,
   }
 
   return fetch(url, options)

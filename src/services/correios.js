@@ -11,7 +11,8 @@ export default function fetchCorreiosService (cepWithLeftPad, proxyURL = '') {
     headers: {
       'Content-Type': 'text/xml;charset=UTF-8',
       'cache-control': 'no-cache'
-    }
+    },
+    timeout: 5000,
   }
 
   return fetch(url, options)
