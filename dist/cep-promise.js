@@ -318,10 +318,18 @@
 
   function analyzeAndParseResponse(response) {
     if (response.ok) {
-      return response.text().then(parseSuccessXML).then(extractValuesFromSuccessResponse);
+      return response.text().then(checkResponseAndResultStatement).then(parseSuccessXML).then(extractValuesFromSuccessResponse);
     }
 
     return response.text().then(parseAndExtractErrorMessage).then(throwCorreiosError);
+  }
+
+  function checkResponseAndResultStatement(xmlString) {
+    if (xmlString.includes('consultaCEPResponse') && !xmlString.includes('<return>')) {
+      throw new Error('CEP NAO ENCONTRADO');
+    }
+
+    return xmlString;
   }
 
   function parseSuccessXML(xmlString) {
