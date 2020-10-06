@@ -4,6 +4,7 @@ import chai from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 import chaiSubset from 'chai-subset'
 import nock from 'nock'
+import https from 'https'
 
 import cep from '../../src/cep-promise.js'
 import CepPromiseError from '../../src/errors/cep-promise.js'
@@ -38,13 +39,30 @@ describe('[e2e] cep-promise', () => {
       const address = await cep(5010000)
 
       expect(address).to.deep.equal({
-            cep: '05010000',
-            state: 'SP',
-            city: 'São Paulo',
-            neighborhood: 'Perdizes',
-            street: 'Rua Caiubi',
-            service: address.service
-          })
+        cep: '05010000',
+        state: 'SP',
+        city: 'São Paulo',
+        neighborhood: 'Perdizes',
+        street: 'Rua Caiubi',
+        service: address.service
+      })
+    })
+  })
+
+  describe('when invoked with a valid 05010000 number and agent', () => {
+    it('should fulfill with correct address', async () => {
+      const agent = new https.Agent({ keepAlive: true })
+
+      const address = await cep(5010000, { agent })
+
+      expect(address).to.deep.equal({
+        cep: '05010000',
+        state: 'SP',
+        city: 'São Paulo',
+        neighborhood: 'Perdizes',
+        street: 'Rua Caiubi',
+        service: address.service
+      })
     })
   })
 

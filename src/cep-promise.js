@@ -107,17 +107,19 @@ function validateInputLength (cepWithLeftPad) {
 }
 
 function fetchCepFromServices (cepWithLeftPad, configurations) {
-  let providersServices = getAvailableServices()
+  const providersServices = getAvailableServices()
 
-  if (configurations.providers.length === 0) {
+  const { providers: providersFromConfigurations, ...configurationsWithoutProviders } = configurations
+
+  if (providersFromConfigurations.length === 0) {
     return Promise.any(
-      Object.values(providersServices).map(provider => provider(cepWithLeftPad))
+      Object.values(providersServices).map(provider => provider(cepWithLeftPad, configurationsWithoutProviders))
     )
   }
 
   return Promise.any(
-    configurations.providers.map(provider => {
-      return providersServices[provider](cepWithLeftPad)
+    providersFromConfigurations.map(provider => {
+      return providersServices[provider](cepWithLeftPad, configurationsWithoutProviders)
     })
   )
 }

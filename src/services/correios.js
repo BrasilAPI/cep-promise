@@ -3,7 +3,7 @@
 import fetch from 'node-fetch'
 import ServiceError from '../errors/service.js'
 
-export default function fetchCorreiosService (cepWithLeftPad, proxyURL = '') {
+export default function fetchCorreiosService (cepWithLeftPad, { proxyURL = '', agent = undefined }) {
   const url = `${proxyURL}https://apps.correios.com.br/SigepMasterJPA/AtendeClienteService/AtendeCliente`
   const options = {
     method: 'POST',
@@ -11,7 +11,8 @@ export default function fetchCorreiosService (cepWithLeftPad, proxyURL = '') {
     headers: {
       'Content-Type': 'text/xml;charset=UTF-8',
       'cache-control': 'no-cache'
-    }
+    },
+    agent
   }
 
   return fetch(url, options)

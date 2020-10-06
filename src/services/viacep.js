@@ -3,7 +3,7 @@
 import fetch from 'node-fetch'
 import ServiceError from '../errors/service.js'
 
-export default function fetchViaCepService (cepWithLeftPad, proxyURL = '') {
+export default function fetchViaCepService (cepWithLeftPad, { proxyURL = '', agent = undefined }) {
   const url = `${proxyURL}https://viacep.com.br/ws/${cepWithLeftPad}/json/`
   const options = {
     method: 'GET',
@@ -11,7 +11,8 @@ export default function fetchViaCepService (cepWithLeftPad, proxyURL = '') {
     headers: {
       'content-type': 'application/json;charset=utf-8',
       'user-agent': ''
-    }
+    },
+    agent
   }
 
   return fetch(url, options)
