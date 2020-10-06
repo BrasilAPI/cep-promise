@@ -72,7 +72,7 @@ function extractValuesFromSuccessResponse (xmlObject) {
     city: xmlObject.cidade,
     neighborhood: xmlObject.bairro,
     street: xmlObject.end,
-    service: 'correios',
+    service: 'correios'
   }
 }
 

@@ -12,7 +12,7 @@ export default function (cepRawValue, configurations = {}) {
     .then(cepRawValue => {
       configurations.providers = configurations.providers ? configurations.providers : []
       validateProviders(configurations.providers)
-      
+
       return cepRawValue
     })
     .then(removeSpecialCharacters)
@@ -26,7 +26,7 @@ export default function (cepRawValue, configurations = {}) {
 }
 
 function validateProviders (providers) {
-  let availableProviders = ['brasilapi', 'correios', 'viacep', 'widenet']
+  const availableProviders = ['brasilapi', 'correios', 'viacep', 'widenet']
 
   if (!Array.isArray(providers)) {
     throw new CepPromiseError({
@@ -35,7 +35,7 @@ function validateProviders (providers) {
       errors: [
         {
           message:
-            `O parâmetro providers deve ser uma lista.`,
+            'O parâmetro providers deve ser uma lista.',
           service: 'providers_validation'
         }
       ]
