@@ -111,15 +111,28 @@ function fetchCepFromServices (cepWithLeftPad, configurations) {
 
   const { providers: providersFromConfigurations, ...configurationsWithoutProviders } = configurations
 
+  const providersName = Object.keys(providersServices)
+  const { globalConfigs, specificConfigs } = Object.entries(configurationsWithoutProviders).reduce((obj, [key, value]) => {
+    const isAProvider = providersName.includes(key)
+
+    if (isAProvider) {
+      obj.specificConfigs[key] = value
+    } else {
+      obj.globalConfigs[key] = value
+    }
+
+    return obj
+  }, { globalConfigs: {}, specificConfigs: {} })
+
   if (providersFromConfigurations.length === 0) {
     return Promise.any(
-      Object.values(providersServices).map(provider => provider(cepWithLeftPad, configurationsWithoutProviders))
+      Object.entries(providersServices).map(([providerName, provider]) => provider(cepWithLeftPad, { ...globalConfigs, ...specificConfigs[providerName] }))
     )
   }
 
   return Promise.any(
     providersFromConfigurations.map(provider => {
-      return providersServices[provider](cepWithLeftPad, configurationsWithoutProviders)
+      return providersServices[provider](cepWithLeftPad, { ...globalConfigs, ...specificConfigs[provider] })
     })
   )
 }
