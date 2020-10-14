@@ -49,9 +49,9 @@ Teste e aprenda <a href="https://npm.runkit.com/cep-promise" target="_blank">aqu
 Por ser multifornecedor, a biblioteca irá resolver a Promise com o fornecedor que **mais rápido** lhe responder.
 
 ``` js
-import cep from 'cep-promise'
+import cepPromise from 'cep-promise'
 
-cep('05010000')
+cepPromise('05010000')
   .then(console.log)
 
   // {
@@ -69,10 +69,10 @@ cep('05010000')
 Em muitos sistemas o CEP é utilizado erroneamente como um Inteiro (e com isto cortando todos os zeros à esquerda). Caso este seja o seu caso, não há problema, pois a biblioteca irá preencher os caracteres faltantes na String, por exemplo:
 
 ``` js
-import cep from 'cep-promise'
+import cepPromise from 'cep-promise'
 
 // enviando sem ter um zero à esquerda do CEP "05010000"
-cep(5010000)
+cepPromise(5010000)
   .then(console.log)
 
   // {
@@ -89,9 +89,9 @@ cep(5010000)
 Neste caso será retornado um `"service_error"` e por ser multifornecedor, a biblioteca irá rejeitar a Promise apenas quando tiver a resposta negativa de todos os fornecedores.
 
 ``` js
-import cep from 'cep-promise'
+import cepPromise from 'cep-promise'
 
-cep('99999999')
+cepPromise('99999999')
   .catch(console.log)
 
   // {
@@ -114,9 +114,9 @@ cep('99999999')
 Neste caso será retornado um `"validation_error"` e a biblioteca irá rejeitar imediatamente a Promise, sem chegar a consultar nenhum fornecedor.
 
 ``` js
-import cep from 'cep-promise'
+import cepPromise from 'cep-promise'
 
-cep('123456789123456789')
+cepPromise('123456789123456789')
   .catch(console.log)
 
   // {
@@ -160,7 +160,7 @@ $ yarn add cep-promise
 ``` ts
 import * as cep from 'cep-promise'
 
-cep('05010000')
+cepPromise('05010000')
   .then(console.log)
 ```
 

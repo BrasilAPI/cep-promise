@@ -5,7 +5,7 @@ import chaiAsPromised from 'chai-as-promised'
 import chaiSubset from 'chai-subset'
 import nock from 'nock'
 
-import cep from '../../src/cep-promise.js'
+import cepPromise from '../../src/cep-promise.js'
 import CepPromiseError from '../../src/errors/cep-promise.js'
 
 chai.use(chaiAsPromised)
@@ -17,9 +17,9 @@ describe('[e2e] cep-promise', () => {
   before(() => {
     nock.enableNetConnect()
   })
-  
+
   describe('when invoked with a valid "05010000" string', () => {
-    it('should fulfill with correct address', () => cep('05010000')
+    it('should fulfill with correct address', () => cepPromise('05010000')
         .then(address => {
           expect(address).to.deep.equal({
             cep: '05010000',
@@ -34,7 +34,7 @@ describe('[e2e] cep-promise', () => {
 
   describe('when invoked with a valid 05010000 number', () => {
     it('should fulfill with correct address', async () => {
-      const address = await cep(5010000)
+      const address = await cepPromise(5010000)
 
       expect(address).to.deep.equal({
             cep: '05010000',
@@ -49,7 +49,7 @@ describe('[e2e] cep-promise', () => {
 
   describe('when invoked with an inexistent "99999999" CEP', () => {
     it('should reject with "service_error"', () => {
-      return cep('99999999').catch(error => {
+      return cepPromise('99999999').catch(error => {
         return expect(error)
           .to.be.an.instanceOf(CepPromiseError)
           .and.containSubset({
@@ -82,7 +82,7 @@ describe('[e2e] cep-promise', () => {
 
   describe('when invoked with an invalid "123456789" CEP', () => {
     it('should reject with "validation_error"', () => {
-      return cep('123456789').catch(error => {
+      return cepPromise('123456789').catch(error => {
         return expect(error)
           .to.be.an.instanceOf(CepPromiseError)
           .and.containSubset({
