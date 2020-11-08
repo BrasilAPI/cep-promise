@@ -1,5 +1,6 @@
 import babel from 'rollup-plugin-babel'
 import commonjs from 'rollup-plugin-commonjs'
+import json from '@rollup/plugin-json'
 import resolve from 'rollup-plugin-node-resolve'
 import replace from 'rollup-plugin-replace'
 
@@ -7,7 +8,8 @@ const input = 'src/cep-promise.js'
 const defaultPlugins = [
   babel({
     babelrc: false,
-    presets: [['@babel/preset-env', { modules: false }]]
+    presets: [['@babel/preset-env', { modules: false }]],
+    exclude: 'node_modules/**'
   })
 ]
 
@@ -15,7 +17,8 @@ export default [
   {
     input,
     plugins: [].concat(defaultPlugins, [
-      commonjs()
+      commonjs(),
+      json()
     ]),
     output: {
       file: 'dist/cep-promise.js',
@@ -33,7 +36,8 @@ export default [
       resolve({
         browser: true
       }),
-      commonjs()
+      commonjs(),
+      json()
     ]),
     context: 'window',
     output: {
