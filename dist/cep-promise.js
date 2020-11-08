@@ -694,7 +694,7 @@
   }
 
   function validateProviders(providers) {
-    var availableProviders = ['brasilapi', 'correios', 'viacep', 'widenet'];
+    var availableProviders = ['brasilapi', 'correios', 'correiosbusca', 'viacep', 'widenet'];
 
     if (!Array.isArray(providers)) {
       throw new CepPromiseError({
