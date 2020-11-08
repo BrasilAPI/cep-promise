@@ -45,6 +45,7 @@
     "@babel/plugin-transform-runtime": "^7.11.0",
     "@babel/preset-env": "7.11.0",
     "@babel/register": "7.10.5",
+    "@rollup/plugin-json": "^4.1.0",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "10.1.0",
     "babel-istanbul": "0.12.2",
@@ -71,6 +72,9 @@
     ]
   },
   "dependencies": {
+    "axios": "^0.21.0",
+    "cheerio": "^1.0.0-rc.3",
+    "form-data": "^3.0.0",
     "node-fetch": "2.6.1",
     "unfetch": "4.1.0"
   },
