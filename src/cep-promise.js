@@ -12,7 +12,7 @@ export default function (cepRawValue, configurations = {}) {
     .then(cepRawValue => {
       configurations.providers = configurations.providers ? configurations.providers : []
       validateProviders(configurations.providers)
-      
+
       return cepRawValue
     })
     .then(removeSpecialCharacters)
@@ -25,8 +25,8 @@ export default function (cepRawValue, configurations = {}) {
     .catch(throwApplicationError)
 }
 
-function validateProviders (providers) {
-  let availableProviders = ['brasilapi', 'correios', 'viacep', 'widenet']
+function validateProviders(providers) {
+  let availableProviders = ['brasilapi', 'correios', 'correiosbusca', 'viacep', 'widenet']
 
   if (!Array.isArray(providers)) {
     throw new CepPromiseError({
@@ -61,7 +61,7 @@ function validateProviders (providers) {
   }
 }
 
-function validateInputType (cepRawValue) {
+function validateInputType(cepRawValue) {
   const cepTypeOf = typeof cepRawValue
 
   if (cepTypeOf === 'number' || cepTypeOf === 'string') {
@@ -81,15 +81,15 @@ function validateInputType (cepRawValue) {
   })
 }
 
-function removeSpecialCharacters (cepRawValue) {
+function removeSpecialCharacters(cepRawValue) {
   return cepRawValue.toString().replace(/\D+/g, '')
 }
 
-function leftPadWithZeros (cepCleanValue) {
+function leftPadWithZeros(cepCleanValue) {
   return '0'.repeat(CEP_SIZE - cepCleanValue.length) + cepCleanValue
 }
 
-function validateInputLength (cepWithLeftPad) {
+function validateInputLength(cepWithLeftPad) {
   if (cepWithLeftPad.length <= CEP_SIZE) {
     return cepWithLeftPad
   }
@@ -106,7 +106,7 @@ function validateInputLength (cepWithLeftPad) {
   })
 }
 
-function fetchCepFromServices (cepWithLeftPad, configurations) {
+function fetchCepFromServices(cepWithLeftPad, configurations) {
   let providersServices = getAvailableServices()
 
   if (configurations.providers.length === 0) {
@@ -122,7 +122,7 @@ function fetchCepFromServices (cepWithLeftPad, configurations) {
   )
 }
 
-function handleServicesError (aggregatedErrors) {
+function handleServicesError(aggregatedErrors) {
   if (aggregatedErrors.length !== undefined) {
     throw new CepPromiseError({
       message: 'Todos os serviços de CEP retornaram erro.',
@@ -133,6 +133,6 @@ function handleServicesError (aggregatedErrors) {
   throw aggregatedErrors
 }
 
-function throwApplicationError ({ message, type, errors }) {
+function throwApplicationError({ message, type, errors }) {
   throw new CepPromiseError({ message, type, errors })
 }

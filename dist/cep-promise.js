@@ -1,10 +1,13 @@
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('node-fetch')) :
-  typeof define === 'function' && define.amd ? define(['node-fetch'], factory) :
-  (global = global || self, global.cep = factory(global.fetch));
-}(this, (function (fetch) { 'use strict';
+  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('node-fetch'), require('axios'), require('form-data'), require('cheerio')) :
+  typeof define === 'function' && define.amd ? define(['node-fetch', 'axios', 'form-data', 'cheerio'], factory) :
+  (global = global || self, global.cep = factory(global.fetch, global.fetch$1, global.FormData, global.cheerio));
+}(this, (function (fetch, fetch$1, FormData, cheerio) { 'use strict';
 
   fetch = fetch && Object.prototype.hasOwnProperty.call(fetch, 'default') ? fetch['default'] : fetch;
+  fetch$1 = fetch$1 && Object.prototype.hasOwnProperty.call(fetch$1, 'default') ? fetch$1['default'] : fetch$1;
+  FormData = FormData && Object.prototype.hasOwnProperty.call(FormData, 'default') ? FormData['default'] : FormData;
+  cheerio = cheerio && Object.prototype.hasOwnProperty.call(cheerio, 'default') ? cheerio['default'] : cheerio;
 
   function _typeof(obj) {
     "@babel/helpers - typeof";
@@ -26,6 +29,55 @@
     if (!(instance instanceof Constructor)) {
       throw new TypeError("Cannot call a class as a function");
     }
+  }
+
+  function _defineProperty(obj, key, value) {
+    if (key in obj) {
+      Object.defineProperty(obj, key, {
+        value: value,
+        enumerable: true,
+        configurable: true,
+        writable: true
+      });
+    } else {
+      obj[key] = value;
+    }
+
+    return obj;
+  }
+
+  function ownKeys(object, enumerableOnly) {
+    var keys = Object.keys(object);
+
+    if (Object.getOwnPropertySymbols) {
+      var symbols = Object.getOwnPropertySymbols(object);
+      if (enumerableOnly) symbols = symbols.filter(function (sym) {
+        return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+      });
+      keys.push.apply(keys, symbols);
+    }
+
+    return keys;
+  }
+
+  function _objectSpread2(target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i] != null ? arguments[i] : {};
+
+      if (i % 2) {
+        ownKeys(Object(source), true).forEach(function (key) {
+          _defineProperty(target, key, source[key]);
+        });
+      } else if (Object.getOwnPropertyDescriptors) {
+        Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+      } else {
+        ownKeys(Object(source)).forEach(function (key) {
+          Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+        });
+      }
+    }
+
+    return target;
   }
 
   function _inherits(subClass, superClass) {
@@ -385,6 +437,66 @@
     throw serviceError;
   }
 
+  function fetchCorreiosBuscaService(cepWithLeftPad) {
+    var proxyURL = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+    var data = new FormData();
+    data.append('cep', cepWithLeftPad);
+    var config = {
+      method: 'post',
+      url: "".concat(proxyURL, "http://www.buscacep.correios.com.br/sistemas/buscacep/detalhaCEP.cfm"),
+      headers: _objectSpread2({}, data.getHeaders()),
+      data: data,
+      responseEncoding: 'Latin1'
+    };
+    return fetch$1(config).then(parseResponse).then(extractValuesData)["catch"](throwApplicationError$1);
+  }
+
+  var parseResponse = function parseResponse(res) {
+    if (res.status !== 200) {
+      throw new Error("Erro ao se conectar com o servi\xE7o dos correios.");
+    }
+
+    return res.data;
+  };
+
+  var extractValuesData = function extractValuesData(res) {
+    var converUtf8 = function converUtf8(value) {
+      return value.replace(/\&#xE0;/g, 'à').replace(/\&#xE1;/g, 'á').replace(/\&#xE2;/g, 'â').replace(/\&#xE3;/g, 'ã').replace(/\&#xE7;/g, 'ç').replace(/\&#xE8;/g, 'è').replace(/\&#xE9;/g, 'é').replace(/\&#xEA;/g, 'ê').replace(/\&#xEC;/g, 'ì').replace(/\&#xED;/g, 'í').replace(/\&#xF2;/g, 'ò').replace(/\&#xF3;/g, 'ó').replace(/\&#xF4;/g, 'ô').replace(/\&#xF5;/g, 'õ').replace(/\&#xF9;/g, 'ù').replace(/\&#xFA;/g, 'ú').replace(/\&#xFB;/g, 'û');
+    };
+
+    var $ = cheerio.load(res);
+    var message = $('div.ctrlcontent p').html();
+
+    if (message == 'DADOS ENCONTRADOS COM SUCESSO.') {
+      var tr = $('table.tmptabela');
+      var aux = $(tr).find('tr:nth-child(3) td:nth-child(2)').html().split('/');
+      return {
+        cep: $(tr).find('tr:nth-child(4) td:nth-child(2)').html().toString().replace(/\D+/g, ''),
+        state: aux[1],
+        city: converUtf8(aux[0]),
+        neighborhood: converUtf8($(tr).find('tr:nth-child(2) td:nth-child(2)').html()).trim(),
+        street: converUtf8($(tr).find('tr:nth-child(1) td:nth-child(2)').html()).trim(),
+        service: 'correiosBusca'
+      };
+    } else {
+      throw new Error("CEP n\xE3o encontrado na base de dados dos Correios.");
+    }
+  };
+
+  var throwApplicationError$1 = function throwApplicationError(error) {
+    if (error.message === 'Request failed with status code 400' || error.message === 'getaddrinfo ENOTFOUND apps.correios.com.br apps.correios.com.br:443') error.message = 'Erro ao se conectar com o serviço dos Correios.';
+    var serviceError = new ServiceError({
+      message: error.message,
+      service: 'correiosbusca'
+    });
+
+    if (error.name === 'FetchError') {
+      serviceError.message = 'Erro ao se conectar com o serviço dos Correios.';
+    }
+
+    throw serviceError;
+  };
+
   function fetchViaCepService(cepWithLeftPad) {
     var proxyURL = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
     var url = "".concat(proxyURL, "https://viacep.com.br/ws/").concat(cepWithLeftPad, "/json/");
@@ -396,7 +508,7 @@
         'user-agent': ''
       }
     };
-    return fetch(url, options).then(analyzeAndParseResponse$1).then(checkForViaCepError).then(extractCepValuesFromResponse)["catch"](throwApplicationError$1);
+    return fetch(url, options).then(analyzeAndParseResponse$1).then(checkForViaCepError).then(extractCepValuesFromResponse)["catch"](throwApplicationError$2);
   }
 
   function analyzeAndParseResponse$1(response) {
@@ -426,7 +538,7 @@
     };
   }
 
-  function throwApplicationError$1(error) {
+  function throwApplicationError$2(error) {
     var serviceError = new ServiceError({
       message: error.message,
       service: 'viacep'
@@ -449,7 +561,7 @@
         'content-type': 'application/json;charset=utf-8'
       }
     };
-    return fetch(url, options).then(analyzeAndParseResponse$2).then(checkForWideNetError).then(extractCepValuesFromResponse$1)["catch"](throwApplicationError$2);
+    return fetch(url, options).then(analyzeAndParseResponse$2).then(checkForWideNetError).then(extractCepValuesFromResponse$1)["catch"](throwApplicationError$3);
   }
 
   function analyzeAndParseResponse$2(response) {
@@ -479,7 +591,7 @@
     };
   }
 
-  function throwApplicationError$2(error) {
+  function throwApplicationError$3(error) {
     var serviceError = new ServiceError({
       message: error.message,
       service: 'widenet'
@@ -501,10 +613,10 @@
         'content-type': 'application/json;charset=utf-8'
       }
     };
-    return fetch(url, options).then(parseResponse).then(extractCepValuesFromResponse$2)["catch"](throwApplicationError$3);
+    return fetch(url, options).then(parseResponse$1).then(extractCepValuesFromResponse$2)["catch"](throwApplicationError$4);
   }
 
-  function parseResponse(response) {
+  function parseResponse$1(response) {
     if (response.ok === false || response.status !== 200) {
       throw new Error('CEP não encontrado na base do BrasilAPI.');
     }
@@ -523,7 +635,7 @@
     };
   }
 
-  function throwApplicationError$3(error) {
+  function throwApplicationError$4(error) {
     var serviceError = new ServiceError({
       message: error.message,
       service: 'brasilapi'
@@ -541,6 +653,7 @@
 
     if (isBrowser) {
       return {
+        correiosbusca: fetchCorreiosBuscaService,
         viacep: fetchViaCepService,
         widenet: fetchWideNetService,
         brasilapi: fetchBrasilAPIService
@@ -548,6 +661,7 @@
     }
 
     return {
+      correiosbusca: fetchCorreiosBuscaService,
       correios: fetchCorreiosService,
       viacep: fetchViaCepService,
       widenet: fetchWideNetService,
@@ -576,7 +690,7 @@
       return cepRawValue;
     }).then(removeSpecialCharacters).then(validateInputLength).then(leftPadWithZeros).then(function (cepWithLeftPad) {
       return fetchCepFromServices(cepWithLeftPad, configurations);
-    })["catch"](handleServicesError)["catch"](throwApplicationError$4);
+    })["catch"](handleServicesError)["catch"](throwApplicationError$5);
   }
 
   function validateProviders(providers) {
@@ -686,7 +800,7 @@
     throw aggregatedErrors;
   }
 
-  function throwApplicationError$4(_ref) {
+  function throwApplicationError$5(_ref) {
     var message = _ref.message,
         type = _ref.type,
         errors = _ref.errors;
