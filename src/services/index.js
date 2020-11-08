@@ -1,13 +1,15 @@
 import Correios from './correios'
+import CorreiosBusca from './correiosBusca'
 import ViaCep from './viacep'
 import WideNet from './widenet'
-import BrasilAPI from './brasilapi.js'
+import BrasilAPI from './brasilapi'
 
-export function getAvailableServices () {
+export function getAvailableServices() {
   const isBrowser = typeof window !== 'undefined'
 
   if (isBrowser) {
     return {
+      correiosbusca: CorreiosBusca,
       viacep: ViaCep,
       widenet: WideNet,
       brasilapi: BrasilAPI
@@ -15,6 +17,7 @@ export function getAvailableServices () {
   }
 
   return {
+    correiosbusca: CorreiosBusca,
     correios: Correios,
     viacep: ViaCep,
     widenet: WideNet,
