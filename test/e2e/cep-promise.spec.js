@@ -17,18 +17,19 @@ describe('[e2e] cep-promise', () => {
   before(() => {
     nock.enableNetConnect()
   })
-  
+
   describe('when invoked with a valid "05010000" string', () => {
     it('should fulfill with correct address', () => cep('05010000')
-        .then(address => {
-          expect(address).to.deep.equal({
-            cep: '05010000',
-            state: 'SP',
-            city: 'São Paulo',
-            neighborhood: 'Perdizes',
-            street: 'Rua Caiubi',
-            service: address.service
-        })})
+      .then(address => {
+        expect(address).to.deep.equal({
+          cep: '05010000',
+          state: 'SP',
+          city: 'São Paulo',
+          neighborhood: 'Perdizes',
+          street: 'Rua Caiubi',
+          service: address.service
+        })
+      })
     )
   })
 
@@ -37,13 +38,13 @@ describe('[e2e] cep-promise', () => {
       const address = await cep(5010000)
 
       expect(address).to.deep.equal({
-            cep: '05010000',
-            state: 'SP',
-            city: 'São Paulo',
-            neighborhood: 'Perdizes',
-            street: 'Rua Caiubi',
-            service: address.service
-          })
+        cep: '05010000',
+        state: 'SP',
+        city: 'São Paulo',
+        neighborhood: 'Perdizes',
+        street: 'Rua Caiubi',
+        service: address.service
+      })
     })
   })
 
@@ -60,6 +61,10 @@ describe('[e2e] cep-promise', () => {
               {
                 message: 'CEP INVÁLIDO',
                 service: 'correios'
+              },
+              {
+                message: 'CEP não encontrado na base de dados dos Correios.',
+                service: 'correiosbusca'
               },
               {
                 message: 'CEP não encontrado na base do ViaCEP.',

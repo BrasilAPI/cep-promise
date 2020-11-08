@@ -29,6 +29,13 @@ describe('[unit] cep-promise for browser', () => {
 
   describe('when invoked', () => {
     it('should return a Promise', () => {
+      nock('http://www.buscacep.correios.com.br')
+        .post('/sistemas/buscacep/detalhaCEP.cfm')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/correios-busca-cep-05010000-found.html')
+        )
+
       nock('https://viacep.com.br')
         .get('/ws/05010000/json/')
         .replyWithFile(
@@ -121,7 +128,7 @@ describe('[unit] cep-promise for browser', () => {
 
   describe('when invoked with an Function', () => {
     it('should reject with "validation_error"', () => {
-      return cep(function zelda () {
+      return cep(function zelda() {
         return 'link'
       }).catch(error => {
         return expect(error)
@@ -144,6 +151,13 @@ describe('[unit] cep-promise for browser', () => {
 
   describe('when invoked with a valid "05010000" String', () => {
     it('should fulfill with correct address', () => {
+      nock('http://www.buscacep.correios.com.br')
+        .post('/sistemas/buscacep/detalhaCEP.cfm')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/correios-busca-cep-05010000-found.html')
+        )
+
       nock('https://viacep.com.br')
         .get('/ws/05010000/json/')
         .replyWithFile(
@@ -167,19 +181,26 @@ describe('[unit] cep-promise for browser', () => {
 
       return cep('05010000')
         .then(address => expect(address).to.deep.equal({
-            cep: '05010000',
-            state: 'SP',
-            city: 'São Paulo',
-            neighborhood: 'Perdizes',
-            street: 'Rua Caiubi',
-            service: address.service
-          })
+          cep: '05010000',
+          state: 'SP',
+          city: 'São Paulo',
+          neighborhood: 'Perdizes',
+          street: 'Rua Caiubi',
+          service: address.service
+        })
         )
     })
   })
 
   describe('when invoked with a valid 5010000 Number', () => {
     it('should fulfill with correct address', () => {
+      nock('http://www.buscacep.correios.com.br')
+        .post('/sistemas/buscacep/detalhaCEP.cfm')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/correios-busca-cep-05010000-found.html')
+        )
+
       nock('https://viacep.com.br')
         .get('/ws/05010000/json/')
         .replyWithFile(
@@ -201,21 +222,72 @@ describe('[unit] cep-promise for browser', () => {
           path.join(__dirname, '/fixtures/brasilapi-cep-05010000-found.json')
         )
 
-        return cep(5010000)
-          .then(address => expect(address).to.deep.equal({
-            cep: '05010000',
-            state: 'SP',
-            city: 'São Paulo',
-            neighborhood: 'Perdizes',
-            street: 'Rua Caiubi',
-            service: address.service
-          })
+      return cep(5010000)
+        .then(address => expect(address).to.deep.equal({
+          cep: '05010000',
+          state: 'SP',
+          city: 'São Paulo',
+          neighborhood: 'Perdizes',
+          street: 'Rua Caiubi',
+          service: address.service
+        })
+        )
+    })
+  })
+
+  describe('Should succeed only with correios busca service', () => {
+    it('should fulfill with correct address', () => {
+      nock('http://www.buscacep.correios.com.br')
+        .post('/sistemas/buscacep/detalhaCEP.cfm')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/correios-busca-cep-05010000-found.html')
+        )
+
+      nock('https://viacep.com.br')
+        .get('/ws/05010000/json/')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/viacep-cep-99999999-error.json')
+        )
+
+      nock('https://cep.widenet.host')
+        .get('/busca-cep/api/cep/05010000.json')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/widenet-cep-99999999-error.json')
+        )
+
+      nock('https://brasilapi.com.br/')
+        .get('/api/cep/v1/99999999')
+        .replyWithFile(
+          404,
+          path.join(__dirname, '/fixtures/brasilapi-cep-99999999-error.json')
+        )
+
+
+      return cep('05010000')
+        .then(address => expect(address).to.deep.equal({
+          cep: '05010000',
+          state: 'SP',
+          city: 'São Paulo',
+          neighborhood: 'Perdizes',
+          street: 'Rua Caiubi',
+          service: 'correiosBusca'
+        })
         )
     })
   })
 
   describe('Should succeed only with viacep service', () => {
     it('should fulfill with correct address', () => {
+      nock('http://www.buscacep.correios.com.br')
+        .post('/sistemas/buscacep/detalhaCEP.cfm')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/correios-busca-cep-99999999-error.html')
+        )
+
       nock('https://viacep.com.br')
         .get('/ws/05010000/json/')
         .replyWithFile(
@@ -237,21 +309,28 @@ describe('[unit] cep-promise for browser', () => {
           path.join(__dirname, '/fixtures/brasilapi-cep-99999999-error.json')
         )
 
-        return cep('05010000')
-          .then(address => expect(address).to.deep.equal({
-            cep: '05010000',
-            state: 'SP',
-            city: 'São Paulo',
-            neighborhood: 'Perdizes',
-            street: 'Rua Caiubi',
-            service: 'viacep'
-          })
+      return cep('05010000')
+        .then(address => expect(address).to.deep.equal({
+          cep: '05010000',
+          state: 'SP',
+          city: 'São Paulo',
+          neighborhood: 'Perdizes',
+          street: 'Rua Caiubi',
+          service: 'viacep'
+        })
         )
     })
   })
 
   describe('Should succeed only with widenet service', () => {
     it('should fulfill with correct address', () => {
+      nock('http://www.buscacep.correios.com.br')
+        .post('/sistemas/buscacep/detalhaCEP.cfm')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/correios-busca-cep-99999999-error.html')
+        )
+
       nock('https://viacep.com.br')
         .get('/ws/05010000/json/')
         .replyWithFile(
@@ -282,11 +361,18 @@ describe('[unit] cep-promise for browser', () => {
           street: 'Rua Caiubi',
           service: 'widenet'
         }))
-      })
+    })
   })
 
   describe('Should succeed only with brasilapi service', () => {
     it('should fulfill with correct address', () => {
+      nock('http://www.buscacep.correios.com.br')
+        .post('/sistemas/buscacep/detalhaCEP.cfm')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/correios-busca-cep-99999999-error.html')
+        )
+
       nock('https://viacep.com.br')
         .get('/ws/05010000/json/')
         .replyWithFile(
@@ -317,11 +403,18 @@ describe('[unit] cep-promise for browser', () => {
           street: 'Rua Caiubi',
           service: 'brasilapi'
         }))
-      })
+    })
   })
 
   describe('when invoked with an inexistent "99999999" CEP', () => {
     it('should reject with "service_error"', () => {
+      nock('http://www.buscacep.correios.com.br')
+        .post('/sistemas/buscacep/detalhaCEP.cfm')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/correios-busca-cep-99999999-error.html')
+        )
+
       nock('https://viacep.com.br')
         .get('/ws/99999999/json/')
         .replyWithFile(
@@ -351,6 +444,10 @@ describe('[unit] cep-promise for browser', () => {
             message: 'Todos os serviços de CEP retornaram erro.',
             type: 'service_error',
             errors: [
+              {
+                message: 'CEP não encontrado na base de dados dos Correios.',
+                service: 'correiosbusca'
+              },
               {
                 message: 'CEP não encontrado na base do ViaCEP.',
                 service: 'viacep'
@@ -387,6 +484,10 @@ describe('[unit] cep-promise for browser', () => {
 
   describe('when http request fails both for all services with bad response', () => {
     it('should reject with "service_error"', () => {
+      nock('http://www.buscacep.correios.com.br')
+        .post('/sistemas/buscacep/detalhaCEP.cfm')
+        .reply(400, '<h2>Bad Request (400)</h2>')
+
       nock('https://viacep.com.br')
         .get('/ws/05010000/json/')
         .reply(400, '<h2>Bad Request (400)</h2>')
@@ -395,7 +496,7 @@ describe('[unit] cep-promise for browser', () => {
         .get('/busca-cep/api/cep/05010000.json')
         .reply(400, '<h2>Bad Request (400)</h2>')
 
-        nock('https://brasilapi.com.br/')
+      nock('https://brasilapi.com.br/')
         .get('/api/cep/v1/05010000')
         .reply(400, '<h2>Bad Request (400)</h2>')
 
@@ -407,6 +508,10 @@ describe('[unit] cep-promise for browser', () => {
             message: 'Todos os serviços de CEP retornaram erro.',
             type: 'service_error',
             errors: [
+              {
+                message: 'Erro ao se conectar com o serviço dos Correios.',
+                service: 'correiosbusca'
+              },
               {
                 message: 'Erro ao se conectar com o serviço ViaCEP.',
                 service: 'viacep'
@@ -425,7 +530,7 @@ describe('[unit] cep-promise for browser', () => {
       })
     })
   })
- 
+
   afterEach(() => {
     nock.cleanAll()
   })

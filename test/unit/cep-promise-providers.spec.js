@@ -79,7 +79,7 @@ describe('when invoked with providers parameter', () => {
 
   describe('and the providers param is a function', () => {
     it('should reject with "validation_error"', () => {
-      return cep('05010000', { providers: () => () => {}}).catch(error => {
+      return cep('05010000', { providers: () => () => { } }).catch(error => {
         return expect(error)
           .to.be.an.instanceOf(CepPromiseError)
           .and.containSubset({
@@ -99,17 +99,17 @@ describe('when invoked with providers parameter', () => {
 
   describe('and the providers param is a invalid array', () => {
     it('should reject with "validation_error"', () => {
-      return cep('05010000', { providers: [123, 'viacep']}).catch(error => {
+      return cep('05010000', { providers: [123, 'viacep'] }).catch(error => {
         return expect(error)
           .to.be.an.instanceOf(CepPromiseError)
           .and.containSubset({
+            name: 'CepPromiseError',
             message: 'Erro ao inicializar a instância do CepPromise.',
             type: 'validation_error',
             errors: [
               {
-                message:
-                  'O provider "123" é inválido. Os providers disponíveis são: ["brasilapi", "correios", "viacep", "widenet"].',
-                service: 'providers_validation'
+                service: 'providers_validation',
+                message: 'O provider "123" é inválido. Os providers disponíveis são: ["brasilapi", "correios", "correiosbusca", "viacep", "widenet"].'
               }
             ]
           })
@@ -126,6 +126,13 @@ describe('when invoked with providers parameter', () => {
           path.join(__dirname, '/fixtures/response-cep-05010000-found.xml')
         )
 
+      const correiosBuscaMock = nock('http://www.buscacep.correios.com.br')
+        .post('/sistemas/buscacep/detalhaCEP.cfm')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/correios-busca-cep-05010000-found.html')
+        )
+
       const viaCepMock = nock('https://viacep.com.br')
         .get('/ws/05010000/json/')
         .replyWithFile(
@@ -140,7 +147,7 @@ describe('when invoked with providers parameter', () => {
           path.join(__dirname, '/fixtures/widenet-cep-05010000-found.json')
         )
 
-      return cep('05010000', { providers: ['viacep']})
+      return cep('05010000', { providers: ['viacep'] })
         .then(address => {
           expect(address).to.deep.equal({
             cep: '05010000',
@@ -153,8 +160,9 @@ describe('when invoked with providers parameter', () => {
 
           expect(viaCepMock.isDone()).to.be.equal(true)
           expect(correiosMock.isDone()).to.be.equal(false)
+          expect(correiosBuscaMock.isDone()).to.be.equal(false)
           expect(wideNetMock.isDone()).to.be.equal(false)
-      })
+        })
     })
   })
 
@@ -165,6 +173,13 @@ describe('when invoked with providers parameter', () => {
         .replyWithFile(
           200,
           path.join(__dirname, '/fixtures/response-cep-05010000-found.xml')
+        )
+
+      const correiosBuscaMock = nock('http://www.buscacep.correios.com.br')
+        .post('/sistemas/buscacep/detalhaCEP.cfm')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/correios-busca-cep-05010000-found.html')
         )
 
       const viaCepMock = nock('https://viacep.com.br')
@@ -181,7 +196,7 @@ describe('when invoked with providers parameter', () => {
           path.join(__dirname, '/fixtures/widenet-cep-05010000-found.json')
         )
 
-      return cep('05010000', { providers: ['widenet']})
+      return cep('05010000', { providers: ['widenet'] })
         .then(address => {
           expect(address).to.deep.equal({
             cep: '05010000',
@@ -195,7 +210,8 @@ describe('when invoked with providers parameter', () => {
           expect(wideNetMock.isDone()).to.be.equal(true)
           expect(viaCepMock.isDone()).to.be.equal(false)
           expect(correiosMock.isDone()).to.be.equal(false)
-      })
+          expect(correiosBuscaMock.isDone()).to.be.equal(false)
+        })
     })
   })
 
@@ -206,6 +222,13 @@ describe('when invoked with providers parameter', () => {
         .replyWithFile(
           200,
           path.join(__dirname, '/fixtures/response-cep-05010000-found.xml')
+        )
+
+      const correiosBuscaMock = nock('http://www.buscacep.correios.com.br')
+        .post('/sistemas/buscacep/detalhaCEP.cfm')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/correios-busca-cep-05010000-found.html')
         )
 
       const viaCepMock = nock('https://viacep.com.br')
@@ -222,7 +245,7 @@ describe('when invoked with providers parameter', () => {
           path.join(__dirname, '/fixtures/widenet-cep-05010000-found.json')
         )
 
-      return cep('05010000', { providers: ['correios']})
+      return cep('05010000', { providers: ['correios'] })
         .then(address => {
           expect(address).to.deep.equal({
             cep: '05010000',
@@ -236,7 +259,57 @@ describe('when invoked with providers parameter', () => {
           expect(correiosMock.isDone()).to.be.equal(true)
           expect(viaCepMock.isDone()).to.be.equal(false)
           expect(wideNetMock.isDone()).to.be.equal(false)
-      })
+          expect(correiosBuscaMock.isDone()).to.be.equal(false)
+        })
+    })
+  })
+
+  describe('and the providers param is [\'correiosbusca\']', () => {
+    it('should call only correiosBusca service', () => {
+      const correiosMock = nock('https://apps.correios.com.br')
+        .post('/SigepMasterJPA/AtendeClienteService/AtendeCliente')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/response-cep-05010000-found.xml')
+        )
+
+      const correiosBuscaMock = nock('http://www.buscacep.correios.com.br')
+        .post('/sistemas/buscacep/detalhaCEP.cfm')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/correios-busca-cep-05010000-found.html')
+        )
+
+      const viaCepMock = nock('https://viacep.com.br')
+        .get('/ws/05010000/json/')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/viacep-cep-05010000-found.json')
+        )
+
+      const wideNetMock = nock('https://cep.widenet.host')
+        .get('/busca-cep/api/cep/05010000.json')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/widenet-cep-05010000-found.json')
+        )
+
+      return cep('05010000', { providers: ['correiosbusca'] })
+        .then(address => {
+          expect(address).to.deep.equal({
+            cep: '05010000',
+            state: 'SP',
+            city: 'São Paulo',
+            neighborhood: 'Perdizes',
+            street: 'Rua Caiubi',
+            service: 'correiosBusca'
+          })
+
+          expect(correiosMock.isDone()).to.be.equal(false)
+          expect(viaCepMock.isDone()).to.be.equal(false)
+          expect(wideNetMock.isDone()).to.be.equal(false)
+          expect(correiosBuscaMock.isDone()).to.be.equal(true)
+        })
     })
   })
 
@@ -247,6 +320,13 @@ describe('when invoked with providers parameter', () => {
         .replyWithFile(
           200,
           path.join(__dirname, '/fixtures/response-cep-05010000-found.xml')
+        )
+
+      const correiosBuscaMock = nock('http://www.buscacep.correios.com.br')
+        .post('/sistemas/buscacep/detalhaCEP.cfm')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/correios-busca-cep-05010000-found.html')
         )
 
       const viaCepMock = nock('https://viacep.com.br')
@@ -270,7 +350,7 @@ describe('when invoked with providers parameter', () => {
           path.join(__dirname, '/fixtures/brasilapi-cep-05010000-found.json')
         )
 
-      return cep('05010000', { providers: ['brasilapi']})
+      return cep('05010000', { providers: ['brasilapi'] })
         .then(address => {
           expect(address).to.deep.equal({
             cep: '05010000',
@@ -285,7 +365,8 @@ describe('when invoked with providers parameter', () => {
           expect(viaCepMock.isDone()).to.be.equal(false)
           expect(wideNetMock.isDone()).to.be.equal(false)
           expect(brasilAPIMock.isDone()).to.be.equal(true)
-      })
+          expect(correiosBuscaMock.isDone()).to.be.equal(false)
+        })
     })
   })
 
@@ -296,6 +377,13 @@ describe('when invoked with providers parameter', () => {
         .replyWithFile(
           200,
           path.join(__dirname, '/fixtures/response-cep-05010000-found.xml')
+        )
+
+      const correiosBuscaMock = nock('http://www.buscacep.correios.com.br')
+        .post('/sistemas/buscacep/detalhaCEP.cfm')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/correios-busca-cep-05010000-found.html')
         )
 
       const viaCepMock = nock('https://viacep.com.br')
@@ -312,7 +400,7 @@ describe('when invoked with providers parameter', () => {
           path.join(__dirname, '/fixtures/widenet-cep-05010000-found.json')
         )
 
-      return cep('05010000', { providers: ['correios', 'viacep']})
+      return cep('05010000', { providers: ['correios', 'viacep'] })
         .then(address => {
           expect(address).to.deep.equal({
             cep: '05010000',
@@ -326,7 +414,8 @@ describe('when invoked with providers parameter', () => {
           expect(viaCepMock.isDone()).to.be.equal(true)
           expect(correiosMock.isDone()).to.be.equal(true)
           expect(wideNetMock.isDone()).to.be.equal(false)
-      })
+          expect(correiosBuscaMock.isDone()).to.be.equal(false)
+        })
     })
   })
 
@@ -337,6 +426,13 @@ describe('when invoked with providers parameter', () => {
         .replyWithFile(
           200,
           path.join(__dirname, '/fixtures/response-cep-05010000-found.xml')
+        )
+
+      const correiosBuscaMock = nock('http://www.buscacep.correios.com.br')
+        .post('/sistemas/buscacep/detalhaCEP.cfm')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/correios-busca-cep-05010000-found.html')
         )
 
       const viaCepMock = nock('https://viacep.com.br')
@@ -367,7 +463,8 @@ describe('when invoked with providers parameter', () => {
           expect(viaCepMock.isDone()).to.be.equal(true)
           expect(correiosMock.isDone()).to.be.equal(true)
           expect(wideNetMock.isDone()).to.be.equal(true)
-      })
+          expect(correiosBuscaMock.isDone()).to.be.equal(true)
+        })
     })
   })
 
