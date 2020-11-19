@@ -11,7 +11,5 @@ declare module 'cep-promise' {
   // this workarround is because this : https://github.com/Microsoft/TypeScript/issues/5073
   namespace cep {}
 
-  function cep( cep: string | number ): Promise<CEP>
-
-  export = cep
+  export function cep( cep: string | number ): Promise<CEP>
 }
