@@ -108,7 +108,7 @@ describe('when invoked with providers parameter', () => {
             errors: [
               {
                 message:
-                  'O provider "123" é inválido. Os providers disponíveis são: ["correios", "viacep", "widenet", "brasilapi"].',
+                  'O provider "123" é inválido. Os providers disponíveis são: ["brasilapi", "correios", "correios-alt", "viacep", "widenet"].',
                 service: 'providers_validation'
               }
             ]
@@ -124,6 +124,13 @@ describe('when invoked with providers parameter', () => {
         .replyWithFile(
           200,
           path.join(__dirname, '/fixtures/response-cep-05010000-found.xml')
+        )
+
+      const correiosAltMock = nock('https://buscacepinter.correios.com.br')
+        .get('/app/cep/carrega-cep.php?cep=05010000')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/correios-alt-cep-05010000-found.json')
         )
 
       const viaCepMock = nock('https://viacep.com.br')
@@ -153,6 +160,7 @@ describe('when invoked with providers parameter', () => {
 
           expect(viaCepMock.isDone()).to.be.equal(true)
           expect(correiosMock.isDone()).to.be.equal(false)
+          expect(correiosAltMock.isDone()).to.be.equal(false)
           expect(wideNetMock.isDone()).to.be.equal(false)
         })
     })
@@ -165,6 +173,13 @@ describe('when invoked with providers parameter', () => {
         .replyWithFile(
           200,
           path.join(__dirname, '/fixtures/response-cep-05010000-found.xml')
+        )
+
+      const correiosAltMock = nock('https://buscacepinter.correios.com.br')
+        .get('/app/cep/carrega-cep.php?cep=05010000')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/correios-alt-cep-05010000-found.json')
         )
 
       const viaCepMock = nock('https://viacep.com.br')
@@ -195,7 +210,8 @@ describe('when invoked with providers parameter', () => {
           expect(wideNetMock.isDone()).to.be.equal(true)
           expect(viaCepMock.isDone()).to.be.equal(false)
           expect(correiosMock.isDone()).to.be.equal(false)
-        })
+          expect(correiosAltMock.isDone()).to.be.equal(false)
+      })
     })
   })
 
@@ -206,6 +222,13 @@ describe('when invoked with providers parameter', () => {
         .replyWithFile(
           200,
           path.join(__dirname, '/fixtures/response-cep-05010000-found.xml')
+        )
+
+      const correiosAltMock = nock('https://buscacepinter.correios.com.br')
+        .get('/app/cep/carrega-cep.php?cep=05010000')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/correios-alt-cep-05010000-found.json')
         )
 
       const viaCepMock = nock('https://viacep.com.br')
@@ -234,6 +257,56 @@ describe('when invoked with providers parameter', () => {
           })
 
           expect(correiosMock.isDone()).to.be.equal(true)
+          expect(correiosAltMock.isDone()).to.be.equal(false)
+          expect(viaCepMock.isDone()).to.be.equal(false)
+          expect(wideNetMock.isDone()).to.be.equal(false)
+      })
+    })
+  })
+
+  describe('and the providers param is [\'correios-alt\']', () => {
+    it('should call only correios service', () => {
+      const correiosMock = nock('https://apps.correios.com.br')
+        .post('/SigepMasterJPA/AtendeClienteService/AtendeCliente')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/response-cep-05010000-found.xml')
+        )
+
+      const correiosAltMock = nock('https://buscacepinter.correios.com.br')
+        .get('/app/cep/carrega-cep.php?cep=05010000')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/correios-alt-cep-05010000-found.json')
+        )
+
+      const viaCepMock = nock('https://viacep.com.br')
+        .get('/ws/05010000/json/')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/viacep-cep-05010000-found.json')
+        )
+
+      const wideNetMock = nock('https://cep.widenet.host')
+        .get('/busca-cep/api/cep/05010000.json')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/widenet-cep-05010000-found.json')
+        )
+
+      return cep('05010000', { providers: ['correios-alt']})
+        .then(address => {
+          expect(address).to.deep.equal({
+            cep: '05010000',
+            state: 'SP',
+            city: 'São Paulo',
+            neighborhood: 'Perdizes',
+            street: 'Rua Caiubi',
+            service: 'correios'
+          })
+
+          expect(correiosMock.isDone()).to.be.equal(false)
+          expect(correiosAltMock.isDone()).to.be.equal(true)
           expect(viaCepMock.isDone()).to.be.equal(false)
           expect(wideNetMock.isDone()).to.be.equal(false)
         })
@@ -247,6 +320,13 @@ describe('when invoked with providers parameter', () => {
         .replyWithFile(
           200,
           path.join(__dirname, '/fixtures/response-cep-05010000-found.xml')
+        )
+
+      const correiosAltMock = nock('https://buscacepinter.correios.com.br')
+        .get('/app/cep/carrega-cep.php?cep=05010000')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/correios-alt-cep-05010000-found.json')
         )
 
       const viaCepMock = nock('https://viacep.com.br')
@@ -282,6 +362,7 @@ describe('when invoked with providers parameter', () => {
           })
 
           expect(correiosMock.isDone()).to.be.equal(false)
+          expect(correiosAltMock.isDone()).to.be.equal(false)
           expect(viaCepMock.isDone()).to.be.equal(false)
           expect(wideNetMock.isDone()).to.be.equal(false)
           expect(brasilAPIMock.isDone()).to.be.equal(true)
@@ -296,6 +377,13 @@ describe('when invoked with providers parameter', () => {
         .replyWithFile(
           200,
           path.join(__dirname, '/fixtures/response-cep-05010000-found.xml')
+        )
+
+      const correiosAltMock = nock('https://buscacepinter.correios.com.br')
+        .get('/app/cep/carrega-cep.php?cep=05010000')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/correios-alt-cep-05010000-found.json')
         )
 
       const viaCepMock = nock('https://viacep.com.br')
@@ -325,6 +413,7 @@ describe('when invoked with providers parameter', () => {
 
           expect(viaCepMock.isDone()).to.be.equal(true)
           expect(correiosMock.isDone()).to.be.equal(true)
+          expect(correiosAltMock.isDone()).to.be.equal(false)
           expect(wideNetMock.isDone()).to.be.equal(false)
         })
     })
@@ -337,6 +426,13 @@ describe('when invoked with providers parameter', () => {
         .replyWithFile(
           200,
           path.join(__dirname, '/fixtures/response-cep-05010000-found.xml')
+        )
+
+      const correiosAltMock = nock('https://buscacepinter.correios.com.br')
+        .get('/app/cep/carrega-cep.php?cep=05010000')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/correios-alt-cep-05010000-found.json')
         )
 
       const viaCepMock = nock('https://viacep.com.br')
@@ -366,6 +462,7 @@ describe('when invoked with providers parameter', () => {
 
           expect(viaCepMock.isDone()).to.be.equal(true)
           expect(correiosMock.isDone()).to.be.equal(true)
+          expect(correiosAltMock.isDone()).to.be.equal(true)
           expect(wideNetMock.isDone()).to.be.equal(true)
         })
     })

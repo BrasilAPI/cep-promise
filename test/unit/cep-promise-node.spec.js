@@ -34,6 +34,13 @@ describe('[unit] cep-promise for node', () => {
           path.join(__dirname, '/fixtures/response-cep-05010000-found.xml')
         )
 
+      nock('https://buscacepinter.correios.com.br')
+        .get('/app/cep/carrega-cep.php?cep=05010000')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/correios-alt-cep-05010000-found.json')
+        )
+
       nock('https://viacep.com.br')
         .get('/ws/05010000/json/')
         .replyWithFile(
@@ -156,6 +163,13 @@ describe('[unit] cep-promise for node', () => {
           path.join(__dirname, '/fixtures/response-cep-05010000-found.xml')
         )
 
+      nock('https://buscacepinter.correios.com.br')
+        .get('/app/cep/carrega-cep.php?cep=05010000')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/correios-alt-cep-05010000-found.json')
+        )
+
       nock('https://viacep.com.br')
         .get('/ws/05010000/json/')
         .replyWithFile(
@@ -199,6 +213,13 @@ describe('[unit] cep-promise for node', () => {
           path.join(__dirname, '/fixtures/response-cep-05010000-found.xml')
         )
 
+      nock('https://buscacepinter.correios.com.br')
+        .get('/app/cep/carrega-cep.php?cep=05010000')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/correios-alt-cep-05010000-found.json')
+        )
+
       nock('https://viacep.com.br')
         .get('/ws/05010000/json/')
         .replyWithFile(
@@ -240,6 +261,64 @@ describe('[unit] cep-promise for node', () => {
         .replyWithFile(
           200,
           path.join(__dirname, '/fixtures/response-cep-05010000-found.xml')
+        )
+
+      nock('https://buscacepinter.correios.com.br')
+        .get('/app/cep/carrega-cep.php?cep=05010000')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/correios-alt-cep-99999999-error.json')
+        )
+
+      nock('https://viacep.com.br')
+        .get('/ws/05010000/json/')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/viacep-cep-99999999-error.json')
+        )
+
+      nock('https://cep.widenet.host')
+        .get('/busca-cep/api/cep/05010000.json')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/widenet-cep-99999999-error.json')
+        )
+
+      nock('https://brasilapi.com.br/')
+        .get('/api/cep/v1/99999999')
+        .replyWithFile(
+          404,
+          path.join(__dirname, '/fixtures/brasilapi-cep-99999999-error.json')
+        )
+
+
+        return cep('05010000')
+          .then(address => expect(address).to.deep.equal({
+            cep: '05010000',
+            state: 'SP',
+            city: 'São Paulo',
+            neighborhood: 'Perdizes',
+            street: 'Rua Caiubi',
+            service: 'correios'
+          })
+        )
+    })
+  })
+
+  describe('Should succeed only with correios-alt service', () => {
+    it('should fulfill with correct address', () => {
+      nock('https://apps.correios.com.br')
+        .post('/SigepMasterJPA/AtendeClienteService/AtendeCliente')
+        .replyWithFile(
+          500,
+          path.join(__dirname, '/fixtures/response-unknown-format.xml')
+        )
+
+      nock('https://buscacepinter.correios.com.br')
+        .get('/app/cep/carrega-cep.php?cep=05010000')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/correios-alt-cep-05010000-found.json')
         )
 
       nock('https://viacep.com.br')
@@ -286,6 +365,13 @@ describe('[unit] cep-promise for node', () => {
           path.join(__dirname, '/fixtures/response-unknown-format.xml')
         )
 
+      nock('https://buscacepinter.correios.com.br')
+        .get('/app/cep/carrega-cep.php?cep=05010000')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/correios-alt-cep-99999999-error.json')
+        )
+
       nock('https://viacep.com.br')
         .get('/ws/05010000/json/')
         .replyWithFile(
@@ -327,6 +413,13 @@ describe('[unit] cep-promise for node', () => {
         .replyWithFile(
           500,
           path.join(__dirname, '/fixtures/response-unknown-format.xml')
+        )
+
+      nock('https://buscacepinter.correios.com.br')
+        .get('/app/cep/carrega-cep.php?cep=05010000')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/correios-alt-cep-99999999-error.json')
         )
 
       nock('https://viacep.com.br')
@@ -371,6 +464,13 @@ describe('[unit] cep-promise for node', () => {
           path.join(__dirname, '/fixtures/response-unknown-format.xml')
         )
 
+      nock('https://buscacepinter.correios.com.br')
+        .get('/app/cep/carrega-cep.php?cep=05010000')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/correios-alt-cep-99999999-error.json')
+        )
+
       nock('https://viacep.com.br')
         .get('/ws/05010000/json/')
         .replyWithFile(
@@ -411,6 +511,13 @@ describe('[unit] cep-promise for node', () => {
         .replyWithFile(
           200,
           path.join(__dirname, '/fixtures/response-bad-xml.xml')
+        )
+
+      nock('https://buscacepinter.correios.com.br')
+        .get('/app/cep/carrega-cep.php?cep=05010000')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/correios-alt-cep-05010000-found.json')
         )
 
       nock('https://viacep.com.br')
@@ -454,6 +561,13 @@ describe('[unit] cep-promise for node', () => {
           'getaddrinfo ENOTFOUND apps.correios.com.br apps.correios.com.br:443'
         )
 
+      nock('https://buscacepinter.correios.com.br')
+        .get('/app/cep/carrega-cep.php?cep=05010000')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/correios-alt-cep-05010000-found.json')
+        )
+
       nock('https://viacep.com.br')
         .get('/ws/05010000/json/')
         .replyWithFile(
@@ -494,6 +608,13 @@ describe('[unit] cep-promise for node', () => {
         .replyWithFile(
           500,
           path.join(__dirname, '/fixtures/response-cep-not-found.xml')
+        )
+
+      nock('https://buscacepinter.correios.com.br')
+        .get('/app/cep/carrega-cep.php?cep=05010000')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/correios-alt-cep-99999999-error.json')
         )
 
       nock('https://viacep.com.br')
@@ -571,6 +692,10 @@ describe('[unit] cep-promise for node', () => {
           'getaddrinfo ENOTFOUND apps.correios.com.br apps.correios.com.br:443'
         )
 
+      nock('https://buscacepinter.correios.com.br')
+        .get('/app/cep/carrega-cep.php?cep=05010000')
+        .reply(400, '<h2>Bad Request (400)</h2>')
+
       nock('https://viacep.com.br')
         .get('/ws/05010000/json/')
         .reply(400, '<h2>Bad Request (400)</h2>')
@@ -591,6 +716,10 @@ describe('[unit] cep-promise for node', () => {
             message: 'Todos os serviços de CEP retornaram erro.',
             type: 'service_error',
             errors: [
+              {
+                message: 'Erro ao se conectar com o serviço dos Correios.',
+                service: 'correios'
+              },
               {
                 message: 'Erro ao se conectar com o serviço dos Correios.',
                 service: 'correios'
@@ -623,6 +752,10 @@ describe('[unit] cep-promise for node', () => {
           path.join(__dirname, '/fixtures/response-bad-xml.xml')
         )
 
+      nock('https://buscacepinter.correios.com.br')
+        .get('/app/cep/carrega-cep.php?cep=05010000')
+        .reply(200, {erro:true})
+
       nock('https://viacep.com.br')
         .get('/ws/05010000/json/')
         .reply(400, '<h2>Bad Request (400)</h2>')
@@ -645,6 +778,10 @@ describe('[unit] cep-promise for node', () => {
             errors: [
               {
                 message: 'Não foi possível interpretar o XML de resposta.',
+                service: 'correios'
+              },
+              {
+                message: 'CEP não encontrado na base dos Correios.',
                 service: 'correios'
               },
               {
@@ -674,6 +811,10 @@ describe('[unit] cep-promise for node', () => {
           'getaddrinfo ENOTFOUND apps.correios.com.br apps.correios.com.br:443'
         )
 
+      nock('https://buscacepinter.correios.com.br')
+        .get('/app/cep/carrega-cep.php?cep=05010000')
+        .reply(200, {erro:true})
+
       nock('https://viacep.com.br')
         .get('/ws/05010000/json/')
         .replyWithError(
@@ -702,6 +843,10 @@ describe('[unit] cep-promise for node', () => {
             errors: [
               {
                 message: 'Erro ao se conectar com o serviço dos Correios.',
+                service: 'correios'
+              },
+              {
+                message: 'CEP não encontrado na base dos Correios.',
                 service: 'correios'
               },
               {
