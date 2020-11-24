@@ -302,7 +302,7 @@ describe('when invoked with providers parameter', () => {
             city: 'São Paulo',
             neighborhood: 'Perdizes',
             street: 'Rua Caiubi',
-            service: 'correios'
+            service: 'correios-alt'
           })
 
           expect(correiosMock.isDone()).to.be.equal(false)

@@ -40,18 +40,18 @@ function extractCepValuesFromResponse(response) {
     city: firstCep.localidade,
     neighborhood: firstCep.bairro,
     street: firstCep.logradouroDNEC,
-    service: 'correios'
+    service: 'correios-alt'
   }
 }
 
 function throwApplicationError(error) {
   const serviceError = new ServiceError({
     message: error.message,
-    service: 'correios'
+    service: 'correios-alt'
   })
 
   if (error.name === 'FetchError') {
-    serviceError.message = 'Erro ao se conectar com o serviço dos Correios.'
+    serviceError.message = 'Erro ao se conectar com o serviço dos Correios Alt.'
   }
 
   throw serviceError

@@ -299,7 +299,7 @@ describe('[unit] cep-promise for node', () => {
             city: 'São Paulo',
             neighborhood: 'Perdizes',
             street: 'Rua Caiubi',
-            service: 'correios'
+            service: 'correios-alt'
           })
         )
     })
@@ -651,6 +651,10 @@ describe('[unit] cep-promise for node', () => {
                 service: 'correios'
               },
               {
+                message: 'Erro ao se conectar com o serviço dos Correios Alt.',
+                service: 'correios-alt'
+              },
+              {
                 message: 'CEP não encontrado na base do ViaCEP.',
                 service: 'viacep'
               },
@@ -721,8 +725,8 @@ describe('[unit] cep-promise for node', () => {
                 service: 'correios'
               },
               {
-                message: 'Erro ao se conectar com o serviço dos Correios.',
-                service: 'correios'
+                message: 'Erro ao se conectar com o serviço dos Correios Alt.',
+                service: 'correios-alt'
               },
               {
                 message: 'Erro ao se conectar com o serviço ViaCEP.',
@@ -782,7 +786,7 @@ describe('[unit] cep-promise for node', () => {
               },
               {
                 message: 'CEP não encontrado na base dos Correios.',
-                service: 'correios'
+                service: 'correios-alt'
               },
               {
                 message: 'Erro ao se conectar com o serviço ViaCEP.',
@@ -847,7 +851,7 @@ describe('[unit] cep-promise for node', () => {
               },
               {
                 message: 'CEP não encontrado na base dos Correios.',
-                service: 'correios'
+                service: 'correios-alt'
               },
               {
                 message: 'Erro ao se conectar com o serviço ViaCEP.',
