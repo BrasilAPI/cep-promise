@@ -26,7 +26,7 @@ export default function (cepRawValue, configurations = {}) {
 }
 
 function validateProviders (providers) {
-  let availableProviders = Object.keys(getAvailableServices())
+  const availableProviders = Object.keys(getAvailableServices())
 
   if (!Array.isArray(providers)) {
     throw new CepPromiseError({
@@ -35,7 +35,7 @@ function validateProviders (providers) {
       errors: [
         {
           message:
-            `O parâmetro providers deve ser uma lista.`,
+            'O parâmetro providers deve ser uma lista.',
           service: 'providers_validation'
         }
       ]
@@ -107,7 +107,7 @@ function validateInputLength (cepWithLeftPad) {
 }
 
 function fetchCepFromServices (cepWithLeftPad, configurations) {
-  let providersServices = getAvailableServices()
+  const providersServices = getAvailableServices()
 
   if (configurations.providers.length === 0) {
     return Promise.any(

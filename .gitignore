@@ -33,6 +33,9 @@ node_modules
 dist/*
 !dist/cep-promise*.js
 
+#Intellij Ide
+.idea
+
 #Yarn
 yarn.lock
 
