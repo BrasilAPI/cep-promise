@@ -392,10 +392,14 @@
       method: 'GET',
       mode: 'cors',
       headers: {
-        'content-type': 'application/json;charset=utf-8',
-        'user-agent': ''
+        'content-type': 'application/json;charset=utf-8'
       }
     };
+
+    if (typeof window == 'undefined') {
+      options.headers['user-agent'] = 'cep-promise';
+    }
+
     return fetch(url, options).then(analyzeAndParseResponse$1).then(checkForViaCepError).then(extractCepValuesFromResponse)["catch"](throwApplicationError$1);
   }
 
