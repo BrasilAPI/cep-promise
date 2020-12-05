@@ -35,7 +35,8 @@
     "zipcode",
     "zip",
     "promise",
-    "viacep"
+    "viacep",
+    "brasilapi"
   ],
   "homepage": "https://github.com/BrasilAPI/cep-promise",
   "devDependencies": {
