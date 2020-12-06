@@ -1,5 +1,5 @@
 declare module 'cep-promise' {
-  interface CEP {
+  export interface CEP {
     cep: string,
     state: string,
     city: string,

@@ -1,6 +1,6 @@
 {
   "name": "cep-promise",
-  "version": "4.0.2",
+  "version": "4.0.3",
   "description": "Busca por CEP integrado diretamente aos serviços dos Correios e ViaCEP",
   "main": "dist/cep-promise.min.js",
   "module": "dist/cep-promise.min.js",
@@ -22,12 +22,12 @@
   "browser": "dist/cep-promise-browser.min.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/filipedeschamps/cep-promise.git"
+    "url": "https://github.com/BrasilAPI/cep-promise.git"
   },
   "author": "Filipe Deschamps",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/filipedeschamps/cep-promise/issues"
+    "url": "https://github.com/BrasilAPI/cep-promise/issues"
   },
   "keywords": [
     "cep",
@@ -35,9 +35,10 @@
     "zipcode",
     "zip",
     "promise",
-    "viacep"
+    "viacep",
+    "brasilapi"
   ],
-  "homepage": "https://github.com/filipedeschamps/cep-promise",
+  "homepage": "https://github.com/BrasilAPI/cep-promise",
   "devDependencies": {
     "@babel/cli": "7.10.5",
     "@babel/core": "7.11.1",

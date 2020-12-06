@@ -16,6 +16,10 @@ export default function fetchViaCepService (cepWithLeftPad, { proxyURL = '', age
     timeout
   }
 
+  if (typeof window == 'undefined') {
+    options.headers['user-agent'] = 'cep-promise'
+  }
+
   return fetch(url, options)
     .then(analyzeAndParseResponse)
     .then(checkForViaCepError)

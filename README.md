@@ -8,8 +8,8 @@
   <a href="https://npm-stat.com/charts.html?package=cep-promise">
     <img src="https://img.shields.io/npm/dm/cep-promise.svg">
   </a>
-  <a href="https://coveralls.io/github/filipedeschamps/cep-promise?branch=master">
-    <img src="https://coveralls.io/repos/github/filipedeschamps/cep-promise/badge.svg?branch=master">
+  <a href="https://coveralls.io/github/BrasilAPI/cep-promise?branch=master">
+    <img src="https://coveralls.io/repos/github/BrasilAPI/cep-promise/badge.svg?branch=master">
   </a>
   <a href="https://www.npmjs.com/package/cep-promise">
     <img src="https://badge.fury.io/js/cep-promise.svg">
@@ -17,8 +17,8 @@
   <a href="http://standardjs.com/">
     <img src="https://img.shields.io/badge/code%20style-standard-brightgreen.svg">
   </a>
-  <a href="https://snyk.io/test/github/filipedeschamps/cep-promise">
-    <img src="https://snyk.io/test/github/filipedeschamps/cep-promise/badge.svg" alt="Known Vulnerabilities" data-canonical-src="https://snyk.io/test/github/filipedeschamps/cep-promise" style="max-width:100%;">
+  <a href="https://snyk.io/test/github/BrasilAPI/cep-promise">
+    <img src="https://snyk.io/test/github/BrasilAPI/cep-promise/badge.svg" alt="Known Vulnerabilities" data-canonical-src="https://snyk.io/test/github/BrasilAPI/cep-promise" style="max-width:100%;">
   </a>
 </p>
 
