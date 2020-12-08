@@ -360,7 +360,7 @@
         'Content-Type': 'text/xml;charset=UTF-8',
         'cache-control': 'no-cache'
       },
-      timeout: configurations.timeout || Infinity
+      timeout: configurations.timeout || 30000
     };
     return fetch(url, options).then(analyzeAndParseResponse)["catch"](throwApplicationError);
   }
@@ -442,7 +442,7 @@
       headers: {
         'content-type': 'application/json;charset=utf-8'
       },
-      timeout: configurations.timeout || Infinity
+      timeout: configurations.timeout || 30000
     };
 
     if (typeof window == 'undefined') {
@@ -500,7 +500,7 @@
       headers: {
         'content-type': 'application/json;charset=utf-8'
       },
-      timeout: configurations.timeout || Infinity
+      timeout: configurations.timeout || 30000
     };
     return fetch(url, options).then(analyzeAndParseResponse$2).then(checkForWideNetError).then(extractCepValuesFromResponse$1)["catch"](throwApplicationError$2);
   }
@@ -553,7 +553,7 @@
       headers: {
         'content-type': 'application/json;charset=utf-8'
       },
-      timeout: configurations.timeout || Infinity
+      timeout: configurations.timeout || 30000
     };
     return fetch(url, options).then(parseResponse).then(extractCepValuesFromResponse$2)["catch"](throwApplicationError$3);
   }

@@ -11,7 +11,7 @@ export default function fetchBrasilAPIService (cepWithLeftPad, configurations) {
     headers: {
       'content-type': 'application/json;charset=utf-8'
     },
-    timeout: configurations.timeout || Infinity
+    timeout: configurations.timeout || 30000
   }
 
   return fetch(url, options)
