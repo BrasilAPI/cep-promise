@@ -12,7 +12,7 @@ export default function (cepRawValue, configurations = {}) {
     .then(cepRawValue => {
       configurations.providers = configurations.providers ? configurations.providers : []
       validateProviders(configurations.providers)
-      
+
       return cepRawValue
     })
     .then(removeSpecialCharacters)
@@ -111,13 +111,13 @@ function fetchCepFromServices (cepWithLeftPad, configurations) {
 
   if (configurations.providers.length === 0) {
     return Promise.any(
-      Object.values(providersServices).map(provider => provider(cepWithLeftPad))
+      Object.values(providersServices).map(provider => provider(cepWithLeftPad, configurations))
     )
   }
 
   return Promise.any(
     configurations.providers.map(provider => {
-      return providersServices[provider](cepWithLeftPad)
+      return providersServices[provider](cepWithLeftPad, configurations)
     })
   )
 }

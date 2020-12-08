@@ -3,14 +3,15 @@
 import fetch from 'node-fetch'
 import ServiceError from '../errors/service.js'
 
-export default function fetchBrasilAPIService (cepWithLeftPad) {
+export default function fetchBrasilAPIService (cepWithLeftPad, configurations) {
   const url = `https://brasilapi.com.br/api/cep/v1/${cepWithLeftPad}`
   const options = {
     method: 'GET',
     mode: 'cors',
     headers: {
       'content-type': 'application/json;charset=utf-8'
-    }
+    },
+    timeout: configurations.timeout || Infinity
   }
 
   return fetch(url, options)
@@ -23,7 +24,7 @@ function parseResponse (response) {
   if (response.ok === false || response.status !== 200) {
     throw new Error('CEP não encontrado na base do BrasilAPI.')
   }
-  
+
   return response.json()
 }
 

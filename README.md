@@ -129,7 +129,15 @@ cep('123456789123456789')
   //     }]
   // }
 ```
+### Options
+- `timeout`: Timeout em milisegundos das consultas em cada serviço. O tempo total poderá ser maior devido a limites no paralelismo.
 
+```js
+import cep from 'cep-promise'
+cep('5010000', { timeout: 5000 })
+  .then(console.log)
+
+```
 
 ### Instalação
 

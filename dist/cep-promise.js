@@ -302,16 +302,16 @@
     return ServiceError;
   }( /*#__PURE__*/_wrapNativeSuper(Error));
 
-  function fetchCorreiosService(cepWithLeftPad) {
-    var proxyURL = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
-    var url = "".concat(proxyURL, "https://apps.correios.com.br/SigepMasterJPA/AtendeClienteService/AtendeCliente");
+  function fetchCorreiosService(cepWithLeftPad, configurations) {
+    var url = "".concat(configurations.proxyURL || '', "https://apps.correios.com.br/SigepMasterJPA/AtendeClienteService/AtendeCliente");
     var options = {
       method: 'POST',
       body: "<?xml version=\"1.0\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:cli=\"http://cliente.bean.master.sigep.bsb.correios.com.br/\">\n  <soapenv:Header />\n  <soapenv:Body>\n    <cli:consultaCEP>\n      <cep>".concat(cepWithLeftPad, "</cep>\n    </cli:consultaCEP>\n  </soapenv:Body>\n</soapenv:Envelope>"),
       headers: {
         'Content-Type': 'text/xml;charset=UTF-8',
         'cache-control': 'no-cache'
-      }
+      },
+      timeout: configurations.timeout || Infinity
     };
     return fetch(url, options).then(analyzeAndParseResponse)["catch"](throwApplicationError);
   }
@@ -385,15 +385,15 @@
     throw serviceError;
   }
 
-  function fetchViaCepService(cepWithLeftPad) {
-    var proxyURL = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
-    var url = "".concat(proxyURL, "https://viacep.com.br/ws/").concat(cepWithLeftPad, "/json/");
+  function fetchViaCepService(cepWithLeftPad, configurations) {
+    var url = "".concat(configurations.proxyURL || '', "https://viacep.com.br/ws/").concat(cepWithLeftPad, "/json/");
     var options = {
       method: 'GET',
       mode: 'cors',
       headers: {
         'content-type': 'application/json;charset=utf-8'
-      }
+      },
+      timeout: configurations.timeout || Infinity
     };
 
     if (typeof window == 'undefined') {
@@ -443,15 +443,15 @@
     throw serviceError;
   }
 
-  function fetchWideNetService(cepWithLeftPad) {
-    var proxyURL = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
-    var url = "".concat(proxyURL, "https://cep.widenet.host/busca-cep/api/cep/").concat(cepWithLeftPad, ".json");
+  function fetchWideNetService(cepWithLeftPad, configurations) {
+    var url = "".concat(configurations.proxyURL || '', "https://cep.widenet.host/busca-cep/api/cep/").concat(cepWithLeftPad, ".json");
     var options = {
       method: 'GET',
       mode: 'cors',
       headers: {
         'content-type': 'application/json;charset=utf-8'
-      }
+      },
+      timeout: configurations.timeout || Infinity
     };
     return fetch(url, options).then(analyzeAndParseResponse$2).then(checkForWideNetError).then(extractCepValuesFromResponse$1)["catch"](throwApplicationError$2);
   }
@@ -496,14 +496,15 @@
     throw serviceError;
   }
 
-  function fetchBrasilAPIService(cepWithLeftPad) {
+  function fetchBrasilAPIService(cepWithLeftPad, configurations) {
     var url = "https://brasilapi.com.br/api/cep/v1/".concat(cepWithLeftPad);
     var options = {
       method: 'GET',
       mode: 'cors',
       headers: {
         'content-type': 'application/json;charset=utf-8'
-      }
+      },
+      timeout: configurations.timeout || Infinity
     };
     return fetch(url, options).then(parseResponse).then(extractCepValuesFromResponse$2)["catch"](throwApplicationError$3);
   }
@@ -669,12 +670,12 @@
 
     if (configurations.providers.length === 0) {
       return Promise$1.any(Object.values(providersServices).map(function (provider) {
-        return provider(cepWithLeftPad);
+        return provider(cepWithLeftPad, configurations);
       }));
     }
 
     return Promise$1.any(configurations.providers.map(function (provider) {
-      return providersServices[provider](cepWithLeftPad);
+      return providersServices[provider](cepWithLeftPad, configurations);
     }));
   }
 
