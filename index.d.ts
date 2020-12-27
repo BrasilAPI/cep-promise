@@ -13,5 +13,5 @@ declare module 'cep-promise' {
 
   function cep( cep: string | number ): Promise<CEP>
 
-  export = cep
+  export default cep
 }
