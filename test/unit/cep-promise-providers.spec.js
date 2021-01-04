@@ -108,7 +108,7 @@ describe('when invoked with providers parameter', () => {
             errors: [
               {
                 message:
-                  'O provider "123" é inválido. Os providers disponíveis são: ["brasilapi", "correios", "viacep", "widenet"].',
+                  'O provider "123" é inválido. Os providers disponíveis são: ["correios", "viacep", "widenet", "brasilapi"].',
                 service: 'providers_validation'
               }
             ]

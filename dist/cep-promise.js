@@ -386,7 +386,7 @@
   }
 
   function fetchViaCepService(cepWithLeftPad, configurations) {
-    var url = 'https://viacep.com.br/ws/${cepWithLeftPad}/json/';
+    var url = "https://viacep.com.br/ws/".concat(cepWithLeftPad, "/json/");
     var options = {
       method: 'GET',
       mode: 'cors',
@@ -444,7 +444,7 @@
   }
 
   function fetchWideNetService(cepWithLeftPad, configurations) {
-    var url = 'https://cep.widenet.host/busca-cep/api/cep/${cepWithLeftPad}.json';
+    var url = "https://cep.widenet.host/busca-cep/api/cep/".concat(cepWithLeftPad, ".json");
     var options = {
       method: 'GET',
       mode: 'cors',
