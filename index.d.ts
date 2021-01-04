@@ -24,7 +24,7 @@ declare module 'cep-promise' {
 
   export interface Configurations {
     providers?: AvaliableProviders[],
-    timeout?: Number
+    timeout?: number
   }
 
   export function cep(cep: string | number, configurations: Configurations): Promise<CEP>
