@@ -4,7 +4,7 @@ import fetch from 'node-fetch'
 import ServiceError from '../errors/service.js'
 
 export default function fetchViaCepService (cepWithLeftPad, configurations) {
-  const url = `${configurations.proxyURL || ''}https://viacep.com.br/ws/${cepWithLeftPad}/json/`
+  const url = 'https://viacep.com.br/ws/${cepWithLeftPad}/json/'
   const options = {
     method: 'GET',
     mode: 'cors',

@@ -8,6 +8,11 @@ declare module 'cep-promise' {
     service: string
   }
 
+  type configuration = {
+    timeout: number,
+    providers: Array<string>,
+  };
+
   // this workarround is because this : https://github.com/Microsoft/TypeScript/issues/5073
   namespace cep {}
 

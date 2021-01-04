@@ -4,7 +4,7 @@ import fetch from 'node-fetch'
 import ServiceError from '../errors/service.js'
 
 export default function fetchCorreiosService (cepWithLeftPad, configurations) {
-  const url = `${configurations.proxyURL || ''}https://apps.correios.com.br/SigepMasterJPA/AtendeClienteService/AtendeCliente`
+  const url = 'https://apps.correios.com.br/SigepMasterJPA/AtendeClienteService/AtendeCliente'
   const options = {
     method: 'POST',
     body: `<?xml version="1.0"?>\n<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:cli="http://cliente.bean.master.sigep.bsb.correios.com.br/">\n  <soapenv:Header />\n  <soapenv:Body>\n    <cli:consultaCEP>\n      <cep>${cepWithLeftPad}</cep>\n    </cli:consultaCEP>\n  </soapenv:Body>\n</soapenv:Envelope>`,

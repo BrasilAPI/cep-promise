@@ -352,7 +352,7 @@
   }( /*#__PURE__*/_wrapNativeSuper(Error));
 
   function fetchCorreiosService(cepWithLeftPad, configurations) {
-    var url = "".concat(configurations.proxyURL || '', "https://apps.correios.com.br/SigepMasterJPA/AtendeClienteService/AtendeCliente");
+    var url = 'https://apps.correios.com.br/SigepMasterJPA/AtendeClienteService/AtendeCliente';
     var options = {
       method: 'POST',
       body: "<?xml version=\"1.0\"?>\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:cli=\"http://cliente.bean.master.sigep.bsb.correios.com.br/\">\n  <soapenv:Header />\n  <soapenv:Body>\n    <cli:consultaCEP>\n      <cep>".concat(cepWithLeftPad, "</cep>\n    </cli:consultaCEP>\n  </soapenv:Body>\n</soapenv:Envelope>"),
@@ -435,7 +435,7 @@
   }
 
   function fetchViaCepService(cepWithLeftPad, configurations) {
-    var url = "".concat(configurations.proxyURL || '', "https://viacep.com.br/ws/").concat(cepWithLeftPad, "/json/");
+    var url = 'https://viacep.com.br/ws/${cepWithLeftPad}/json/';
     var options = {
       method: 'GET',
       mode: 'cors',
@@ -493,7 +493,7 @@
   }
 
   function fetchWideNetService(cepWithLeftPad, configurations) {
-    var url = "".concat(configurations.proxyURL || '', "https://cep.widenet.host/busca-cep/api/cep/").concat(cepWithLeftPad, ".json");
+    var url = 'https://cep.widenet.host/busca-cep/api/cep/${cepWithLeftPad}.json';
     var options = {
       method: 'GET',
       mode: 'cors',
@@ -634,7 +634,7 @@
   }
 
   function validateProviders(providers) {
-    var availableProviders = ['brasilapi', 'correios', 'viacep', 'widenet'];
+    var availableProviders = Object.keys(getAvailableServices());
 
     if (!Array.isArray(providers)) {
       throw new CepPromiseError({
