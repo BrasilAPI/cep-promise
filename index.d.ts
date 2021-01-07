@@ -22,4 +22,6 @@ declare module 'cep-promise' {
   }
     
   export function cep(cep: string | number, configurations: Configurations): Promise<CEP>
+
+  export default cep
 }
