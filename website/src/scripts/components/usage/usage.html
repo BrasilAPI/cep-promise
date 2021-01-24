@@ -1,0 +1,100 @@
+<div class="usage">
+  <slice>
+    <h2>Realizando uma consulta</h2>
+    <p>
+      Por ser multifornecedor, a biblioteca irá resolver a Promise com o
+      fornecedor que <strong>mais rápido</strong> lhe responder.
+    </p>
+    <code-sample language="javascript">
+import cep from 'cep-promise'
+
+cep('05010000').then(console.log);
+
+// Resultado:
+// {
+//   "cep":  "05010000",
+//   "state":  "SP",
+//   "city":  "São Paulo",
+//   "street":  "Rua Caiubí",
+//   "neighborhood":  "Perdizes",
+// }
+    </code-sample>
+  </slice>
+  <slice>
+    <h2>Você também poderá passar o CEP como Inteiro</h2>
+    <p>
+      Em muitos sistemas o CEP é utilizado erroneamente como um Inteiro
+      (e com isto cortando todos os zeros à esquerda). Caso este seja o seu
+      caso, não há problema, pois a biblioteca irá preencher os caracteres
+      faltantes na String, por exemplo:
+    </p>
+    <code-sample language="javascript">
+import cep from 'cep-promise'
+
+// enviando sem ter um zero à esquerda do CEP "05010000"
+cep(5010000).then(console.log)
+
+// Resultado:
+// {
+//   "cep":  "05010000",
+//   "state":  "SP",
+//   "city":  "São Paulo",
+//   "street":  "Rua Caiubí",
+//   "neighborhood":  "Perdizes",
+// }
+    </code-sample>
+  </slice>
+  <slice>
+    <h2>Quando o CEP não é encontrado</h2>
+    <p>
+      Neste caso será retornado um "service_error" e por ser multifornecedor, a
+      biblioteca irá rejeitar a Promise apenas quando tiver a resposta negativa
+      de todos os fornecedores.
+    </p>
+    <code-sample language="javascript">
+import cep from 'cep-promise'
+
+cep('99999999').catch(console.log)
+
+// Resultado:
+// {
+//     "name": "CepPromiseError",
+//     "message": "Todos os serviços de CEP retornaram erro.",
+//     "type": "service_error",
+//     "errors": [{
+//       "message": "CEP NAO ENCONTRADO",
+//       "service": "correios"
+//     }, {
+//       "message": "CEP não encontrado na base do ViaCEP.",
+//       "service": "viacep"
+//     }, {
+//       "message": "CEP não encontrado na base do Cep Aberto.",
+//       "service": "cepaberto"
+//     }]
+// }
+    </code-sample>
+  </slice>
+  <slice>
+    <h2>Quando o CEP possui um formato inválido</h2>
+    <p>
+      Neste caso será retornado um "validation_error" e a biblioteca irá
+      rejeitar imediatamente a Promise, sem chegar a consultar nenhum fornecedor.
+    </p>
+    <code-sample language="javascript">
+import cep from 'cep-promise'
+
+cep('123456789123456789').catch(console.log)
+
+// Resultado:
+// {
+//     "name": "CepPromiseError",
+//     "message": "CEP deve conter exatamente 8 caracteres.",
+//     "type": "validation_error",
+//     "errors": [{
+//       "message": "CEP informado possui mais do que 8 caracteres.",
+//       "service": "cep_validation"
+//     }]
+// }
+    </code-sample>
+  </slice>
+</div>

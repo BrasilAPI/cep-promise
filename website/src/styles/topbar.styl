@@ -1,0 +1,33 @@
+@require '_variables'
+@require '_mixins'
+
+.topbar
+  position absolute
+  top 0
+  left 0
+  width 100%
+  padding 40px 0
+  z-index $layer-low
+  cleafix()
+  .logo
+    float left
+  .navmenu
+    float right
+    margin-top 31px
+  &.topbar-negative
+    .logo
+      background-image('logo-negative.svg')
+    a
+      color $color-pink-light
+
++breakpoint('xs')
+  .topbar
+    text-align center
+    a
+      height 40px
+      clearfix()
+    .logo
+      float none
+      display inline-block
+      width 90px
+      height 40px

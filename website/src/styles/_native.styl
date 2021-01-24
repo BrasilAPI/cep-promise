@@ -1,0 +1,42 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:500,700');
+@require '_variables'
+@require '_mixins'
+
+html, body
+  margin 0
+
+html, body
+  font-family $font-primary
+  font-size 16px
+  -webkit-font-smoothing antialiased
+  -moz-osx-font-smoothing grayscale
+
+h1, h2, h3, h4, h5, h6
+  margin 0
+  color $color-blue
+  font-family $font-primary
+
+
+h1, h2
+  font-size $font-size-xxl
+  letter-spacing -1px
+
+p
+  color $color-grey-dark
+
+a
+  color $color-blue
+  text-decoration none
+  &:visited
+    color $color-blue
+
+input
+  padding 10px
+  font-size $font-size-sm
+  border 1px solid $color-grey
+  outline 0
+  border-radius(3px)
+  box-sizing(border-box)
+  &:focus,
+  &:active
+    border 1px solid alpha($color-blue, .3)

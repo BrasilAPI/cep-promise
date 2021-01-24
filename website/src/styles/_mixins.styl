@@ -1,0 +1,57 @@
+@require '_variables'
+
+background-image($filename)
+  background-image url($path-images + $filename)
+
+border-radius($radius)
+  -webkit-border-radius $radius
+  -moz-border-radius    $radius
+  border-radius         $radius
+
+box-sizing($size)
+  -webkit-box-sizing $size
+  -moz-box-sizing    $size
+  box-sizing         $size
+
+clearfix()
+  zoom 1
+  &:after
+    content ' '
+    display table
+    clear both
+
+transform($property)
+  -webkit-transform unquote($property)
+  -moz-transform unquote($property)
+  -ms-transform unquote($property)
+  -o-transform unquote($property)
+  transform unquote($property)
+
+transition($property, $time)
+  -webkit-transition  $property $time $animation-ease-default
+  -moz-transition     $property $time $animation-ease-default
+  -o-transition       $property $time $animation-ease-default
+  transition          $property $time $animation-ease-default
+
+breakpoint($size)
+  if($size == 'xs')
+    @media screen and (max-width $screen-xs-max)
+      {block}
+  else if ($size == 'xs-sm')
+    @media screen and (max-width $screen-sm-max)
+      {block}
+  else if ($size == 'sm')
+    @media screen and (min-width $screen-xs-max) and (max-width $screen-sm-max)
+      {block}
+  else if ($size == 'sm-md')
+    @media screen and (min-width $screen-sm-min) and (max-width $screen-md-max)
+      {block}
+  else if ($size == 'md')
+    @media screen and (min-width $screen-sm-max) and (max-width $screen-md-max)
+      {block}
+  else if ($size == 'md-lg')
+    @media screen and (min-width $screen-md-max) and (max-width $screen-lg-min)
+      {block}
+  else if ($size == 'lg')
+    @media screen and (min-width $screen-lg-min)
+      {block}

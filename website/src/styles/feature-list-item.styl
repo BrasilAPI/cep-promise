@@ -1,0 +1,31 @@
+@require '_variables'
+@require '_mixins'
+
+.feature-list-item
+  float left
+  width 50%
+  margin-top 40px
+  padding 0 40px
+  text-align center
+  clearfix()
+  box-sizing(border-box)
+
+.feature-list-item-image
+  height 130px
+  background-repeat no-repeat
+  background-position center center
+
+for $name in 'map' 'cogs' 'timer' 'traffic-lights'
+  .feature-list-item-image-{$name}
+    background-image($name + '.svg')
+
+.feature-list-item-title
+  margin-top 25px
+
+.feature-list-item-content
+  max-width 370px
+
++breakpoint('xs')
+  .feature-list-item
+    float none
+    width 100%

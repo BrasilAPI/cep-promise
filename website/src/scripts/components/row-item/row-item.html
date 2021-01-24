@@ -1,0 +1,5 @@
+<div class="row-item" :class="sizeCssClass">
+  <div class="row-item-label" v-if="label">{{ label }}</div>
+  <div class="row-item-value" v-if="value">{{ value }}</div>
+  <slot></slot>
+</div>
