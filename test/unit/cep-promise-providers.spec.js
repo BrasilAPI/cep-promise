@@ -108,7 +108,7 @@ describe('when invoked with providers parameter', () => {
             errors: [
               {
                 message:
-                  'O provider "123" é inválido. Os providers disponíveis são: ["brasilapi", "correios", "viacep", "widenet"].',
+                  'O provider "123" é inválido. Os providers disponíveis são: ["correios", "viacep", "widenet", "brasilapi"].',
                 service: 'providers_validation'
               }
             ]
@@ -353,7 +353,7 @@ describe('when invoked with providers parameter', () => {
           path.join(__dirname, '/fixtures/widenet-cep-05010000-found.json')
         )
 
-      return cep('05010000', [])
+      return cep('05010000', { providers: [] })
         .then(address => {
           expect(address).to.deep.equal({
             cep: '05010000',

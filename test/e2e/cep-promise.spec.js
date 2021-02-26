@@ -17,7 +17,7 @@ describe('[e2e] cep-promise', () => {
   before(() => {
     nock.enableNetConnect()
   })
-  
+
   describe('when invoked with a valid "05010000" string', () => {
     it('should fulfill with correct address', () => cep('05010000')
         .then(address => {
@@ -66,7 +66,6 @@ describe('[e2e] cep-promise', () => {
                 service: 'viacep'
               },
               {
-                message: 'CEP não encontrado na base do WideNet.',
                 service: 'widenet'
               },
               {
