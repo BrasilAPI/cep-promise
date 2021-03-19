@@ -4,6 +4,7 @@ import chai from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 import chaiSubset from 'chai-subset'
 import nock from 'nock'
+import https from 'https'
 
 import cep from '../../src/cep-promise.js'
 import CepPromiseError from '../../src/errors/cep-promise.js'
@@ -11,7 +12,7 @@ import CepPromiseError from '../../src/errors/cep-promise.js'
 chai.use(chaiAsPromised)
 chai.use(chaiSubset)
 
-let expect = chai.expect
+const expect = chai.expect
 
 describe('[e2e] cep-promise', () => {
   before(() => {
@@ -20,15 +21,16 @@ describe('[e2e] cep-promise', () => {
 
   describe('when invoked with a valid "05010000" string', () => {
     it('should fulfill with correct address', () => cep('05010000')
-        .then(address => {
-          expect(address).to.deep.equal({
-            cep: '05010000',
-            state: 'SP',
-            city: 'São Paulo',
-            neighborhood: 'Perdizes',
-            street: 'Rua Caiubi',
-            service: address.service
-        })})
+      .then(address => {
+        expect(address).to.deep.equal({
+          cep: '05010000',
+          state: 'SP',
+          city: 'São Paulo',
+          neighborhood: 'Perdizes',
+          street: 'Rua Caiubi',
+          service: address.service
+        })
+      })
     )
   })
 
@@ -37,13 +39,30 @@ describe('[e2e] cep-promise', () => {
       const address = await cep(5010000)
 
       expect(address).to.deep.equal({
-            cep: '05010000',
-            state: 'SP',
-            city: 'São Paulo',
-            neighborhood: 'Perdizes',
-            street: 'Rua Caiubi',
-            service: address.service
-          })
+        cep: '05010000',
+        state: 'SP',
+        city: 'São Paulo',
+        neighborhood: 'Perdizes',
+        street: 'Rua Caiubi',
+        service: address.service
+      })
+    })
+  })
+
+  describe('when invoked with a valid 05010000 number and agent', () => {
+    it('should fulfill with correct address', async () => {
+      const agent = new https.Agent({ keepAlive: true })
+
+      const address = await cep(5010000, { agent })
+
+      expect(address).to.deep.equal({
+        cep: '05010000',
+        state: 'SP',
+        city: 'São Paulo',
+        neighborhood: 'Perdizes',
+        street: 'Rua Caiubi',
+        service: address.service
+      })
     })
   })
 

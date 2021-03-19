@@ -26,7 +26,7 @@ export default function (cepRawValue, configurations = {}) {
 }
 
 function validateProviders (providers) {
-  let availableProviders = Object.keys(getAvailableServices())
+  const availableProviders = Object.keys(getAvailableServices())
 
   if (!Array.isArray(providers)) {
     throw new CepPromiseError({
@@ -35,7 +35,7 @@ function validateProviders (providers) {
       errors: [
         {
           message:
-            `O parâmetro providers deve ser uma lista.`,
+            'O parâmetro providers deve ser uma lista.',
           service: 'providers_validation'
         }
       ]
@@ -107,17 +107,32 @@ function validateInputLength (cepWithLeftPad) {
 }
 
 function fetchCepFromServices (cepWithLeftPad, configurations) {
-  let providersServices = getAvailableServices()
+  const providersServices = getAvailableServices()
 
-  if (configurations.providers.length === 0) {
+  const { providers: providersFromConfigurations, ...configurationsWithoutProviders } = configurations
+
+  const providersName = Object.keys(providersServices)
+  const { globalConfigs, specificConfigs } = Object.entries(configurationsWithoutProviders).reduce((obj, [key, value]) => {
+    const isAProvider = providersName.includes(key)
+
+    if (isAProvider) {
+      obj.specificConfigs[key] = value
+    } else {
+      obj.globalConfigs[key] = value
+    }
+
+    return obj
+  }, { globalConfigs: {}, specificConfigs: {} })
+
+  if (providersFromConfigurations.length === 0) {
     return Promise.any(
-      Object.values(providersServices).map(provider => provider(cepWithLeftPad, configurations))
+      Object.entries(providersServices).map(([providerName, provider]) => provider(cepWithLeftPad, { ...globalConfigs, ...specificConfigs[providerName] }))
     )
   }
 
   return Promise.any(
-    configurations.providers.map(provider => {
-      return providersServices[provider](cepWithLeftPad, configurations)
+    providersFromConfigurations.map(provider => {
+      return providersServices[provider](cepWithLeftPad, { ...globalConfigs, ...specificConfigs[provider] })
     })
   )
 }

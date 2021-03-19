@@ -63,6 +63,36 @@ cep('05010000')
   // }
 ```
 
+### Realizando uma consulta avançada
+Para passar configurações como Proxy, Agent, timeout:
+
+``` js
+import cep from 'cep-promise'
+import https from 'https'
+
+const agent = new https.Agent({ keepAlive: true })
+const proxyURL = 'socks5://127.0.0.1:1950'
+
+const configurations = {
+  agent,
+  proxyURL,
+  brasilapi: {
+    timeout:1000
+  }
+}
+
+cep('05010000', configurations)
+  .then(console.log)
+
+  // {
+  //   "cep":  "05010000",
+  //   "state":  "SP",
+  //   "city":  "São Paulo",
+  //   "street":  "Rua Caiubí",
+  //   "neighborhood":  "Perdizes",
+  // }
+```
+
 
 ### Você também poderá passar o CEP como Inteiro
 

@@ -3,15 +3,17 @@
 import fetch from 'node-fetch'
 import ServiceError from '../errors/service.js'
 
-export default function fetchViaCepService (cepWithLeftPad, configurations) {
+export default function fetchViaCepService (cepWithLeftPad, { proxyURL = '', agent = undefined, timeout = undefined, headers = {} }) {
   const url = `https://viacep.com.br/ws/${cepWithLeftPad}/json/`
   const options = {
     method: 'GET',
     mode: 'cors',
     headers: {
-      'content-type': 'application/json;charset=utf-8'
+      'content-type': 'application/json;charset=utf-8',
+      ...headers
     },
-    timeout: configurations.timeout || 30000
+    agent,
+    timeout: timeout || 30000
   }
 
   if (typeof window == 'undefined') {
@@ -48,7 +50,7 @@ function extractCepValuesFromResponse (responseObject) {
     city: responseObject.localidade,
     neighborhood: responseObject.bairro,
     street: responseObject.logradouro,
-    service: 'viacep',
+    service: 'viacep'
   }
 }
 

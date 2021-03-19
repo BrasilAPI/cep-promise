@@ -3,15 +3,17 @@
 import fetch from 'node-fetch'
 import ServiceError from '../errors/service.js'
 
-export default function fetchBrasilAPIService (cepWithLeftPad, configurations) {
+export default function fetchBrasilAPIService (cepWithLeftPad, { agent = undefined, timeout = undefined, headers = {} }) {
   const url = `https://brasilapi.com.br/api/cep/v1/${cepWithLeftPad}`
   const options = {
     method: 'GET',
     mode: 'cors',
     headers: {
-      'content-type': 'application/json;charset=utf-8'
+      'content-type': 'application/json;charset=utf-8',
+      ...headers
     },
-    timeout: configurations.timeout || 30000
+    agent,
+    timeout: timeout || 30000
   }
 
   return fetch(url, options)

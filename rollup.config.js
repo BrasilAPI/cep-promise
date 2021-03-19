@@ -27,7 +27,7 @@ export default [
     input,
     plugins: [
       replace({
-        'node-fetch': 'unfetch',
+        'node-fetch': 'unfetch'
       })
     ].concat(defaultPlugins, [
       resolve({
@@ -43,4 +43,3 @@ export default [
     }
   }
 ]
-

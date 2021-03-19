@@ -3,15 +3,17 @@
 import fetch from 'node-fetch'
 import ServiceError from '../errors/service.js'
 
-export default function fetchWideNetService (cepWithLeftPad, configurations) {
+export default function fetchWideNetService (cepWithLeftPad, { proxyURL = '', agent = undefined, timeout = undefined, headers = {} }) {
   const url = `https://cep.widenet.host/busca-cep/api/cep/${cepWithLeftPad}.json`
   const options = {
     method: 'GET',
     mode: 'cors',
     headers: {
-      'content-type': 'application/json;charset=utf-8'
+      'content-type': 'application/json;charset=utf-8',
+      ...headers
     },
-    timeout: configurations.timeout || 30000
+    agent,
+    timeout : timeout || 30000
   }
 
   return fetch(url, options)
