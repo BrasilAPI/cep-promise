@@ -13,7 +13,7 @@ export default function fetchBrasilAPIService (cepWithLeftPad, { agent = undefin
       ...headers
     },
     agent,
-    timeout
+    timeout: timeout || 30000
   }
 
   return fetch(url, options)

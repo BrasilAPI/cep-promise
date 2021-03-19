@@ -85,7 +85,6 @@ describe('[e2e] cep-promise', () => {
                 service: 'viacep'
               },
               {
-                message: 'CEP não encontrado na base do WideNet.',
                 service: 'widenet'
               },
               {

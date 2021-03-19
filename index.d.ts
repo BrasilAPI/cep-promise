@@ -11,7 +11,18 @@ declare module 'cep-promise' {
   // this workarround is because this : https://github.com/Microsoft/TypeScript/issues/5073
   namespace cep {}
 
-  function cep( cep: string | number ): Promise<CEP>
+  type AvaliableProviders =
+    "brasilapi" |
+    "correios" |
+    "viacep" |
+    "widenet"
+
+  export interface Configurations {
+    providers?: AvaliableProviders[],
+    timeout?: number
+  }
+
+  export function cep(cep: string | number, configurations: Configurations): Promise<CEP>
 
   export default cep
 }

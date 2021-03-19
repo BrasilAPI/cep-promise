@@ -4,7 +4,7 @@ import fetch from 'node-fetch'
 import ServiceError from '../errors/service.js'
 
 export default function fetchViaCepService (cepWithLeftPad, { proxyURL = '', agent = undefined, timeout = undefined, headers = {} }) {
-  const url = `${proxyURL}https://viacep.com.br/ws/${cepWithLeftPad}/json/`
+  const url = `https://viacep.com.br/ws/${cepWithLeftPad}/json/`
   const options = {
     method: 'GET',
     mode: 'cors',
@@ -13,7 +13,7 @@ export default function fetchViaCepService (cepWithLeftPad, { proxyURL = '', age
       ...headers
     },
     agent,
-    timeout
+    timeout: timeout || 30000
   }
 
   if (typeof window == 'undefined') {

@@ -26,7 +26,7 @@ export default function (cepRawValue, configurations = {}) {
 }
 
 function validateProviders (providers) {
-  const availableProviders = ['brasilapi', 'correios', 'viacep', 'widenet']
+  const availableProviders = Object.keys(getAvailableServices())
 
   if (!Array.isArray(providers)) {
     throw new CepPromiseError({
