@@ -36,7 +36,9 @@
     "zip",
     "promise",
     "viacep",
-    "brasilapi"
+    "brasilapi",
+    "widenet",
+    "apicep"
   ],
   "homepage": "https://github.com/BrasilAPI/cep-promise",
   "devDependencies": {
