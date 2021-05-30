@@ -3,8 +3,8 @@
 import fetch from 'node-fetch'
 import ServiceError from '../errors/service.js'
 
-export default function fetchWideNetService (cepWithLeftPad, configurations) {
-  const url = `https://cep.widenet.host/busca-cep/api/cep/${cepWithLeftPad}.json`
+export default function fetchWideNetService(cepWithLeftPad, configurations) {
+  const url = `https://ws.apicep.com/busca-cep/api/cep/${cepWithLeftPad}.json`
   const options = {
     method: 'GET',
     mode: 'cors',
@@ -21,7 +21,7 @@ export default function fetchWideNetService (cepWithLeftPad, configurations) {
     .catch(throwApplicationError)
 }
 
-function analyzeAndParseResponse (response) {
+function analyzeAndParseResponse(response) {
   if (response.ok) {
     return response.json()
   }
@@ -29,7 +29,7 @@ function analyzeAndParseResponse (response) {
   throw Error('Erro ao se conectar com o serviço WideNet.')
 }
 
-function checkForWideNetError (object) {
+function checkForWideNetError(object) {
   if (object.ok === false || object.status !== 200) {
     throw new Error('CEP não encontrado na base do WideNet.')
   }
@@ -37,7 +37,7 @@ function checkForWideNetError (object) {
   return object
 }
 
-function extractCepValuesFromResponse (object) {
+function extractCepValuesFromResponse(object) {
   return {
     cep: object.code.replace('-', ''),
     state: object.state,
@@ -48,7 +48,7 @@ function extractCepValuesFromResponse (object) {
   }
 }
 
-function throwApplicationError (error) {
+function throwApplicationError(error) {
   const serviceError = new ServiceError({
     message: error.message,
     service: 'widenet'
