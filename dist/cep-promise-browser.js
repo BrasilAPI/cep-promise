@@ -493,7 +493,7 @@
   }
 
   function fetchWideNetService(cepWithLeftPad, configurations) {
-    var url = "https://cep.widenet.host/busca-cep/api/cep/".concat(cepWithLeftPad, ".json");
+    var url = "https://ws.apicep.com/busca-cep/api/cep/".concat(cepWithLeftPad, ".json");
     var options = {
       method: 'GET',
       mode: 'cors',

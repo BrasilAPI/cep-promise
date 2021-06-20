@@ -41,7 +41,7 @@ describe('[unit] cep-promise for node', () => {
           path.join(__dirname, '/fixtures/viacep-cep-05010000-found.json')
         )
 
-      nock('https://cep.widenet.host')
+      nock('https://ws.apicep.com')
         .get('/busca-cep/api/cep/05010000.json')
         .replyWithFile(
           200,
@@ -126,7 +126,7 @@ describe('[unit] cep-promise for node', () => {
 
   describe('when invoked with an Function', () => {
     it('should reject with "validation_error"', () => {
-      return cep(function zelda () {
+      return cep(function zelda() {
         return 'link'
       }).catch(error => {
         return expect(error)
@@ -163,7 +163,7 @@ describe('[unit] cep-promise for node', () => {
           path.join(__dirname, '/fixtures/viacep-cep-05010000-found.json')
         )
 
-      nock('https://cep.widenet.host')
+      nock('https://ws.apicep.com')
         .get('/busca-cep/api/cep/05010000.json')
         .replyWithFile(
           200,
@@ -179,13 +179,13 @@ describe('[unit] cep-promise for node', () => {
 
       return cep('05010000')
         .then(address => expect(address).to.deep.equal({
-            cep: '05010000',
-            state: 'SP',
-            city: 'São Paulo',
-            neighborhood: 'Perdizes',
-            street: 'Rua Caiubi',
-            service: address.service
-          })
+          cep: '05010000',
+          state: 'SP',
+          city: 'São Paulo',
+          neighborhood: 'Perdizes',
+          street: 'Rua Caiubi',
+          service: address.service
+        })
         )
     })
   })
@@ -206,7 +206,7 @@ describe('[unit] cep-promise for node', () => {
           path.join(__dirname, '/fixtures/viacep-cep-05010000-found.json')
         )
 
-      nock('https://cep.widenet.host')
+      nock('https://ws.apicep.com')
         .get('/busca-cep/api/cep/05010000.json')
         .replyWithFile(
           200,
@@ -220,15 +220,15 @@ describe('[unit] cep-promise for node', () => {
           path.join(__dirname, '/fixtures/brasilapi-cep-05010000-found.json')
         )
 
-        return cep(5010000)
-          .then(address => expect(address).to.deep.equal({
-            cep: '05010000',
-            state: 'SP',
-            city: 'São Paulo',
-            neighborhood: 'Perdizes',
-            street: 'Rua Caiubi',
-            service: address.service
-          })
+      return cep(5010000)
+        .then(address => expect(address).to.deep.equal({
+          cep: '05010000',
+          state: 'SP',
+          city: 'São Paulo',
+          neighborhood: 'Perdizes',
+          street: 'Rua Caiubi',
+          service: address.service
+        })
         )
     })
   })
@@ -249,7 +249,7 @@ describe('[unit] cep-promise for node', () => {
           path.join(__dirname, '/fixtures/viacep-cep-99999999-error.json')
         )
 
-      nock('https://cep.widenet.host')
+      nock('https://ws.apicep.com')
         .get('/busca-cep/api/cep/05010000.json')
         .replyWithFile(
           200,
@@ -264,15 +264,15 @@ describe('[unit] cep-promise for node', () => {
         )
 
 
-        return cep('05010000')
-          .then(address => expect(address).to.deep.equal({
-            cep: '05010000',
-            state: 'SP',
-            city: 'São Paulo',
-            neighborhood: 'Perdizes',
-            street: 'Rua Caiubi',
-            service: 'correios'
-          })
+      return cep('05010000')
+        .then(address => expect(address).to.deep.equal({
+          cep: '05010000',
+          state: 'SP',
+          city: 'São Paulo',
+          neighborhood: 'Perdizes',
+          street: 'Rua Caiubi',
+          service: 'correios'
+        })
         )
     })
   })
@@ -293,7 +293,7 @@ describe('[unit] cep-promise for node', () => {
           path.join(__dirname, '/fixtures/viacep-cep-05010000-found.json')
         )
 
-      nock('https://cep.widenet.host')
+      nock('https://ws.apicep.com')
         .get('/busca-cep/api/cep/05010000.json')
         .replyWithFile(
           200,
@@ -307,15 +307,15 @@ describe('[unit] cep-promise for node', () => {
           path.join(__dirname, '/fixtures/brasilapi-cep-99999999-error.json')
         )
 
-        return cep('05010000')
-          .then(address => expect(address).to.deep.equal({
-            cep: '05010000',
-            state: 'SP',
-            city: 'São Paulo',
-            neighborhood: 'Perdizes',
-            street: 'Rua Caiubi',
-            service: 'viacep'
-          })
+      return cep('05010000')
+        .then(address => expect(address).to.deep.equal({
+          cep: '05010000',
+          state: 'SP',
+          city: 'São Paulo',
+          neighborhood: 'Perdizes',
+          street: 'Rua Caiubi',
+          service: 'viacep'
+        })
         )
     })
   })
@@ -336,7 +336,7 @@ describe('[unit] cep-promise for node', () => {
           path.join(__dirname, '/fixtures/viacep-cep-99999999-error.json')
         )
 
-      nock('https://cep.widenet.host')
+      nock('https://ws.apicep.com')
         .get('/busca-cep/api/cep/05010000.json')
         .replyWithFile(
           200,
@@ -359,7 +359,7 @@ describe('[unit] cep-promise for node', () => {
           street: 'Rua Caiubi',
           service: 'widenet'
         }))
-      })
+    })
   })
 
   describe('Should succeed only with brasilapi service', () => {
@@ -378,7 +378,7 @@ describe('[unit] cep-promise for node', () => {
           path.join(__dirname, '/fixtures/viacep-cep-99999999-error.json')
         )
 
-      nock('https://cep.widenet.host')
+      nock('https://ws.apicep.com')
         .get('/busca-cep/api/cep/05010000.json')
         .replyWithFile(
           200,
@@ -401,7 +401,7 @@ describe('[unit] cep-promise for node', () => {
           street: 'Rua Caiubi',
           service: 'brasilapi'
         }))
-      })
+    })
   })
 
   describe('when its not possible to parse the returned XML and then succeed to one failover service', () => {
@@ -420,7 +420,7 @@ describe('[unit] cep-promise for node', () => {
           path.join(__dirname, '/fixtures/viacep-cep-05010000-found.json')
         )
 
-      nock('https://cep.widenet.host')
+      nock('https://ws.apicep.com')
         .get('/busca-cep/api/cep/05010000.json')
         .replyWithFile(
           200,
@@ -461,7 +461,7 @@ describe('[unit] cep-promise for node', () => {
           path.join(__dirname, '/fixtures/viacep-cep-05010000-found.json')
         )
 
-      nock('https://cep.widenet.host')
+      nock('https://ws.apicep.com')
         .get('/busca-cep/api/cep/05010000.json')
         .replyWithFile(
           200,
@@ -503,7 +503,7 @@ describe('[unit] cep-promise for node', () => {
           path.join(__dirname, '/fixtures/viacep-cep-99999999-error.json')
         )
 
-      nock('https://cep.widenet.host')
+      nock('https://ws.apicep.com')
         .get('/busca-cep/api/cep/99999999.json')
         .replyWithFile(
           200,
@@ -575,11 +575,11 @@ describe('[unit] cep-promise for node', () => {
         .get('/ws/05010000/json/')
         .reply(400, '<h2>Bad Request (400)</h2>')
 
-      nock('https://cep.widenet.host')
+      nock('https://ws.apicep.com')
         .get('/busca-cep/api/cep/05010000.json')
         .reply(400, '<h2>Bad Request (400)</h2>')
 
-        nock('https://brasilapi.com.br/')
+      nock('https://brasilapi.com.br/')
         .get('/api/cep/v1/05010000')
         .reply(400, '<h2>Bad Request (400)</h2>')
 
@@ -627,7 +627,7 @@ describe('[unit] cep-promise for node', () => {
         .get('/ws/05010000/json/')
         .reply(400, '<h2>Bad Request (400)</h2>')
 
-      nock('https://cep.widenet.host')
+      nock('https://ws.apicep.com')
         .get('/busca-cep/api/cep/05010000.json')
         .reply(400, '<h2>Bad Request (400)</h2>')
 
@@ -680,7 +680,7 @@ describe('[unit] cep-promise for node', () => {
           'getaddrinfo ENOTFOUND apps.correios.com.br apps.correios.com.br:443'
         )
 
-      nock('https://cep.widenet.host')
+      nock('https://ws.apicep.com')
         .get('/busca-cep/api/cep/05010000.json')
         .replyWithError(
           'getaddrinfo ENOTFOUND apps.correios.com.br apps.correios.com.br:443'
