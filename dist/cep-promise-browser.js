@@ -641,7 +641,7 @@
         message: 'Erro ao inicializar a instância do CepPromise.',
         type: 'validation_error',
         errors: [{
-          message: "O par\xE2metro providers deve ser uma lista.",
+          message: 'O parâmetro providers deve ser uma lista.',
           service: 'providers_validation'
         }]
       });
@@ -664,8 +664,6 @@
             }]
           });
         }
-
-        return provider;
       }
     } catch (err) {
       _iterator.e(err);

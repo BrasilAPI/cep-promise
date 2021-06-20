@@ -56,8 +56,6 @@ function validateProviders (providers) {
         ]
       })
     }
-
-    return provider
   }
 }
 
