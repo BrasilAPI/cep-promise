@@ -5,15 +5,17 @@ import ServiceError from '../errors/service.js'
 
 export default function fetchCorreiosAltAPIService(
   cepWithLeftPad,
-  proxyURL = ''
+  configurations
 ) {
-  const url = `${proxyURL}https://buscacepinter.correios.com.br/app/cep/carrega-cep.php?cep=${cepWithLeftPad}`
+  const url = 'https://buscacepinter.correios.com.br/app/cep/carrega-cep.php'
   const options = {
-    method: 'GET',
+    method: 'POST',
     mode: 'cors',
     headers: {
-      'content-type': 'application/json;charset=utf-8'
-    }
+      'content-type': 'application/x-www-form-urlencoded; charset=UTF-8'
+    },
+    body: `cep=${cepWithLeftPad}`,
+    timeout: configurations.timeout || 30000
   }
 
   return fetch(url, options)
@@ -22,14 +24,13 @@ export default function fetchCorreiosAltAPIService(
     .catch(throwApplicationError)
 }
 
-async function parseResponse(response) {
-  response = await response.json()
-
-  if (response.erro === true || response.total === 0) {
-    throw new Error('CEP não encontrado na base dos Correios.')
-  }
-
-  return response
+function parseResponse(response) {
+  return response.json().then(result => {
+    if (result.erro === true || result.total === 0) {
+      throw new Error('CEP não encontrado na base dos Correios.')
+    }
+    return result
+  })
 }
 
 function extractCepValuesFromResponse(response) {

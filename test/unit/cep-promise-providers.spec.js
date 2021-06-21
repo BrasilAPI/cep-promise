@@ -7,6 +7,7 @@ import path from 'path'
 
 import cep from '../../src/cep-promise.js'
 import CepPromiseError from '../../src/errors/cep-promise.js'
+import { getAvailableServices } from '../../src/services/index.js'
 
 chai.use(chaiSubset)
 
@@ -99,6 +100,8 @@ describe('when invoked with providers parameter', () => {
 
   describe('and the providers param is a invalid array', () => {
     it('should reject with "validation_error"', () => {
+      const availableProviders = Object.keys(getAvailableServices())
+
       return cep('05010000', { providers: [123, 'viacep'] }).catch(error => {
         return expect(error)
           .to.be.an.instanceOf(CepPromiseError)
@@ -108,7 +111,7 @@ describe('when invoked with providers parameter', () => {
             errors: [
               {
                 message:
-                  'O provider "123" é inválido. Os providers disponíveis são: ["brasilapi", "correios", "correios-alt", "viacep", "widenet"].',
+                `O provider "123" é inválido. Os providers disponíveis são: ["${availableProviders.join('", "')}"].`,
                 service: 'providers_validation'
               }
             ]
@@ -127,7 +130,7 @@ describe('when invoked with providers parameter', () => {
         )
 
       const correiosAltMock = nock('https://buscacepinter.correios.com.br')
-        .get('/app/cep/carrega-cep.php?cep=05010000')
+        .post('/app/cep/carrega-cep.php')
         .replyWithFile(
           200,
           path.join(__dirname, '/fixtures/correios-alt-cep-05010000-found.json')
@@ -176,7 +179,7 @@ describe('when invoked with providers parameter', () => {
         )
 
       const correiosAltMock = nock('https://buscacepinter.correios.com.br')
-        .get('/app/cep/carrega-cep.php?cep=05010000')
+        .post('/app/cep/carrega-cep.php')
         .replyWithFile(
           200,
           path.join(__dirname, '/fixtures/correios-alt-cep-05010000-found.json')
@@ -225,7 +228,7 @@ describe('when invoked with providers parameter', () => {
         )
 
       const correiosAltMock = nock('https://buscacepinter.correios.com.br')
-        .get('/app/cep/carrega-cep.php?cep=05010000')
+        .post('/app/cep/carrega-cep.php')
         .replyWithFile(
           200,
           path.join(__dirname, '/fixtures/correios-alt-cep-05010000-found.json')
@@ -274,7 +277,7 @@ describe('when invoked with providers parameter', () => {
         )
 
       const correiosAltMock = nock('https://buscacepinter.correios.com.br')
-        .get('/app/cep/carrega-cep.php?cep=05010000')
+        .post('/app/cep/carrega-cep.php')
         .replyWithFile(
           200,
           path.join(__dirname, '/fixtures/correios-alt-cep-05010000-found.json')
@@ -323,7 +326,7 @@ describe('when invoked with providers parameter', () => {
         )
 
       const correiosAltMock = nock('https://buscacepinter.correios.com.br')
-        .get('/app/cep/carrega-cep.php?cep=05010000')
+        .post('/app/cep/carrega-cep.php')
         .replyWithFile(
           200,
           path.join(__dirname, '/fixtures/correios-alt-cep-05010000-found.json')
@@ -380,7 +383,7 @@ describe('when invoked with providers parameter', () => {
         )
 
       const correiosAltMock = nock('https://buscacepinter.correios.com.br')
-        .get('/app/cep/carrega-cep.php?cep=05010000')
+        .post('/app/cep/carrega-cep.php')
         .replyWithFile(
           200,
           path.join(__dirname, '/fixtures/correios-alt-cep-05010000-found.json')
@@ -429,7 +432,7 @@ describe('when invoked with providers parameter', () => {
         )
 
       const correiosAltMock = nock('https://buscacepinter.correios.com.br')
-        .get('/app/cep/carrega-cep.php?cep=05010000')
+        .post('/app/cep/carrega-cep.php')
         .replyWithFile(
           200,
           path.join(__dirname, '/fixtures/correios-alt-cep-05010000-found.json')
