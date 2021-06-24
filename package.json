@@ -4,6 +4,7 @@
   "description": "Busca por CEP integrado diretamente aos serviços dos Correios e ViaCEP",
   "main": "dist/cep-promise.min.js",
   "module": "dist/cep-promise.min.js",
+  "types": "./index.d.ts",
   "scripts": {
     "dev": "nodemon --watch src/ --exec \"npm run build\"",
     "test": "npm run coverage",
