@@ -1,16 +1,35 @@
 'use strict'
 
-import CepPromiseError from './errors/cep-promise.js'
-import { getAvailableServices } from './services/index.js'
-import Promise from './utils/promise-any.js'
+import CepPromiseError from './errors/cep-promise'
+import { getAvailableServices } from './services/index'
 
 const CEP_SIZE = 8
 
-export default function (cepRawValue, configurations = {}) {
+export type CEPRawValue = string | number;
+
+export type AvaliableProviders =
+  "brasilapi" |
+  "correios" |
+  "viacep" |
+  "widenet"
+
+export interface Configurations {
+  providers?: AvaliableProviders[],
+  timeout?: number
+}
+export interface CEP {
+    cep: string,
+    state: string,
+    city: string,
+    street: string,
+    neighborhood: string,
+    service: string
+  }
+export default function (cepRawValue: CEPRawValue, configurations: Configurations = {}): Promise<CEP> {
   return Promise.resolve(cepRawValue)
     .then(validateInputType)
     .then(cepRawValue => {
-      configurations.providers = configurations.providers ? configurations.providers : []
+      configurations.providers = configurations.providers || []
       validateProviders(configurations.providers)
 
       return cepRawValue
@@ -21,11 +40,11 @@ export default function (cepRawValue, configurations = {}) {
     .then((cepWithLeftPad) => {
       return fetchCepFromServices(cepWithLeftPad, configurations)
     })
-    .catch(handleServicesError)
-    .catch(throwApplicationError)
+    // .catch(handleServicesError)
+    // .catch(throwApplicationError)
 }
 
-function validateProviders (providers) {
+function validateProviders (providers: AvaliableProviders[]) {
   const availableProviders = Object.keys(getAvailableServices())
 
   if (!Array.isArray(providers)) {
@@ -59,7 +78,7 @@ function validateProviders (providers) {
   }
 }
 
-function validateInputType (cepRawValue) {
+function validateInputType (cepRawValue: CEPRawValue) {
   const cepTypeOf = typeof cepRawValue
 
   if (cepTypeOf === 'number' || cepTypeOf === 'string') {
@@ -79,15 +98,15 @@ function validateInputType (cepRawValue) {
   })
 }
 
-function removeSpecialCharacters (cepRawValue) {
+function removeSpecialCharacters (cepRawValue: CEPRawValue) {
   return cepRawValue.toString().replace(/\D+/g, '')
 }
 
-function leftPadWithZeros (cepCleanValue) {
+function leftPadWithZeros (cepCleanValue: string) {
   return '0'.repeat(CEP_SIZE - cepCleanValue.length) + cepCleanValue
 }
 
-function validateInputLength (cepWithLeftPad) {
+function validateInputLength (cepWithLeftPad: string) {
   if (cepWithLeftPad.length <= CEP_SIZE) {
     return cepWithLeftPad
   }
@@ -104,16 +123,18 @@ function validateInputLength (cepWithLeftPad) {
   })
 }
 
-function fetchCepFromServices (cepWithLeftPad, configurations) {
+type ValidatedConfigurations = Omit<Configurations, 'providers'> & { providers: AvaliableProviders[] }
+
+function fetchCepFromServices (cepWithLeftPad: string, configurations: ValidatedConfigurations): Promise<CEP> {
   const providersServices = getAvailableServices()
 
   if (configurations.providers.length === 0) {
-    return Promise.any(
+    return Promise.any<CEP>(
       Object.values(providersServices).map(provider => provider(cepWithLeftPad, configurations))
     )
   }
 
-  return Promise.any(
+  return Promise.any<CEP>(
     configurations.providers.map(provider => {
       return providersServices[provider](cepWithLeftPad, configurations)
     })
