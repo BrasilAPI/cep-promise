@@ -1,5 +1,3 @@
-'use strict'
-
 import fetch, { RequestInit, HeadersInit, Response } from 'node-fetch'
 import { CEP, Configurations } from '../cep-promise.js'
 import ServiceError from '../errors/service.js'

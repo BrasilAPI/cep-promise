@@ -1,4 +1,3 @@
-'use strict'
 
 import CepPromiseError from './errors/cep-promise'
 import { getAvailableServices } from './services/index'
@@ -25,23 +24,26 @@ export interface CEP {
     neighborhood: string,
     service: string
   }
-export default function (cepRawValue: CEPRawValue, configurations: Configurations = {}): Promise<CEP> {
-  return Promise.resolve(cepRawValue)
-    .then(validateInputType)
-    .then(cepRawValue => {
-      configurations.providers = configurations.providers || []
-      validateProviders(configurations.providers)
+export default async function (cepRawValue: CEPRawValue, configurations: Configurations = {}): Promise<CEP> {
+  try {
+    const validatedInputType = validateInputType(cepRawValue);
+    const removedSpecialCharacters = removeSpecialCharacters(validatedInputType);
+    const validatedInputLength = validateInputLength(removedSpecialCharacters);
+    const leftedPaddedWithZeros = leftPadWithZeros(validatedInputLength);
 
-      return cepRawValue
-    })
-    .then(removeSpecialCharacters)
-    .then(validateInputLength)
-    .then(leftPadWithZeros)
-    .then((cepWithLeftPad) => {
-      return fetchCepFromServices(cepWithLeftPad, configurations)
-    })
-    // .catch(handleServicesError)
-    // .catch(throwApplicationError)
+
+    configurations.providers = configurations.providers || []
+    validateProviders(configurations.providers)
+
+    return await fetchCepFromServices(leftedPaddedWithZeros, {
+      ...configurations,
+      providers: configurations.providers,
+    });
+
+    
+  } catch (error) {
+    throw handleServicesError(error)
+  }
 }
 
 function validateProviders (providers: AvaliableProviders[]) {
