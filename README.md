@@ -37,7 +37,7 @@
  * Suporte ao Node.js `4.x`, `5.x`, `6.x`, `7.x`, `8.x`, `9.x`, até cep-promise versão `3.0.9`.
  * Suporte ao Node.js `0.10.x` e `0.12.x` até cep-promise versão `2.0.8`.
  * 100% de code coverage com testes unitários e E2E.
- * Desenvolvido utilizando ES6.
+ * Desenvolvido utilizando ES6 (EcmaScript 6).
 
 
 ## Como utilizar
@@ -142,29 +142,29 @@ cep('5010000', { timeout: 5000, providers: ['brasilapi'] })
 
 ### Instalação
 
-#### Browser usando CDN
-```
+#### via browser usando CDN
+```html
 <script src="https://cdn.jsdelivr.net/npm/cep-promise/dist/cep-promise.min.js"></script>
 ```
 
-#### npm
+#### via npm
 
-```
+```bash
 $ npm install --save cep-promise
 ```
 
-#### Bower
+#### via Bower
 
-```
+```bash
 $ bower install --save cep-promise
 ```
-#### yarn
+#### via yarn
 
-```
+```bash
 $ yarn add cep-promise
 ```
 
-#### Angular 2
+#### via Angular.js 2
 
 ``` ts
 import * as cep from 'cep-promise'
