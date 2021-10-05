@@ -1,29 +1,11 @@
 
 import CepPromiseError from './errors/cep-promise'
 import { getAvailableServices } from './services/index'
+import { AvaliableProviders, CEP, CEPRawValue, Configurations } from './types';
 
 const CEP_SIZE = 8
 
-export type CEPRawValue = string | number;
 
-export type AvaliableProviders =
-  "brasilapi" |
-  "correios" |
-  "viacep" |
-  "widenet"
-
-export interface Configurations {
-  providers?: AvaliableProviders[],
-  timeout?: number
-}
-export interface CEP {
-    cep: string,
-    state: string,
-    city: string,
-    street: string,
-    neighborhood: string,
-    service: string
-  }
 export default async function (cepRawValue: CEPRawValue, configurations: Configurations = {}): Promise<CEP> {
   try {
     const validatedInputType = validateInputType(cepRawValue);
@@ -100,15 +82,15 @@ function validateInputType (cepRawValue: CEPRawValue) {
   })
 }
 
-function removeSpecialCharacters (cepRawValue: CEPRawValue) {
+function removeSpecialCharacters (cepRawValue: CEPRawValue): string {
   return cepRawValue.toString().replace(/\D+/g, '')
 }
 
-function leftPadWithZeros (cepCleanValue: string) {
+function leftPadWithZeros (cepCleanValue: string): string {
   return '0'.repeat(CEP_SIZE - cepCleanValue.length) + cepCleanValue
 }
 
-function validateInputLength (cepWithLeftPad: string) {
+function validateInputLength (cepWithLeftPad: string): string {
   if (cepWithLeftPad.length <= CEP_SIZE) {
     return cepWithLeftPad
   }

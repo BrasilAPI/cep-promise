@@ -1,9 +1,8 @@
-'use strict'
+import fetch, { Response } from 'node-fetch'
+import ServiceError from '../errors/service'
+import { ArrayString, CEP, Configurations } from '../types'
 
-import fetch from 'node-fetch'
-import ServiceError from '../errors/service.js'
-
-export default function fetchCorreiosService (cepWithLeftPad, configurations) {
+export default function fetchCorreiosService(cepWithLeftPad: string, configurations: Configurations): Promise<CEP | void> {
   const url = 'https://apps.correios.com.br/SigepMasterJPA/AtendeClienteService/AtendeCliente'
   const options = {
     method: 'POST',
@@ -20,25 +19,25 @@ export default function fetchCorreiosService (cepWithLeftPad, configurations) {
     .catch(throwApplicationError)
 }
 
-function analyzeAndParseResponse (response) {
+async function analyzeAndParseResponse(response: Response): Promise<CEP> {
   if (response.ok) {
     return response.text()
       .then(parseSuccessXML)
       .then(extractValuesFromSuccessResponse)
   }
 
-  return response.text()
-    .then(parseAndextractErrorMessage)
-    .then(throwCorreiosError)
+
+  const responseText = await response.text()
+  throw new Error(parseAndExtractErrorMessage(responseText))
 }
 
-function parseSuccessXML (xmlString) {
+function parseSuccessXML(xmlString: string) {
   try {
-    const returnStatement = xmlString.replace(/\r?\n|\r/g, '').match(/<return>(.*)<\/return>/)[0] ?? ''
+    const returnStatement = xmlString.replace(/\r?\n|\r/g, '').match(/<return>(.*)<\/return>/)?.[0] ?? ''
     const cleanReturnStatement = returnStatement.replace('<return>', '').replace('</return>', '')
     const parsedReturnStatement = cleanReturnStatement
       .split(/</)
-      .reduce((result, exp) => {
+      .reduce<ArrayString>((result, exp) => {
         const splittenExp = exp.split('>')
         if (splittenExp.length > 1 && splittenExp[1].length) {
           result[splittenExp[0]] = splittenExp[1]
@@ -52,9 +51,9 @@ function parseSuccessXML (xmlString) {
   }
 }
 
-function parseAndextractErrorMessage (xmlString) {
+function parseAndExtractErrorMessage(xmlString: string): string {
   try {
-    const returnStatement = xmlString.match(/<faultstring>(.*)<\/faultstring>/)[0] ?? ''
+    const returnStatement = xmlString.match(/<faultstring>(.*)<\/faultstring>/)?.[0] ?? ''
     const cleanReturnStatement = returnStatement.replace('<faultstring>', '').replace('</faultstring>', '')
     return cleanReturnStatement
   } catch (e) {
@@ -62,11 +61,8 @@ function parseAndextractErrorMessage (xmlString) {
   }
 }
 
-function throwCorreiosError (translatedErrorMessage) {
-  throw new Error(translatedErrorMessage)
-}
 
-function extractValuesFromSuccessResponse (xmlObject) {
+function extractValuesFromSuccessResponse(xmlObject: ArrayString): CEP {
   return {
     cep: xmlObject.cep,
     state: xmlObject.uf,
@@ -77,7 +73,7 @@ function extractValuesFromSuccessResponse (xmlObject) {
   }
 }
 
-function throwApplicationError (error) {
+function throwApplicationError(error: Error) {
   const serviceError = new ServiceError({
     message: error.message,
     service: 'correios'

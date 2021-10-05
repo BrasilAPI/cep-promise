@@ -1,6 +1,7 @@
 import fetch, { RequestInit, HeadersInit, Response } from 'node-fetch'
-import { CEP, Configurations } from '../cep-promise.js'
-import ServiceError from '../errors/service.js'
+
+import ServiceError from '../errors/service'
+import { CEP, Configurations } from '../types';
 
 export default function fetchViaCepService (cepWithLeftPad: string, configurations: Configurations): Promise<CEP | void> {
   const url = `https://viacep.com.br/ws/${cepWithLeftPad}/json/`
