@@ -13,22 +13,28 @@ export default async function (cepRawValue: CEPRawValue, configurations: Configu
     const validatedInputLength = validateInputLength(removedSpecialCharacters);
     const leftedPaddedWithZeros = leftPadWithZeros(validatedInputLength);
 
-
     configurations.providers = configurations.providers || []
     validateProviders(configurations.providers)
 
-    return await fetchCepFromServices(leftedPaddedWithZeros, {
+    const result = await fetchCepFromServices(leftedPaddedWithZeros, {
       ...configurations,
       providers: configurations.providers,
     });
 
-    
+    if (!result) { 
+      // TODO: tratar o erro
+      throw new Error("Tratar erro")
+    }
+
+    return result;
+
   } catch (error) {
+    // @ts-ignore
     throw handleServicesError(error)
   }
 }
 
-function validateProviders (providers: AvaliableProviders[]) {
+function validateProviders(providers: AvaliableProviders[]) {
   const availableProviders = Object.keys(getAvailableServices())
 
   if (!Array.isArray(providers)) {
@@ -62,7 +68,7 @@ function validateProviders (providers: AvaliableProviders[]) {
   }
 }
 
-function validateInputType (cepRawValue: CEPRawValue) {
+function validateInputType(cepRawValue: CEPRawValue) {
   const cepTypeOf = typeof cepRawValue
 
   if (cepTypeOf === 'number' || cepTypeOf === 'string') {
@@ -82,15 +88,15 @@ function validateInputType (cepRawValue: CEPRawValue) {
   })
 }
 
-function removeSpecialCharacters (cepRawValue: CEPRawValue): string {
+function removeSpecialCharacters(cepRawValue: CEPRawValue): string {
   return cepRawValue.toString().replace(/\D+/g, '')
 }
 
-function leftPadWithZeros (cepCleanValue: string): string {
+function leftPadWithZeros(cepCleanValue: string): string {
   return '0'.repeat(CEP_SIZE - cepCleanValue.length) + cepCleanValue
 }
 
-function validateInputLength (cepWithLeftPad: string): string {
+function validateInputLength(cepWithLeftPad: string): string {
   if (cepWithLeftPad.length <= CEP_SIZE) {
     return cepWithLeftPad
   }
@@ -109,33 +115,34 @@ function validateInputLength (cepWithLeftPad: string): string {
 
 type ValidatedConfigurations = Omit<Configurations, 'providers'> & { providers: AvaliableProviders[] }
 
-function fetchCepFromServices (cepWithLeftPad: string, configurations: ValidatedConfigurations): Promise<CEP> {
+function fetchCepFromServices(cepWithLeftPad: string, configurations: ValidatedConfigurations): Promise<CEP | void> {
   const providersServices = getAvailableServices()
 
   if (configurations.providers.length === 0) {
-    return Promise.any<CEP>(
+    return Promise.any<CEP | void>(
       Object.values(providersServices).map(provider => provider(cepWithLeftPad, configurations))
     )
   }
 
-  return Promise.any<CEP>(
-    configurations.providers.map(provider => {
-      return providersServices[provider](cepWithLeftPad, configurations)
-    })
+  const mappedServices = configurations.providers
+    .map(p => providersServices[p])
+
+  return Promise.any<CEP | void>(
+    mappedServices.map(service => service?.(cepWithLeftPad, configurations))
   )
 }
 
-function handleServicesError (aggregatedErrors) {
+function handleServicesError(aggregatedErrors: CepPromiseError[]) {
   if (aggregatedErrors.length !== undefined) {
     throw new CepPromiseError({
       message: 'Todos os serviços de CEP retornaram erro.',
       type: 'service_error',
-      errors: aggregatedErrors
+      errors: []
     })
   }
   throw aggregatedErrors
 }
 
-function throwApplicationError ({ message, type, errors }) {
+function throwApplicationError({ message, type, errors }: CepPromiseError) {
   throw new CepPromiseError({ message, type, errors })
 }

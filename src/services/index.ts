@@ -5,24 +5,23 @@ import BrasilAPI from './brasilapi'
 import { AvaliableProviders, CEP, Configurations } from '../types'
 
 export type AvailableServicesConstructor = { 
-  [k in AvaliableProviders]: (cep: string, config: Configurations) => Promise<CEP | void> 
+  [k in AvaliableProviders]?: (cep: string, config: Configurations) => Promise<CEP | void> 
 }
 
-export function getAvailableServices() {
+export function getAvailableServices(): AvailableServicesConstructor {
   const isBrowser = typeof window !== 'undefined'
 
-  if (isBrowser) {
-    return {
-      viacep: ViaCep,
-      widenet: WideNet,
-      brasilapi: BrasilAPI
-    }
-  }
 
-  return {
-    correios: Correios,
+  const services: AvailableServicesConstructor =  {
     viacep: ViaCep,
     widenet: WideNet,
     brasilapi: BrasilAPI
   }
+
+
+  if (!isBrowser) { 
+    services['correios'] = Correios;
+  }
+
+  return services;
 }
