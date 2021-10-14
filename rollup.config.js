@@ -3,7 +3,7 @@ import commonjs from 'rollup-plugin-commonjs'
 import resolve from 'rollup-plugin-node-resolve'
 import replace from 'rollup-plugin-replace'
 
-const input = 'src/cep-promise.js'
+const input = 'src/cep-promise'
 const defaultPlugins = [
   babel({
     babelrc: false,

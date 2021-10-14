@@ -1,6 +1,6 @@
 import fetch from 'node-fetch'
 import type { Response } from "node-fetch"
-import ServiceError from '../errors/service.js'
+import ServiceError from '../errors/service'
 import type { ArrayString, CEP, Configurations } from '../types.js'
 
 export default function fetchBrasilAPIService (cepWithLeftPad: string, configurations: Configurations): Promise<CEP | void> {

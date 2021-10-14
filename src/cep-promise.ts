@@ -5,8 +5,7 @@ import { AvaliableProviders, CEP, CEPRawValue, Configurations } from './types';
 
 const CEP_SIZE = 8
 
-
-export default async function (cepRawValue: CEPRawValue, configurations: Configurations = {}): Promise<CEP> {
+export default async function cepPromise(cepRawValue: CEPRawValue, configurations: Configurations = {}): Promise<CEP> {
   try {
     const validatedInputType = validateInputType(cepRawValue);
     const removedSpecialCharacters = removeSpecialCharacters(validatedInputType);
@@ -21,7 +20,7 @@ export default async function (cepRawValue: CEPRawValue, configurations: Configu
       providers: configurations.providers,
     });
 
-    if (!result) { 
+    if (!result) {
       // TODO: tratar o erro
       throw new Error("Tratar erro")
     }
