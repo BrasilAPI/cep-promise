@@ -8,9 +8,6 @@ declare module 'cep-promise' {
     service: string
   }
 
-  // this workarround is because this : https://github.com/Microsoft/TypeScript/issues/5073
-  namespace cep {}
-
   type AvaliableProviders =
     "brasilapi" |
     "correios" |
