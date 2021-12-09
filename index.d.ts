@@ -8,14 +8,14 @@ declare module 'cep-promise' {
     service: string
   }
 
-  type AvaliableProviders =
+  type AvailableProviders =
     "brasilapi" |
     "correios" |
     "viacep" |
     "widenet"
 
   export interface Configurations {
-    providers?: AvaliableProviders[],
+    providers?: AvailableProviders[],
     timeout?: number
   }
 
