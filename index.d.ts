@@ -20,7 +20,7 @@ declare module 'cep-promise' {
     timeout?: number
   }
 
-  export function cep(cep: string | number, configurations: Configurations): Promise<CEP>
+  export function cep(cep: string | number, configurations?: Configurations): Promise<CEP>
 
   export default cep
 }
