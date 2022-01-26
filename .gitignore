@@ -31,7 +31,8 @@ node_modules
 
 #Allow only web browser to be versioned
 dist/*
-!dist/cep-promise*.js
+!dist/cep-promise*
+output
 
 #Intellij Ide
 .idea

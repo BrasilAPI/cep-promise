@@ -6,8 +6,8 @@ import chaiSubset from 'chai-subset'
 import nock from 'nock'
 import path from 'path'
 
-import cep from '../../src/cep-promise.js'
-import CepPromiseError from '../../src/errors/cep-promise.js'
+import cep from '../../src/cep-promise'
+import CepPromiseError from '../../src/errors/cep-promise'
 
 chai.use(chaiAsPromised)
 chai.use(chaiSubset)

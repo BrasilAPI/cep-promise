@@ -1,31 +1,39 @@
-'use strict'
 
-import CepPromiseError from './errors/cep-promise.js'
-import { getAvailableServices } from './services/index.js'
-import Promise from './utils/promise-any.js'
+import CepPromiseError from './errors/cep-promise'
+import { getAvailableServices } from './services/index'
+import { AvaliableProviders, CEP, CEPRawValue, Configurations } from './types';
 
 const CEP_SIZE = 8
 
-export default function (cepRawValue, configurations = {}) {
-  return Promise.resolve(cepRawValue)
-    .then(validateInputType)
-    .then(cepRawValue => {
-      configurations.providers = configurations.providers ? configurations.providers : []
-      validateProviders(configurations.providers)
+export default async function cepPromise(cepRawValue: CEPRawValue, configurations: Configurations = {}): Promise<CEP> {
+  try {
+    const validatedInputType = validateInputType(cepRawValue);
+    const removedSpecialCharacters = removeSpecialCharacters(validatedInputType);
+    const validatedInputLength = validateInputLength(removedSpecialCharacters);
+    const leftedPaddedWithZeros = leftPadWithZeros(validatedInputLength);
 
-      return cepRawValue
-    })
-    .then(removeSpecialCharacters)
-    .then(validateInputLength)
-    .then(leftPadWithZeros)
-    .then((cepWithLeftPad) => {
-      return fetchCepFromServices(cepWithLeftPad, configurations)
-    })
-    .catch(handleServicesError)
-    .catch(throwApplicationError)
+    configurations.providers = configurations.providers || []
+    validateProviders(configurations.providers)
+
+    const result = await fetchCepFromServices(leftedPaddedWithZeros, {
+      ...configurations,
+      providers: configurations.providers,
+    });
+
+    if (!result) {
+      // TODO: tratar o erro
+      throw new Error("Tratar erro")
+    }
+
+    return result;
+
+  } catch (error) {
+    // @ts-ignore
+    throw handleServicesError(error)
+  }
 }
 
-function validateProviders (providers) {
+function validateProviders(providers: AvaliableProviders[]) {
   const availableProviders = Object.keys(getAvailableServices())
 
   if (!Array.isArray(providers)) {
@@ -59,7 +67,7 @@ function validateProviders (providers) {
   }
 }
 
-function validateInputType (cepRawValue) {
+function validateInputType(cepRawValue: CEPRawValue) {
   const cepTypeOf = typeof cepRawValue
 
   if (cepTypeOf === 'number' || cepTypeOf === 'string') {
@@ -79,15 +87,15 @@ function validateInputType (cepRawValue) {
   })
 }
 
-function removeSpecialCharacters (cepRawValue) {
+function removeSpecialCharacters(cepRawValue: CEPRawValue): string {
   return cepRawValue.toString().replace(/\D+/g, '')
 }
 
-function leftPadWithZeros (cepCleanValue) {
+function leftPadWithZeros(cepCleanValue: string): string {
   return '0'.repeat(CEP_SIZE - cepCleanValue.length) + cepCleanValue
 }
 
-function validateInputLength (cepWithLeftPad) {
+function validateInputLength(cepWithLeftPad: string): string {
   if (cepWithLeftPad.length <= CEP_SIZE) {
     return cepWithLeftPad
   }
@@ -104,33 +112,36 @@ function validateInputLength (cepWithLeftPad) {
   })
 }
 
-function fetchCepFromServices (cepWithLeftPad, configurations) {
+type ValidatedConfigurations = Omit<Configurations, 'providers'> & { providers: AvaliableProviders[] }
+
+function fetchCepFromServices(cepWithLeftPad: string, configurations: ValidatedConfigurations): Promise<CEP | void> {
   const providersServices = getAvailableServices()
 
   if (configurations.providers.length === 0) {
-    return Promise.any(
+    return Promise.any<CEP | void>(
       Object.values(providersServices).map(provider => provider(cepWithLeftPad, configurations))
     )
   }
 
-  return Promise.any(
-    configurations.providers.map(provider => {
-      return providersServices[provider](cepWithLeftPad, configurations)
-    })
+  const mappedServices = configurations.providers
+    .map(p => providersServices[p])
+
+  return Promise.any<CEP | void>(
+    mappedServices.map(service => service?.(cepWithLeftPad, configurations))
   )
 }
 
-function handleServicesError (aggregatedErrors) {
+function handleServicesError(aggregatedErrors: CepPromiseError[]) {
   if (aggregatedErrors.length !== undefined) {
     throw new CepPromiseError({
       message: 'Todos os serviços de CEP retornaram erro.',
       type: 'service_error',
-      errors: aggregatedErrors
+      errors: []
     })
   }
   throw aggregatedErrors
 }
 
-function throwApplicationError ({ message, type, errors }) {
+function throwApplicationError({ message, type, errors }: CepPromiseError) {
   throw new CepPromiseError({ message, type, errors })
 }

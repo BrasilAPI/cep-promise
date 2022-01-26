@@ -1,9 +1,18 @@
-'use strict'
+import fetch, { Response } from 'node-fetch'
+import ServiceError from '../errors/service'
+import { CEP, Configurations } from '../types'
 
-import fetch from 'node-fetch'
-import ServiceError from '../errors/service.js'
+export interface WideNetResponse {
+  ok: boolean,
+  status: number,
+  code: string,
+  state: string,
+  city: string,
+  district: string,
+  address: string
+}
 
-export default function fetchWideNetService(cepWithLeftPad, configurations) {
+export default function fetchWideNetService(cepWithLeftPad: string, configurations: Configurations): Promise<CEP | void> {
   const url = `https://ws.apicep.com/busca-cep/api/cep/${cepWithLeftPad}.json`
   const options = {
     method: 'GET',
@@ -21,7 +30,7 @@ export default function fetchWideNetService(cepWithLeftPad, configurations) {
     .catch(throwApplicationError)
 }
 
-function analyzeAndParseResponse(response) {
+function analyzeAndParseResponse(response: Response) {
   if (response.ok) {
     return response.json()
   }
@@ -29,7 +38,7 @@ function analyzeAndParseResponse(response) {
   throw Error('Erro ao se conectar com o serviço WideNet.')
 }
 
-function checkForWideNetError(object) {
+function checkForWideNetError(object: WideNetResponse) {
   if (object.ok === false || object.status !== 200) {
     throw new Error('CEP não encontrado na base do WideNet.')
   }
@@ -37,7 +46,7 @@ function checkForWideNetError(object) {
   return object
 }
 
-function extractCepValuesFromResponse(object) {
+function extractCepValuesFromResponse(object: WideNetResponse): CEP {
   return {
     cep: object.code.replace('-', ''),
     state: object.state,
@@ -48,7 +57,7 @@ function extractCepValuesFromResponse(object) {
   }
 }
 
-function throwApplicationError(error) {
+function throwApplicationError(error: Error) {
   const serviceError = new ServiceError({
     message: error.message,
     service: 'widenet'

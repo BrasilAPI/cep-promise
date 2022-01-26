@@ -1,5 +1,6 @@
 class ServiceError extends Error {
-  constructor ({ message, service } = {}) {
+  service: string;
+  constructor ({ message, service }: { message: string, service: string}) {
     super()
 
     this.name = 'ServiceError'

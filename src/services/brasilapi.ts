@@ -1,9 +1,9 @@
-'use strict'
-
 import fetch from 'node-fetch'
-import ServiceError from '../errors/service.js'
+import type { Response } from "node-fetch"
+import ServiceError from '../errors/service'
+import type { ArrayString, CEP, Configurations } from '../types.js'
 
-export default function fetchBrasilAPIService (cepWithLeftPad, configurations) {
+export default function fetchBrasilAPIService (cepWithLeftPad: string, configurations: Configurations): Promise<CEP | void> {
   const url = `https://brasilapi.com.br/api/cep/v1/${cepWithLeftPad}`
   const options = {
     method: 'GET',
@@ -20,7 +20,7 @@ export default function fetchBrasilAPIService (cepWithLeftPad, configurations) {
     .catch(throwApplicationError)
 }
 
-function parseResponse (response) {
+function parseResponse (response: Response) {
   if (response.ok === false || response.status !== 200) {
     throw new Error('CEP não encontrado na base do BrasilAPI.')
   }
@@ -28,7 +28,7 @@ function parseResponse (response) {
   return response.json()
 }
 
-function extractCepValuesFromResponse (response) {
+function extractCepValuesFromResponse (response: ArrayString): CEP {
   return {
     cep: response.cep,
     state: response.state,
@@ -39,7 +39,7 @@ function extractCepValuesFromResponse (response) {
   }
 }
 
-function throwApplicationError (error) {
+function throwApplicationError (error: Error) {
   const serviceError = new ServiceError({
     message: error.message,
     service: 'brasilapi'

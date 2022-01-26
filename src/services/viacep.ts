@@ -1,17 +1,24 @@
-'use strict'
+import fetch, { RequestInit, HeadersInit, Response } from 'node-fetch'
 
-import fetch from 'node-fetch'
-import ServiceError from '../errors/service.js'
+import ServiceError from '../errors/service'
+import { CEP, Configurations } from '../types';
 
-export default function fetchViaCepService (cepWithLeftPad, configurations) {
+export default function fetchViaCepService (cepWithLeftPad: string, configurations: Configurations): Promise<CEP | void> {
   const url = `https://viacep.com.br/ws/${cepWithLeftPad}/json/`
-  const options = {
+  type OptionsInit = Omit<RequestInit, "headers"> & { 
+    headers: HeadersInit & { 'user-agent'?: string }
+  };
+  const options: OptionsInit  = {
+    timeout: configurations.timeout || 30000,
     method: 'GET',
-    mode: 'cors',
+    /**
+     * Node-fetch does not suport mode
+     */
+    // mode: "cors",
     headers: {
-      'content-type': 'application/json;charset=utf-8'
+      'content-type': 'application/json;charset=utf-8',
     },
-    timeout: configurations.timeout || 30000
+    
   }
 
   if (typeof window == 'undefined') {
@@ -25,7 +32,7 @@ export default function fetchViaCepService (cepWithLeftPad, configurations) {
     .catch(throwApplicationError)
 }
 
-function analyzeAndParseResponse (response) {
+function analyzeAndParseResponse (response: Response) {
   if (response.ok) {
     return response.json()
   }
@@ -33,7 +40,7 @@ function analyzeAndParseResponse (response) {
   throw Error('Erro ao se conectar com o serviço ViaCEP.')
 }
 
-function checkForViaCepError (responseObject) {
+function checkForViaCepError (responseObject: any) {
   if (responseObject.erro === true) {
     throw new Error('CEP não encontrado na base do ViaCEP.')
   }
@@ -41,7 +48,7 @@ function checkForViaCepError (responseObject) {
   return responseObject
 }
 
-function extractCepValuesFromResponse (responseObject) {
+function extractCepValuesFromResponse (responseObject: { [k: string]: string }): CEP {
   return {
     cep: responseObject.cep.replace('-', ''),
     state: responseObject.uf,
@@ -52,7 +59,7 @@ function extractCepValuesFromResponse (responseObject) {
   }
 }
 
-function throwApplicationError (error) {
+function throwApplicationError (error: Error) {
   const serviceError = new ServiceError({
     message: error.message,
     service: 'viacep'
