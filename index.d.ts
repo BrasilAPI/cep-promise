@@ -8,9 +8,6 @@ declare module 'cep-promise' {
     service: string
   }
 
-  // this workarround is because this : https://github.com/Microsoft/TypeScript/issues/5073
-  namespace cep {}
-
   type AvaliableProviders =
     "brasilapi" |
     "correios" |
@@ -22,7 +19,7 @@ declare module 'cep-promise' {
     timeout?: number
   }
 
-  export function cep(cep: string | number, configurations: Configurations): Promise<CEP>
+  function cep(cep: string | number, configurations?: Configurations): Promise<CEP>
 
   export default cep
 }
