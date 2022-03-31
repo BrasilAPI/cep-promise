@@ -15,6 +15,7 @@ declare module 'cep-promise' {
     widenet = "widenet"
   }
 
+
   export interface Configurations {
     providers?: AvailableProviders[],
     timeout?: number
