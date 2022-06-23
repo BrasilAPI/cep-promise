@@ -8,18 +8,20 @@ declare module 'cep-promise' {
     service: string
   }
 
-  type AvaliableProviders =
-    "brasilapi" |
-    "correios" |
-    "viacep" |
-    "widenet"
+  export enum AvailableProviders {
+    brasilapi = "brasilapi",
+    correios = "correios",
+    viacep = "viacep",
+    widenet = "widenet"
+  }
+
 
   export interface Configurations {
-    providers?: AvaliableProviders[],
+    providers?: AvailableProviders[],
     timeout?: number
   }
 
-  function cep(cep: string | number, configurations?: Configurations): Promise<CEP>
+  export function cep(cep: string | number, configurations?: Configurations): Promise<CEP>
 
   export default cep
 }
