@@ -8,21 +8,20 @@ declare module 'cep-promise' {
     service: string
   }
 
-  // this workarround is because this : https://github.com/Microsoft/TypeScript/issues/5073
-  namespace cep {}
+  export enum AvailableProviders {
+    brasilapi = "brasilapi",
+    correios = "correios",
+    viacep = "viacep",
+    widenet = "widenet"
+  }
 
-  type AvaliableProviders =
-    "brasilapi" |
-    "correios" |
-    "viacep" |
-    "widenet"
 
   export interface Configurations {
-    providers?: AvaliableProviders[],
+    providers?: AvailableProviders[],
     timeout?: number
   }
 
-  export function cep(cep: string | number, configurations: Configurations): Promise<CEP>
+  export function cep(cep: string | number, configurations?: Configurations): Promise<CEP>
 
   export default cep
 }

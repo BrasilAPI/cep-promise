@@ -1,9 +1,10 @@
 {
   "name": "cep-promise",
-  "version": "4.1.1",
+  "version": "4.2.0",
   "description": "Busca por CEP integrado diretamente aos serviços dos Correios e ViaCEP",
   "main": "dist/cep-promise.min.js",
   "module": "dist/cep-promise.min.js",
+  "types": "./index.d.ts",
   "scripts": {
     "dev": "nodemon --watch src/ --exec \"npm run build\"",
     "test": "npm run coverage",
@@ -74,7 +75,7 @@
     ]
   },
   "dependencies": {
-    "node-fetch": "2.6.1",
+    "node-fetch": "2.6.7",
     "unfetch": "4.1.0"
   },
   "files": [
