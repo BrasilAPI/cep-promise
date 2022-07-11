@@ -62,7 +62,7 @@ describe('[e2e] cep-promise', () => {
                 service: 'correios'
               },
               {
-                message: 'Erro ao se conectar com o serviço dos Correios Alt.',
+                message: 'CEP não encontrado na base dos Correios.',
                 service: 'correios-alt'
               },
               {

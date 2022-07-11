@@ -11,6 +11,7 @@ declare module 'cep-promise' {
   export enum AvailableProviders {
     brasilapi = "brasilapi",
     correios = "correios",
+    correiosAlt = "correios-alt",
     viacep = "viacep",
     widenet = "widenet"
   }

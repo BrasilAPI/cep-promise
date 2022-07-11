@@ -26,7 +26,7 @@ export default function fetchCorreiosAltAPIService(
 
 function parseResponse(response) {
   return response.json().then(result => {
-    if (result.erro === true || result.total === 0) {
+    if (result.total === 0 || result.erro || result.dados[0].cep === "") {
       throw new Error('CEP não encontrado na base dos Correios.')
     }
     return result
