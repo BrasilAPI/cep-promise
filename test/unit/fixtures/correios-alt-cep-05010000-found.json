@@ -1,0 +1,26 @@
+{
+  "erro": false,
+  "mensagem": "DADOS LOCALIZADOS COM SUCESSO.",
+  "total": 1,
+  "dados": [
+      {
+          "uf": "SP",
+          "localidade": "São Paulo",
+          "locNoSem": "",
+          "locNu": "96681",
+          "localidadeSubordinada": "",
+          "logradouroDNEC": "Rua Caiubi",
+          "logradouroTextoAdicional": "",
+          "logradouroTexto": "",
+          "bairro": "Perdizes",
+          "baiNu": "",
+          "nomeUnidade": "",
+          "cep": "05010000",
+          "tipoCep": "2",
+          "numeroLocalidade": "96681",
+          "situacao": "",
+          "faixasCaixaPostal": [],
+          "faixasCep": []
+      }
+  ]
+}

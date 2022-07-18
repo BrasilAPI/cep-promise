@@ -62,6 +62,10 @@ describe('[e2e] cep-promise', () => {
                 service: 'correios'
               },
               {
+                message: 'CEP não encontrado na base dos Correios.',
+                service: 'correios-alt'
+              },
+              {
                 message: 'CEP não encontrado na base do ViaCEP.',
                 service: 'viacep'
               },

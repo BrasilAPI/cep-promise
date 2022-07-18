@@ -1,0 +1,26 @@
+{
+  "erro": false,
+  "mensagem": "DADOS LOCALIZADOS COM SUCESSO.",
+  "total": 1,
+  "dados": [
+      {
+          "uf": "",
+          "localidade": "",
+          "locNoSem": "",
+          "locNu": "",
+          "localidadeSubordinada": "",
+          "logradouroDNEC": "O CEP 99999-999 NAO FOI ENCONTRADO",
+          "logradouroTextoAdicional": "",
+          "logradouroTexto": "",
+          "bairro": "",
+          "baiNu": "",
+          "nomeUnidade": "",
+          "cep": "",
+          "tipoCep": "",
+          "numeroLocalidade": "",
+          "situacao": "",
+          "faixasCaixaPostal": [],
+          "faixasCep": []
+      }
+  ]
+}
