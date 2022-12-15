@@ -434,6 +434,55 @@
     throw serviceError;
   }
 
+  function fetchCorreiosAltAPIService(cepWithLeftPad, configurations) {
+    var url = 'https://buscacepinter.correios.com.br/app/cep/carrega-cep.php';
+    var options = {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'content-type': 'application/x-www-form-urlencoded; charset=UTF-8'
+      },
+      body: "cep=".concat(cepWithLeftPad),
+      timeout: configurations.timeout || 30000
+    };
+    return fetch(url, options).then(parseResponse).then(extractCepValuesFromResponse)["catch"](throwApplicationError$1);
+  }
+
+  function parseResponse(response) {
+    return response.json().then(function (result) {
+      if (result.total === 0 || result.erro || result.dados[0].cep === "") {
+        throw new Error('CEP não encontrado na base dos Correios.');
+      }
+
+      return result;
+    });
+  }
+
+  function extractCepValuesFromResponse(response) {
+    var firstCep = response.dados[0];
+    return {
+      cep: firstCep.cep,
+      state: firstCep.uf,
+      city: firstCep.localidade,
+      neighborhood: firstCep.bairro,
+      street: firstCep.logradouroDNEC,
+      service: 'correios-alt'
+    };
+  }
+
+  function throwApplicationError$1(error) {
+    var serviceError = new ServiceError({
+      message: error.message,
+      service: 'correios-alt'
+    });
+
+    if (error.name === 'FetchError') {
+      serviceError.message = 'Erro ao se conectar com o serviço dos Correios Alt.';
+    }
+
+    throw serviceError;
+  }
+
   function fetchViaCepService(cepWithLeftPad, configurations) {
     var url = "https://viacep.com.br/ws/".concat(cepWithLeftPad, "/json/");
     var options = {
@@ -449,7 +498,7 @@
       options.headers['user-agent'] = 'cep-promise';
     }
 
-    return fetch(url, options).then(analyzeAndParseResponse$1).then(checkForViaCepError).then(extractCepValuesFromResponse)["catch"](throwApplicationError$1);
+    return fetch(url, options).then(analyzeAndParseResponse$1).then(checkForViaCepError).then(extractCepValuesFromResponse$1)["catch"](throwApplicationError$2);
   }
 
   function analyzeAndParseResponse$1(response) {
@@ -468,7 +517,7 @@
     return responseObject;
   }
 
-  function extractCepValuesFromResponse(responseObject) {
+  function extractCepValuesFromResponse$1(responseObject) {
     return {
       cep: responseObject.cep.replace('-', ''),
       state: responseObject.uf,
@@ -479,7 +528,7 @@
     };
   }
 
-  function throwApplicationError$1(error) {
+  function throwApplicationError$2(error) {
     var serviceError = new ServiceError({
       message: error.message,
       service: 'viacep'
@@ -502,7 +551,7 @@
       },
       timeout: configurations.timeout || 30000
     };
-    return fetch(url, options).then(analyzeAndParseResponse$2).then(checkForWideNetError).then(extractCepValuesFromResponse$1)["catch"](throwApplicationError$2);
+    return fetch(url, options).then(analyzeAndParseResponse$2).then(checkForWideNetError).then(extractCepValuesFromResponse$2)["catch"](throwApplicationError$3);
   }
 
   function analyzeAndParseResponse$2(response) {
@@ -521,7 +570,7 @@
     return object;
   }
 
-  function extractCepValuesFromResponse$1(object) {
+  function extractCepValuesFromResponse$2(object) {
     return {
       cep: object.code.replace('-', ''),
       state: object.state,
@@ -532,7 +581,7 @@
     };
   }
 
-  function throwApplicationError$2(error) {
+  function throwApplicationError$3(error) {
     var serviceError = new ServiceError({
       message: error.message,
       service: 'widenet'
@@ -555,10 +604,10 @@
       },
       timeout: configurations.timeout || 30000
     };
-    return fetch(url, options).then(parseResponse).then(extractCepValuesFromResponse$2)["catch"](throwApplicationError$3);
+    return fetch(url, options).then(parseResponse$1).then(extractCepValuesFromResponse$3)["catch"](throwApplicationError$4);
   }
 
-  function parseResponse(response) {
+  function parseResponse$1(response) {
     if (response.ok === false || response.status !== 200) {
       throw new Error('CEP não encontrado na base do BrasilAPI.');
     }
@@ -566,7 +615,7 @@
     return response.json();
   }
 
-  function extractCepValuesFromResponse$2(response) {
+  function extractCepValuesFromResponse$3(response) {
     return {
       cep: response.cep,
       state: response.state,
@@ -577,7 +626,7 @@
     };
   }
 
-  function throwApplicationError$3(error) {
+  function throwApplicationError$4(error) {
     var serviceError = new ServiceError({
       message: error.message,
       service: 'brasilapi'
@@ -603,6 +652,7 @@
 
     return {
       correios: fetchCorreiosService,
+      'correios-alt': fetchCorreiosAltAPIService,
       viacep: fetchViaCepService,
       widenet: fetchWideNetService,
       brasilapi: fetchBrasilAPIService
@@ -630,7 +680,7 @@
       return cepRawValue;
     }).then(removeSpecialCharacters).then(validateInputLength).then(leftPadWithZeros).then(function (cepWithLeftPad) {
       return fetchCepFromServices(cepWithLeftPad, configurations);
-    })["catch"](handleServicesError)["catch"](throwApplicationError$4);
+    })["catch"](handleServicesError)["catch"](throwApplicationError$5);
   }
 
   function validateProviders(providers) {
@@ -738,7 +788,7 @@
     throw aggregatedErrors;
   }
 
-  function throwApplicationError$4(_ref) {
+  function throwApplicationError$5(_ref) {
     var message = _ref.message,
         type = _ref.type,
         errors = _ref.errors;
