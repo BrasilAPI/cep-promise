@@ -36,8 +36,8 @@ describe('[unit] cep-promise for browser', () => {
           path.join(__dirname, '/fixtures/viacep-cep-05010000-found.json')
         )
 
-      nock('https://ws.apicep.com')
-        .get('/busca-cep/api/cep/05010000.json')
+      nock('https://cdn.apicep.com')
+        .get('/file/apicep/05010-000.json')
         .replyWithFile(
           200,
           path.join(__dirname, '/fixtures/widenet-cep-05010000-found.json')
@@ -151,8 +151,8 @@ describe('[unit] cep-promise for browser', () => {
           path.join(__dirname, '/fixtures/viacep-cep-05010000-found.json')
         )
 
-      nock('https://ws.apicep.com')
-        .get('/busca-cep/api/cep/05010000.json')
+      nock('https://cdn.apicep.com')
+        .get('/file/apicep/05010-000.json')
         .replyWithFile(
           200,
           path.join(__dirname, '/fixtures/widenet-cep-05010000-found.json')
@@ -187,8 +187,8 @@ describe('[unit] cep-promise for browser', () => {
           path.join(__dirname, '/fixtures/viacep-cep-05010000-found.json')
         )
 
-      nock('https://ws.apicep.com')
-        .get('/busca-cep/api/cep/05010000.json')
+      nock('https://cdn.apicep.com')
+        .get('/file/apicep/05010-000.json')
         .replyWithFile(
           200,
           path.join(__dirname, '/fixtures/widenet-cep-05010000-found.json')
@@ -223,8 +223,8 @@ describe('[unit] cep-promise for browser', () => {
           path.join(__dirname, '/fixtures/viacep-cep-05010000-found.json')
         )
 
-      nock('https://ws.apicep.com')
-        .get('/busca-cep/api/cep/05010000.json')
+      nock('https://cdn.apicep.com')
+        .get('/file/apicep/05010-000.json')
         .replyWithFile(
           200,
           path.join(__dirname, '/fixtures/widenet-cep-99999999-error.json')
@@ -259,8 +259,8 @@ describe('[unit] cep-promise for browser', () => {
           path.join(__dirname, '/fixtures/viacep-cep-99999999-error.json')
         )
 
-      nock('https://ws.apicep.com')
-        .get('/busca-cep/api/cep/05010000.json')
+      nock('https://cdn.apicep.com')
+        .get('/file/apicep/05010-000.json')
         .replyWithFile(
           200,
           path.join(__dirname, '/fixtures/widenet-cep-05010000-found.json')
@@ -294,8 +294,8 @@ describe('[unit] cep-promise for browser', () => {
           path.join(__dirname, '/fixtures/viacep-cep-99999999-error.json')
         )
 
-      nock('https://ws.apicep.com')
-        .get('/busca-cep/api/cep/05010000.json')
+      nock('https://cdn.apicep.com')
+        .get('/file/apicep/05010-000.json')
         .replyWithFile(
           200,
           path.join(__dirname, '/fixtures/widenet-cep-99999999-error.json')
@@ -329,8 +329,8 @@ describe('[unit] cep-promise for browser', () => {
           path.join(__dirname, '/fixtures/viacep-cep-99999999-error.json')
         )
 
-      nock('https://ws.apicep.com')
-        .get('/busca-cep/api/cep/99999999.json')
+      nock('https://cdn.apicep.com')
+        .get('/file/apicep/99999-999.json')
         .replyWithFile(
           200,
           path.join(__dirname, '/fixtures/widenet-cep-99999999-error.json')
@@ -391,8 +391,8 @@ describe('[unit] cep-promise for browser', () => {
         .get('/ws/05010000/json/')
         .reply(400, '<h2>Bad Request (400)</h2>')
 
-      nock('https://ws.apicep.com')
-        .get('/busca-cep/api/cep/05010000.json')
+      nock('https://cdn.apicep.com')
+        .get('/file/apicep/05010-000.json')
         .reply(400, '<h2>Bad Request (400)</h2>')
 
       nock('https://brasilapi.com.br/')
