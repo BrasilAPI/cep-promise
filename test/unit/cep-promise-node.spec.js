@@ -14,6 +14,8 @@ chai.use(chaiSubset)
 
 let expect = chai.expect
 
+const allProviders = ['correios', 'correios-alt', 'viacep', 'brasilapi', 'widenet']
+
 describe('[unit] cep-promise for node', () => {
   before(() => {
     nock.disableNetConnect()
@@ -443,7 +445,7 @@ describe('[unit] cep-promise for node', () => {
           path.join(__dirname, '/fixtures/brasilapi-cep-99999999-error.json')
         )
 
-      return cep('5010000')
+      return cep('5010000', { providers: allProviders })
         .then(address => expect(address).to.deep.equal({
           cep: '05010000',
           state: 'SP',
@@ -638,7 +640,7 @@ describe('[unit] cep-promise for node', () => {
           path.join(__dirname, '/fixtures/brasilapi-cep-99999999-error.json')
         )
 
-      return cep('99999999').catch(error => {
+      return cep('99999999', { providers: allProviders }).catch(error => {
         return expect(error)
           .to.be.an.instanceOf(CepPromiseError)
           .and.containSubset({
@@ -712,7 +714,7 @@ describe('[unit] cep-promise for node', () => {
         .get('/api/cep/v1/05010000')
         .reply(400, '<h2>Bad Request (400)</h2>')
 
-      return cep('05010000').catch(error => {
+      return cep('05010000', { providers: allProviders }).catch(error => {
         return expect(error)
           .to.be.an.instanceOf(CepPromiseError)
           .and.containSubset({
@@ -772,7 +774,7 @@ describe('[unit] cep-promise for node', () => {
         .get('/api/cep/v1/05010000')
         .reply(400, '<h2>Bad Request (400)</h2>')
 
-      return cep('05010000').catch(error => {
+      return cep('05010000', { providers: allProviders }).catch(error => {
         return expect(error)
           .to.be.an.instanceOf(CepPromiseError)
           .and.containSubset({
@@ -837,7 +839,7 @@ describe('[unit] cep-promise for node', () => {
           'getaddrinfo ENOTFOUND apps.correios.com.br apps.correios.com.br:443'
         )
 
-      return cep('05010000').catch(error => {
+      return cep('05010000', { providers: allProviders }).catch(error => {
         return expect(error)
           .to.be.an.instanceOf(CepPromiseError)
           .and.containSubset({

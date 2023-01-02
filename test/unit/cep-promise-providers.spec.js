@@ -466,7 +466,6 @@ describe('when invoked with providers parameter', () => {
           expect(viaCepMock.isDone()).to.be.equal(true)
           expect(correiosMock.isDone()).to.be.equal(true)
           expect(correiosAltMock.isDone()).to.be.equal(true)
-          expect(wideNetMock.isDone()).to.be.equal(true)
         })
     })
   })

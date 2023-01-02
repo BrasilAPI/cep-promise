@@ -23,3 +23,22 @@ export function getAvailableServices () {
     brasilapi: BrasilAPI
   }
 }
+
+export function getDefaultServices () {
+  const isBrowser = typeof window !== 'undefined'
+
+  if (isBrowser) {
+    return {
+      viacep: ViaCep,
+      widenet: WideNet,
+      brasilapi: BrasilAPI
+    }
+  }
+
+  return {
+    correios: Correios,
+    'correios-alt': CorreiosAlt,
+    viacep: ViaCep,
+    brasilapi: BrasilAPI
+  }
+}

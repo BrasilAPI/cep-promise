@@ -1,7 +1,7 @@
 'use strict'
 
 import CepPromiseError from './errors/cep-promise.js'
-import { getAvailableServices } from './services/index.js'
+import { getAvailableServices, getDefaultServices } from './services/index.js'
 import Promise from './utils/promise-any.js'
 
 const CEP_SIZE = 8
@@ -105,14 +105,15 @@ function validateInputLength (cepWithLeftPad) {
 }
 
 function fetchCepFromServices (cepWithLeftPad, configurations) {
-  const providersServices = getAvailableServices()
-
+  
   if (configurations.providers.length === 0) {
+    const defaultServices = getDefaultServices()
     return Promise.any(
-      Object.values(providersServices).map(provider => provider(cepWithLeftPad, configurations))
+      Object.values(defaultServices).map(provider => provider(cepWithLeftPad, configurations))
     )
   }
-
+    
+  const providersServices = getAvailableServices()
   return Promise.any(
     configurations.providers.map(provider => {
       return providersServices[provider](cepWithLeftPad, configurations)
