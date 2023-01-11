@@ -4,12 +4,13 @@ import fetch from 'node-fetch'
 import ServiceError from '../errors/service.js'
 
 export default function fetchWideNetService(cepWithLeftPad, configurations) {
-  const url = `https://ws.apicep.com/busca-cep/api/cep/${cepWithLeftPad}.json`
+  const cepWithDash = `${cepWithLeftPad.slice(0, 5)}-${cepWithLeftPad.slice(5)}`
+  const url = `https://cdn.apicep.com/file/apicep/${cepWithDash}.json`
   const options = {
     method: 'GET',
     mode: 'cors',
     headers: {
-      'content-type': 'application/json;charset=utf-8'
+      accept: 'application/json'
     },
     timeout: configurations.timeout || 30000
   }
