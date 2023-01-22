@@ -18,7 +18,7 @@ Agora pronto, você já pode começar a contribuir com o projeto!
 
 ## Reportando Issues
 
-Você pode criar uma issue [aqui](https://github.com/filipedeschamps/cep-promise/issues), mas, lembre-se de ser claro e informar o máximo de detalhes possíveis.
+Você pode criar uma issue [aqui](https://github.com/BrasilAPI/cep-promise/issues), mas, lembre-se de ser claro e informar o máximo de detalhes possíveis.
 
 ## Submetendo Pull Requests
 * Crie pull requests pequenos, para que a revisão seja feita mais facilmente

@@ -1,18 +1,28 @@
 declare module 'cep-promise' {
-  interface CEP {
+  export interface CEP {
     cep: string,
     state: string,
     city: string,
     street: string,
-    neighborhood: string
+    neighborhood: string,
+    service: string
   }
 
-  // this workarround is because this : https://github.com/Microsoft/TypeScript/issues/5073
-  namespace cep {}
+  export enum AvailableProviders {
+    brasilapi = "brasilapi",
+    correios = "correios",
+    correiosAlt = "correios-alt",
+    viacep = "viacep",
+    widenet = "widenet"
+  }
 
-  function cep( cep: string | number ): Promise<CEP>
 
-  export = cep
+  export interface Configurations {
+    providers?: AvailableProviders[],
+    timeout?: number
+  }
+
+  export function cep(cep: string | number, configurations?: Configurations): Promise<CEP>
+
+  export default cep
 }
-
-

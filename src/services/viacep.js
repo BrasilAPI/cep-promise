@@ -1,16 +1,21 @@
 'use strict'
 
-import fetch from 'isomorphic-unfetch'
+import fetch from 'node-fetch'
 import ServiceError from '../errors/service.js'
 
-export default function fetchViaCepService (cepWithLeftPad) {
+export default function fetchViaCepService (cepWithLeftPad, configurations) {
   const url = `https://viacep.com.br/ws/${cepWithLeftPad}/json/`
   const options = {
     method: 'GET',
     mode: 'cors',
     headers: {
       'content-type': 'application/json;charset=utf-8'
-    }
+    },
+    timeout: configurations.timeout || 30000
+  }
+
+  if (typeof window == 'undefined') {
+    options.headers['user-agent'] = 'cep-promise'
   }
 
   return fetch(url, options)
@@ -42,7 +47,8 @@ function extractCepValuesFromResponse (responseObject) {
     state: responseObject.uf,
     city: responseObject.localidade,
     neighborhood: responseObject.bairro,
-    street: responseObject.logradouro
+    street: responseObject.logradouro,
+    service: 'viacep'
   }
 }
 

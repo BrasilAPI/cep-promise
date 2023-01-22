@@ -1,0 +1,6 @@
+{
+  "status": 404,
+  "ok": false,
+  "message": "CEP não encontrado",
+  "statusText": "not_found"
+}
