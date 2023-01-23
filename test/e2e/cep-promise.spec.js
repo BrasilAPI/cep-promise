@@ -12,6 +12,7 @@ chai.use(chaiAsPromised)
 chai.use(chaiSubset)
 
 let expect = chai.expect
+const allProviders = ['correios', 'correios-alt', 'viacep', 'brasilapi', 'widenet']
 
 describe('[e2e] cep-promise', () => {
   before(() => {
@@ -49,7 +50,7 @@ describe('[e2e] cep-promise', () => {
 
   describe('when invoked with an inexistent "99999999" CEP', () => {
     it('should reject with "service_error"', () => {
-      return cep('99999999').catch(error => {
+      return cep('99999999', { providers: allProviders } ).catch(error => {
         return expect(error)
           .to.be.an.instanceOf(CepPromiseError)
           .and.containSubset({
