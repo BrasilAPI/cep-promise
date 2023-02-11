@@ -57,7 +57,7 @@
     "chai-subset": "1.6.0",
     "mocha": "8.1.1",
     "nock": "13.0.2",
-    "nodemon": "2.0.4",
+    "nodemon": "2.0.20",
     "rollup": "2.20.0",
     "rollup-plugin-babel": "4.4.0",
     "rollup-plugin-commonjs": "10.1.0",
