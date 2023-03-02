@@ -46,7 +46,7 @@ function throwApplicationError (error) {
   })
 
   if (error.name === 'FetchError') {
-    serviceError.message = 'Erro ao se conectar com o serviço BrasilAPI.'
+    serviceError.message = 'Erro ao se conectar com o serviço do BrasilAPI.'
   }
 
   throw serviceError
