@@ -3,6 +3,19 @@
 import fetch from 'node-fetch'
 import ServiceError from '../errors/service.js'
 
+/**
+ * @typedef {import('../cep-promise').CepPromiseConfigurations} CepPromiseConfigurations
+ * @typedef {import('../cep-promise').CepResponse} CepResponse
+ * @typedef {import('node-fetch').Response} FetchResponse
+ * @typedef {import('./index').Provider} Provider
+ */
+
+/**
+ * @param { string } cepWithLeftPad
+ * @param { CepPromiseConfigurations } configurations
+ * @returns { Promise<void | CepResponse> }
+ */
+
 export default function fetchCorreiosService (cepWithLeftPad, configurations) {
   const url = 'https://apps.correios.com.br/SigepMasterJPA/AtendeClienteService/AtendeCliente'
   const options = {
@@ -20,8 +33,13 @@ export default function fetchCorreiosService (cepWithLeftPad, configurations) {
     .catch(throwApplicationError)
 }
 
+
+/**
+ * @param { FetchResponse } response
+ * @returns { Promise<void | CepResponse> }
+ */
 function analyzeAndParseResponse (response) {
-  if (response.ok) {
+  if (response && response.ok) {
     return response.text()
       .then(parseSuccessXML)
       .then(extractValuesFromSuccessResponse)
@@ -32,19 +50,32 @@ function analyzeAndParseResponse (response) {
     .then(throwCorreiosError)
 }
 
+/**
+ * 
+ * @param { string } xmlString 
+ * @returns { Object <string, any> }
+ */
 function parseSuccessXML (xmlString) {
   try {
     const returnStatement = xmlString.replace(/\r?\n|\r/g, '').match(/<return>(.*)<\/return>/)[0] ?? ''
     const cleanReturnStatement = returnStatement.replace('<return>', '').replace('</return>', '')
     const parsedReturnStatement = cleanReturnStatement
       .split(/</)
-      .reduce((result, exp) => {
-        const splittenExp = exp.split('>')
-        if (splittenExp.length > 1 && splittenExp[1].length) {
-          result[splittenExp[0]] = splittenExp[1]
-        }
-        return result
-      }, {})
+
+      .reduce(
+        /**
+         * @param { Object <string, any> } result
+         * @param { string } exp
+         * @returns { Object <string, any> }
+         */
+        (result, exp) => {
+          const splittenExp = exp.split('>')
+          if (splittenExp.length > 1 && splittenExp[1].length) {
+            result[splittenExp[0]] = splittenExp[1]
+          }
+          return result
+        }, {}
+      )
 
     return parsedReturnStatement
   } catch (e) {
@@ -52,6 +83,11 @@ function parseSuccessXML (xmlString) {
   }
 }
 
+/**
+ * 
+ * @param { string } xmlString 
+ * @returns { string } 
+ */
 function parseAndextractErrorMessage (xmlString) {
   try {
     const returnStatement = xmlString.match(/<faultstring>(.*)<\/faultstring>/)[0] ?? ''
@@ -62,10 +98,20 @@ function parseAndextractErrorMessage (xmlString) {
   }
 }
 
+/**
+ * 
+ * @param { string } translatedErrorMessage 
+ * @returns { void }
+ */
 function throwCorreiosError (translatedErrorMessage) {
   throw new Error(translatedErrorMessage)
 }
 
+/**
+ * 
+ * @param { Object <string, any> } xmlObject 
+ * @returns { CepResponse }
+ */
 function extractValuesFromSuccessResponse (xmlObject) {
   return {
     cep: xmlObject.cep,
@@ -77,6 +123,10 @@ function extractValuesFromSuccessResponse (xmlObject) {
   }
 }
 
+/**
+ * 
+ * @param { Error } error 
+ */
 function throwApplicationError (error) {
   const serviceError = new ServiceError({
     message: error.message,

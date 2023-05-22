@@ -6,6 +6,29 @@ import Promise from './utils/promise-any.js'
 
 const CEP_SIZE = 8
 
+/**
+ * @typedef { Object } CepPromiseConfigurations
+ * @property { string[] } [providers]
+ * @property { boolean } [onlyFromCache]
+ * @property { number } [timeout] - In milliseconds
+ */
+
+/**
+ * @typedef { Object } CepResponse
+ * @property { string } cep
+ * @property { string } state
+ * @property { string } city
+ * @property { string } neighborhood
+ * @property { string } street
+ * @property { string } service
+ */
+
+/**
+ * 
+ * @param { string | number } cepRawValue 
+ * @param { CepPromiseConfigurations } configurations 
+ * @returns { Promise<void | CepResponse> }
+ */
 export default function (cepRawValue, configurations = {}) {
   return Promise.resolve(cepRawValue)
     .then(validateInputType)
@@ -25,6 +48,10 @@ export default function (cepRawValue, configurations = {}) {
     .catch(throwApplicationError)
 }
 
+/**
+ * 
+ * @param { CepPromiseConfigurations["providers"] } providers 
+ */
 function validateProviders (providers) {
   const availableProviders = Object.keys(getAvailableServices())
 
@@ -59,6 +86,11 @@ function validateProviders (providers) {
   }
 }
 
+/**
+ * 
+ * @param { string | number } cepRawValue 
+ * @returns { string | number }
+ */
 function validateInputType (cepRawValue) {
   const cepTypeOf = typeof cepRawValue
 
@@ -79,14 +111,20 @@ function validateInputType (cepRawValue) {
   })
 }
 
+/**
+ * 
+ * @param { string | number } cepRawValue 
+ * @returns { string }
+ */
 function removeSpecialCharacters (cepRawValue) {
   return cepRawValue.toString().replace(/\D+/g, '')
 }
 
-function leftPadWithZeros (cepCleanValue) {
-  return '0'.repeat(CEP_SIZE - cepCleanValue.length) + cepCleanValue
-}
-
+/**
+ * 
+ * @param { string } cepWithLeftPad 
+ * @returns { string }
+ */
 function validateInputLength (cepWithLeftPad) {
   if (cepWithLeftPad.length <= CEP_SIZE) {
     return cepWithLeftPad
@@ -104,22 +142,44 @@ function validateInputLength (cepWithLeftPad) {
   })
 }
 
+/**
+ * 
+ * @param { string } cepCleanValue 
+ * @returns { string }
+ */
+function leftPadWithZeros (cepCleanValue) {
+  return '0'.repeat(CEP_SIZE - cepCleanValue.length) + cepCleanValue
+}
+
+/**
+ * 
+ * @param { string } cepWithLeftPad 
+ * @param { CepPromiseConfigurations } configurations 
+ * @returns { Promise<void | CepResponse> } 
+ */
 function fetchCepFromServices (cepWithLeftPad, configurations) {
   const providersServices = getAvailableServices()
 
   if (configurations.providers.length === 0) {
     return Promise.any(
-      Object.values(providersServices).map(provider => provider(cepWithLeftPad, configurations))
+      Object.values(providersServices)
+        .map(provider => provider(cepWithLeftPad, configurations))
     )
   }
 
   return Promise.any(
-    configurations.providers.map(provider => {
-      return providersServices[provider](cepWithLeftPad, configurations)
-    })
+    configurations.providers.map(
+      provider => {
+        return providersServices[provider](cepWithLeftPad, configurations)
+      }
+    )
   )
 }
 
+/**
+ * 
+ * @param { Error[] } aggregatedErrors 
+ */
 function handleServicesError (aggregatedErrors) {
   if (aggregatedErrors.length !== undefined) {
     throw new CepPromiseError({
@@ -131,6 +191,14 @@ function handleServicesError (aggregatedErrors) {
   throw aggregatedErrors
 }
 
+/**
+ * 
+ * @param { {
+ * message: string,
+ * type: string,
+ * errors: Error[]
+ * } } error
+ */
 function throwApplicationError ({ message, type, errors }) {
   throw new CepPromiseError({ message, type, errors })
 }

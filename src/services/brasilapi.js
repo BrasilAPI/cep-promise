@@ -3,6 +3,18 @@
 import fetch from 'node-fetch'
 import ServiceError from '../errors/service.js'
 
+/**
+ * @typedef {import('../cep-promise').CepPromiseConfigurations} CepPromiseConfigurations
+ * @typedef {import('../cep-promise').CepResponse} CepResponse
+ * @typedef {import('node-fetch').Response} FetchResponse
+ * @typedef {import('./index').Provider} Provider
+ */
+
+/**
+ * @param { string } cepWithLeftPad
+ * @param { CepPromiseConfigurations } configurations
+ * @returns { Promise<void | CepResponse> }
+ */
 export default function fetchBrasilAPIService (cepWithLeftPad, configurations) {
   const url = `https://brasilapi.com.br/api/cep/v1/${cepWithLeftPad}`
   const options = {
@@ -20,6 +32,10 @@ export default function fetchBrasilAPIService (cepWithLeftPad, configurations) {
     .catch(throwApplicationError)
 }
 
+/**
+ * @param { FetchResponse } response
+ * @returns { Promise<Object<string, string>> }
+ */
 function parseResponse (response) {
   if (response.ok === false || response.status !== 200) {
     throw new Error('CEP não encontrado na base do BrasilAPI.')
@@ -28,6 +44,11 @@ function parseResponse (response) {
   return response.json()
 }
 
+/**
+ * 
+ * @param { Object<string, string> } response 
+ * @returns { CepResponse }
+ */
 function extractCepValuesFromResponse (response) {
   return {
     cep: response.cep,
@@ -39,6 +60,10 @@ function extractCepValuesFromResponse (response) {
   }
 }
 
+/**
+ * 
+ * @param { Error } error 
+ */
 function throwApplicationError (error) {
   const serviceError = new ServiceError({
     message: error.message,

@@ -3,6 +3,19 @@
 import fetch from 'node-fetch'
 import ServiceError from '../errors/service.js'
 
+/**
+ * @typedef {import('../cep-promise').CepPromiseConfigurations} CepPromiseConfigurations
+ * @typedef {import('../cep-promise').CepResponse} CepResponse
+ * @typedef {import('node-fetch').Response} FetchResponse
+ * @typedef {import('./index').Provider} Provider
+ */
+
+/**
+ * @param { string } cepWithLeftPad
+ * @param { CepPromiseConfigurations } configurations
+ * @returns { Promise<void | CepResponse> }
+ */
+
 export default function fetchCorreiosAltAPIService(
   cepWithLeftPad,
   configurations
@@ -24,6 +37,11 @@ export default function fetchCorreiosAltAPIService(
     .catch(throwApplicationError)
 }
 
+
+/**
+ * @param { FetchResponse } response
+ * @returns { Promise<Object<string, any>> }
+ */
 function parseResponse(response) {
   return response.json().then(result => {
     if (result.total === 0 || result.erro || result.dados[0].cep === "") {
@@ -33,6 +51,11 @@ function parseResponse(response) {
   })
 }
 
+/**
+ * 
+ * @param { Object<string, any> } response 
+ * @returns { CepResponse }
+ */
 function extractCepValuesFromResponse(response) {
   const firstCep = response.dados[0]
   return {
@@ -45,6 +68,10 @@ function extractCepValuesFromResponse(response) {
   }
 }
 
+/**
+ * 
+ * @param { Error } error 
+ */
 function throwApplicationError(error) {
   const serviceError = new ServiceError({
     message: error.message,
