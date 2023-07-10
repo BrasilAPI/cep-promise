@@ -8,13 +8,7 @@ declare module 'cep-promise' {
     service: string
   }
 
-  export enum AvailableProviders {
-    brasilapi = "brasilapi",
-    correios = "correios",
-    correiosAlt = "correios-alt",
-    viacep = "viacep",
-    widenet = "widenet"
-  }
+  export type AvailableProviders = "brasilapi" | "correios" |  "correios-alt" | "viacep" | "widenet"
 
 
   export interface Configurations {
