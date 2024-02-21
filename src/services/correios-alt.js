@@ -7,14 +7,16 @@ export default function fetchCorreiosAltAPIService(
   cepWithLeftPad,
   configurations
 ) {
-  const url = 'https://buscacepinter.correios.com.br/app/cep/carrega-cep.php'
+  const url = 'https://buscacepinter.correios.com.br/app/endereco/carrega-cep-endereco.php'
   const options = {
     method: 'POST',
     mode: 'cors',
     headers: {
-      'content-type': 'application/x-www-form-urlencoded; charset=UTF-8'
+      'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+      'Referer': 'https://buscacepinter.correios.com.br/app/endereco/index.php',
+      'Referrer-Policy': 'strict-origin-when-cross-origin'
     },
-    body: `cep=${cepWithLeftPad}`,
+    body: `endereco=${cepWithLeftPad}&tipoCEP=ALL`,
     timeout: configurations.timeout || 30000
   }
 

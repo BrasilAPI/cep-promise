@@ -35,7 +35,7 @@ describe('[unit] cep-promise for node', () => {
         )
 
       nock('https://buscacepinter.correios.com.br')
-        .post('/app/cep/carrega-cep.php')
+        .post('/app/endereco/carrega-cep-endereco.php')
         .replyWithFile(
           200,
           path.join(__dirname, '/fixtures/correios-alt-cep-05010000-found.json')
@@ -164,7 +164,7 @@ describe('[unit] cep-promise for node', () => {
         )
 
       nock('https://buscacepinter.correios.com.br')
-        .post('/app/cep/carrega-cep.php')
+        .post('/app/endereco/carrega-cep-endereco.php')
         .replyWithFile(
           200,
           path.join(__dirname, '/fixtures/correios-alt-cep-05010000-found.json')
@@ -214,7 +214,7 @@ describe('[unit] cep-promise for node', () => {
         )
 
       nock('https://buscacepinter.correios.com.br')
-        .post('/app/cep/carrega-cep.php')
+        .post('/app/endereco/carrega-cep-endereco.php')
         .replyWithFile(
           200,
           path.join(__dirname, '/fixtures/correios-alt-cep-05010000-found.json')
@@ -264,7 +264,7 @@ describe('[unit] cep-promise for node', () => {
         )
 
       nock('https://buscacepinter.correios.com.br')
-        .post('/app/cep/carrega-cep.php')
+        .post('/app/endereco/carrega-cep-endereco.php')
         .replyWithFile(
           200,
           path.join(__dirname, '/fixtures/correios-alt-cep-99999999-error.json')
@@ -315,7 +315,7 @@ describe('[unit] cep-promise for node', () => {
         )
 
       nock('https://buscacepinter.correios.com.br')
-        .post('/app/cep/carrega-cep.php')
+        .post('/app/endereco/carrega-cep-endereco.php')
         .replyWithFile(
           200,
           path.join(__dirname, '/fixtures/correios-alt-cep-05010000-found.json')
@@ -366,7 +366,7 @@ describe('[unit] cep-promise for node', () => {
         )
 
       nock('https://buscacepinter.correios.com.br')
-        .post('/app/cep/carrega-cep.php')
+        .post('/app/endereco/carrega-cep-endereco.php')
         .replyWithFile(
           200,
           path.join(__dirname, '/fixtures/correios-alt-cep-99999999-error.json')
@@ -416,7 +416,7 @@ describe('[unit] cep-promise for node', () => {
         )
 
       nock('https://buscacepinter.correios.com.br')
-        .post('/app/cep/carrega-cep.php')
+        .post('/app/endereco/carrega-cep-endereco.php')
         .replyWithFile(
           200,
           path.join(__dirname, '/fixtures/correios-alt-cep-99999999-error.json')
@@ -465,7 +465,7 @@ describe('[unit] cep-promise for node', () => {
         )
 
       nock('https://buscacepinter.correios.com.br')
-        .post('/app/cep/carrega-cep.php')
+        .post('/app/endereco/carrega-cep-endereco.php')
         .replyWithFile(
           200,
           path.join(__dirname, '/fixtures/correios-alt-cep-99999999-error.json')
@@ -514,7 +514,7 @@ describe('[unit] cep-promise for node', () => {
         )
 
       nock('https://buscacepinter.correios.com.br')
-        .post('/app/cep/carrega-cep.php')
+        .post('/app/endereco/carrega-cep-endereco.php')
         .replyWithFile(
           200,
           path.join(__dirname, '/fixtures/correios-alt-cep-05010000-found.json')
@@ -562,7 +562,7 @@ describe('[unit] cep-promise for node', () => {
         )
 
       nock('https://buscacepinter.correios.com.br')
-        .post('/app/cep/carrega-cep.php')
+        .post('/app/endereco/carrega-cep-endereco.php')
         .replyWithFile(
           200,
           path.join(__dirname, '/fixtures/correios-alt-cep-05010000-found.json')
@@ -611,7 +611,7 @@ describe('[unit] cep-promise for node', () => {
         )
 
       nock('https://buscacepinter.correios.com.br')
-        .post('/app/cep/carrega-cep.php')
+        .post('/app/endereco/carrega-cep-endereco.php')
         .replyWithFile(
           200,
           path.join(__dirname, '/fixtures/correios-alt-cep-99999999-error.json')
@@ -697,7 +697,7 @@ describe('[unit] cep-promise for node', () => {
         )
 
       nock('https://buscacepinter.correios.com.br')
-        .post('/app/cep/carrega-cep.php')
+        .post('/app/endereco/carrega-cep-endereco.php')
         .reply(400, '<h2>Bad Request (400)</h2>')
 
       nock('https://viacep.com.br')
@@ -757,7 +757,7 @@ describe('[unit] cep-promise for node', () => {
         )
 
       nock('https://buscacepinter.correios.com.br')
-        .post('/app/cep/carrega-cep.php')
+        .post('/app/endereco/carrega-cep-endereco.php')
         .reply(200, {erro:true})
 
       nock('https://viacep.com.br')
@@ -816,7 +816,7 @@ describe('[unit] cep-promise for node', () => {
         )
 
       nock('https://buscacepinter.correios.com.br')
-        .post('/app/cep/carrega-cep.php')
+        .post('/app/endereco/carrega-cep-endereco.php')
         .reply(200, {erro:true})
 
       nock('https://viacep.com.br')

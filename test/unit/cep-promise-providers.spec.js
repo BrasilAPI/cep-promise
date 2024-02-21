@@ -130,7 +130,7 @@ describe('when invoked with providers parameter', () => {
         )
 
       const correiosAltMock = nock('https://buscacepinter.correios.com.br')
-        .post('/app/cep/carrega-cep.php')
+        .post('/app/endereco/carrega-cep-endereco.php')
         .replyWithFile(
           200,
           path.join(__dirname, '/fixtures/correios-alt-cep-05010000-found.json')
@@ -179,7 +179,7 @@ describe('when invoked with providers parameter', () => {
         )
 
       const correiosAltMock = nock('https://buscacepinter.correios.com.br')
-        .post('/app/cep/carrega-cep.php')
+        .post('/app/endereco/carrega-cep-endereco.php')
         .replyWithFile(
           200,
           path.join(__dirname, '/fixtures/correios-alt-cep-05010000-found.json')
@@ -228,7 +228,7 @@ describe('when invoked with providers parameter', () => {
         )
 
       const correiosAltMock = nock('https://buscacepinter.correios.com.br')
-        .post('/app/cep/carrega-cep.php')
+        .post('/app/endereco/carrega-cep-endereco.php')
         .replyWithFile(
           200,
           path.join(__dirname, '/fixtures/correios-alt-cep-05010000-found.json')
@@ -277,7 +277,7 @@ describe('when invoked with providers parameter', () => {
         )
 
       const correiosAltMock = nock('https://buscacepinter.correios.com.br')
-        .post('/app/cep/carrega-cep.php')
+        .post('/app/endereco/carrega-cep-endereco.php')
         .replyWithFile(
           200,
           path.join(__dirname, '/fixtures/correios-alt-cep-05010000-found.json')
@@ -326,7 +326,7 @@ describe('when invoked with providers parameter', () => {
         )
 
       const correiosAltMock = nock('https://buscacepinter.correios.com.br')
-        .post('/app/cep/carrega-cep.php')
+        .post('/app/endereco/carrega-cep-endereco.php')
         .replyWithFile(
           200,
           path.join(__dirname, '/fixtures/correios-alt-cep-05010000-found.json')
@@ -383,7 +383,7 @@ describe('when invoked with providers parameter', () => {
         )
 
       const correiosAltMock = nock('https://buscacepinter.correios.com.br')
-        .post('/app/cep/carrega-cep.php')
+        .post('/app/endereco/carrega-cep-endereco.php')
         .replyWithFile(
           200,
           path.join(__dirname, '/fixtures/correios-alt-cep-05010000-found.json')
@@ -432,7 +432,7 @@ describe('when invoked with providers parameter', () => {
         )
 
       const correiosAltMock = nock('https://buscacepinter.correios.com.br')
-        .post('/app/cep/carrega-cep.php')
+        .post('/app/endereco/carrega-cep-endereco.php')
         .replyWithFile(
           200,
           path.join(__dirname, '/fixtures/correios-alt-cep-05010000-found.json')
