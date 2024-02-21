@@ -435,14 +435,16 @@
   }
 
   function fetchCorreiosAltAPIService(cepWithLeftPad, configurations) {
-    var url = 'https://buscacepinter.correios.com.br/app/cep/carrega-cep.php';
+    var url = 'https://buscacepinter.correios.com.br/app/endereco/carrega-cep-endereco.php';
     var options = {
       method: 'POST',
       mode: 'cors',
       headers: {
-        'content-type': 'application/x-www-form-urlencoded; charset=UTF-8'
+        'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        'Referer': 'https://buscacepinter.correios.com.br/app/endereco/index.php',
+        'Referrer-Policy': 'strict-origin-when-cross-origin'
       },
-      body: "cep=".concat(cepWithLeftPad),
+      body: "endereco=".concat(cepWithLeftPad, "&tipoCEP=ALL"),
       timeout: configurations.timeout || 30000
     };
     return fetch(url, options).then(parseResponse).then(extractCepValuesFromResponse)["catch"](throwApplicationError$1);
@@ -542,12 +544,13 @@
   }
 
   function fetchWideNetService(cepWithLeftPad, configurations) {
-    var url = "https://ws.apicep.com/busca-cep/api/cep/".concat(cepWithLeftPad, ".json");
+    var cepWithDash = "".concat(cepWithLeftPad.slice(0, 5), "-").concat(cepWithLeftPad.slice(5));
+    var url = "https://cdn.apicep.com/file/apicep/".concat(cepWithDash, ".json");
     var options = {
       method: 'GET',
       mode: 'cors',
       headers: {
-        'content-type': 'application/json;charset=utf-8'
+        accept: 'application/json'
       },
       timeout: configurations.timeout || 30000
     };
