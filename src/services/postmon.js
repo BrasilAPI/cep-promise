@@ -55,7 +55,7 @@ function extractCepValuesFromResponse (responseObject) {
 function throwApplicationError (error) {
   const serviceError = new ServiceError({
     message: error.message,
-    service: 'viacep'
+    service: 'postmon'
   })
 
   if (error.name === 'FetchError') {
