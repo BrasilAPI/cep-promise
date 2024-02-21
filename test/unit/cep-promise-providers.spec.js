@@ -142,6 +142,12 @@ describe('when invoked with providers parameter', () => {
           200,
           path.join(__dirname, '/fixtures/viacep-cep-05010000-found.json')
         )
+      const postmonMock = nock('https://postmon.com.br')
+        .get('/v1/cep/05010000')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/viacep-cep-05010000-found.json')
+        )
 
       const wideNetMock = nock('https://cdn.apicep.com')
         .get('/file/apicep/05010-000.json')
@@ -165,6 +171,63 @@ describe('when invoked with providers parameter', () => {
           expect(correiosMock.isDone()).to.be.equal(false)
           expect(correiosAltMock.isDone()).to.be.equal(false)
           expect(wideNetMock.isDone()).to.be.equal(false)
+          expect(postmonMock.isDone()).to.be.equal(false)
+        })
+    })
+  })
+
+  describe('and the providers param is [\'postmon\']', () => {
+    it('should call only postmon service', () => {
+      const correiosMock = nock('https://apps.correios.com.br')
+        .post('/SigepMasterJPA/AtendeClienteService/AtendeCliente')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/response-cep-05010000-found.xml')
+        )
+
+      const correiosAltMock = nock('https://buscacepinter.correios.com.br')
+        .post('/app/cep/carrega-cep.php')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/correios-alt-cep-05010000-found.json')
+        )
+
+      const viaCepMock = nock('https://viacep.com.br')
+        .get('/ws/05010000/json/')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/viacep-cep-05010000-found.json')
+        )
+      const postmonMock = nock('https://postmon.com.br')
+        .get('/v1/cep/05010000')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/postmon-cep-05010000-found.json')
+        )
+
+      const wideNetMock = nock('https://cdn.apicep.com')
+        .get('/file/apicep/05010-000.json')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/widenet-cep-05010000-found.json')
+        )
+
+      return cep('05010000', { providers: ['postmon'] })
+        .then(address => {
+          expect(address).to.deep.equal({
+            cep: '05010000',
+            state: 'SP',
+            city: 'São Paulo',
+            neighborhood: 'Perdizes',
+            street: 'Rua Caiubi',
+            service: 'postmon'
+          })
+
+          expect(viaCepMock.isDone()).to.be.equal(false)
+          expect(correiosMock.isDone()).to.be.equal(false)
+          expect(correiosAltMock.isDone()).to.be.equal(false)
+          expect(wideNetMock.isDone()).to.be.equal(false)
+          expect(postmonMock.isDone()).to.be.equal(true)
         })
     })
   })
