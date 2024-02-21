@@ -146,7 +146,7 @@ describe('when invoked with providers parameter', () => {
         .get('/v1/cep/05010000')
         .replyWithFile(
           200,
-          path.join(__dirname, '/fixtures/viacep-cep-05010000-found.json')
+          path.join(__dirname, '/fixtures/postmon-cep-05010000-found.json')
         )
 
       const wideNetMock = nock('https://cdn.apicep.com')
