@@ -624,6 +624,14 @@ describe('[unit] cep-promise for node', () => {
           path.join(__dirname, '/fixtures/viacep-cep-99999999-error.json')
         )
 
+      nock('https://postmon.com.br')
+        .get('/v1/cep/05010000')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/postmon-cep-99999999-error.json')
+        )
+      
+
       nock('https://cdn.apicep.com')
         .get('/file/apicep/99999-999.json')
         .replyWithFile(
@@ -661,6 +669,10 @@ describe('[unit] cep-promise for node', () => {
               {
                 message: 'CEP não encontrado na base do WideNet.',
                 service: 'widenet'
+              },
+              {
+                message: 'CEP não encontrado na base do postmon.',
+                service: 'postmon'
               }
             ]
           })

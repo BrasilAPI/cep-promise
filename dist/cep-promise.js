@@ -462,7 +462,7 @@
   function throwApplicationError$3(error) {
     var serviceError = new ServiceError({
       message: error.message,
-      service: 'viacep'
+      service: 'postmon'
     });
     if (error.name === 'FetchError') {
       serviceError.message = 'Erro ao se conectar com o serviço Postmon.';
