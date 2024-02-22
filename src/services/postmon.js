@@ -34,7 +34,7 @@ function analyzeAndParseResponse (response) {
 }
 
 function checkForPostmanError (responseObject) {
-  if (!responseObject) {
+  if (!responseObject ) {
     throw new Error('CEP não encontrado na base do Postmon.')
   }
 

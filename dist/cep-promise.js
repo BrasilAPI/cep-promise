@@ -345,7 +345,7 @@
   }
   function parseResponse(response) {
     return response.json().then(function (result) {
-      if (result.total === 0 || result.erro || result.dados[0].cep === "") {
+      if (result.total === 0 || result.erro || result.dados[0].cep === "" || result.dados[0].cep.replace(/\D/g, '') !== cepWithLeftPad) {
         throw new Error('CEP não encontrado na base dos Correios.');
       }
       return result;
@@ -421,14 +421,13 @@
     throw serviceError;
   }
 
-  function fetchWideNetService(cepWithLeftPad, configurations) {
-    var cepWithDash = "".concat(cepWithLeftPad.slice(0, 5), "-").concat(cepWithLeftPad.slice(5));
-    var url = "https://cdn.apicep.com/file/apicep/".concat(cepWithDash, ".json");
+  function fetchViaCepService$1(cepWithLeftPad, configurations) {
+    var url = "https://api.postmon.com.br/v1/cep/".concat(cepWithLeftPad);
     var options = {
       method: 'GET',
       mode: 'cors',
       headers: {
-        accept: 'application/json'
+        'content-type': 'application/json;charset=utf-8'
       },
       timeout: configurations.timeout || 30000
     };
