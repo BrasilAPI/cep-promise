@@ -2,11 +2,12 @@
 
 import fetch from 'node-fetch'
 import ServiceError from '../errors/service.js'
-
+let queriedCep = null;
 export default function fetchCorreiosAltAPIService(
   cepWithLeftPad,
   configurations
 ) {
+  queriedCep = cepWithLeftPad;
   const url = 'https://buscacepinter.correios.com.br/app/endereco/carrega-cep-endereco.php'
   const options = {
     method: 'POST',
@@ -28,7 +29,7 @@ export default function fetchCorreiosAltAPIService(
 
 function parseResponse(response) {
   return response.json().then(result => {
-    if (result.total === 0 || result.erro || result.dados[0].cep === "" || result.dados[0].cep.replace(/\D/g, '') !== cepWithLeftPad) {
+    if (result.total === 0 || result.erro || result.dados[0].cep === "" || result.dados[0].cep.replace(/\D/g, '') !== queriedCep) {
       throw new Error('CEP não encontrado na base dos Correios.')
     }
     return result

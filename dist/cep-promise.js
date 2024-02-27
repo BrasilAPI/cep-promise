@@ -328,7 +328,9 @@
     throw serviceError;
   }
 
+  var queriedCep = null;
   function fetchCorreiosAltAPIService(cepWithLeftPad, configurations) {
+    queriedCep = cepWithLeftPad;
     var url = 'https://buscacepinter.correios.com.br/app/endereco/carrega-cep-endereco.php';
     var options = {
       method: 'POST',
@@ -341,11 +343,12 @@
       body: "endereco=".concat(cepWithLeftPad, "&tipoCEP=ALL"),
       timeout: configurations.timeout || 30000
     };
+    console.log(options);
     return fetch(url, options).then(parseResponse).then(extractCepValuesFromResponse)["catch"](throwApplicationError$1);
   }
   function parseResponse(response) {
     return response.json().then(function (result) {
-      if (result.total === 0 || result.erro || result.dados[0].cep === "" || result.dados[0].cep.replace(/\D/g, '') !== cepWithLeftPad) {
+      if (result.total === 0 || result.erro || result.dados[0].cep === "" || result.dados[0].cep.replace(/\D/g, '') !== queriedCep) {
         throw new Error('CEP não encontrado na base dos Correios.');
       }
       return result;
@@ -424,47 +427,46 @@
   function fetchViaCepService$1(cepWithLeftPad, configurations) {
     var url = "https://api.postmon.com.br/v1/cep/".concat(cepWithLeftPad);
     var options = {
-      method: 'GET',
-      mode: 'cors',
+      method: "GET",
+      mode: "cors",
       headers: {
-        'content-type': 'application/json;charset=utf-8'
+        "content-type": "application/json;charset=utf-8"
       },
       timeout: configurations.timeout || 30000
     };
-    if (typeof window == 'undefined') {
-      options.headers['user-agent'] = 'cep-promise';
+    if (typeof window == "undefined") {
+      options.headers["user-agent"] = "cep-promise";
     }
-    return fetch(url, options).then(analyzeAndParseResponse$2).then(checkForPostmanError).then(extractCepValuesFromResponse$2)["catch"](throwApplicationError$3);
+    return fetch(url, options).then(analyzeAndParseResponse$2).then(extractCepValuesFromResponse$2)["catch"](throwApplicationError$3);
   }
   function analyzeAndParseResponse$2(response) {
     if (response.ok) {
       return response.json();
+    } else if (response.status === 404) {
+      throw new Error("CEP não encontrado na base do Postmon.");
     }
-    throw Error('Erro ao se conectar com o serviço Postmon.');
-  }
-  function checkForPostmanError(responseObject) {
-    if (!responseObject) {
-      throw new Error('CEP não encontrado na base do Postmon.');
-    }
-    return responseObject;
+    throw Error("Erro ao se conectar com o serviço Postmon.");
   }
   function extractCepValuesFromResponse$2(responseObject) {
     return {
-      cep: responseObject.cep.replace('-', ''),
+      cep: responseObject.cep.replace("-", ""),
       state: responseObject.estado,
       city: responseObject.cidade,
       neighborhood: responseObject.bairro,
       street: responseObject.logradouro,
-      service: 'postmon'
+      service: "postmon"
     };
   }
   function throwApplicationError$3(error) {
     var serviceError = new ServiceError({
       message: error.message,
-      service: 'postmon'
+      service: "postmon"
     });
-    if (error.name === 'FetchError') {
-      serviceError.message = 'Erro ao se conectar com o serviço Postmon.';
+    if (!!error.response && error.reseponse.status === 404) {
+      throw new Error("CEP não encontrado na base do Postmon.");
+    }
+    if (error.name === "FetchError") {
+      serviceError.message = "Erro ao se conectar com o serviço Postmon.";
     }
     throw serviceError;
   }
