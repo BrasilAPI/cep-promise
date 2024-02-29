@@ -55,7 +55,7 @@
     "chai": "4.2.0",
     "chai-as-promised": "7.1.1",
     "chai-subset": "1.6.0",
-    "mocha": "8.1.1",
+    "mocha": "8.4.0",
     "nock": "13.0.2",
     "nodemon": "2.0.4",
     "rollup": "2.20.0",
