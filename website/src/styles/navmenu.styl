@@ -1,0 +1,22 @@
+@require '_variables'
+@require '_mixins'
+
+.navmenu
+  margin 0
+  padding 0
+  list-style-type none
+  clearfix()
+  li
+    float left
+    margin-left 40px
+  a
+    padding-bottom 5px
+    color $color-blue
+    &.router-link-exact-active
+      border-bottom 1px solid $color-blue
+      cursor default
+      pointer-events none
+
++breakpoint('xs')
+  .navmenu
+    display none

@@ -1,0 +1,40 @@
+@require '_variables'
+@require '_mixins'
+
+.demo,
+.demo-toolbar-container
+  position relative
+
+.demo-wrapper
+  height 350px
+
+.demo-container,
+.demo-toolbar
+  position absolute
+  top 0
+  left 0
+  width 100%
+  z-index $layer-lowest
+  .btn-small
+    margin-right 10px
+  p
+    color $color-grey
+    font-size $font-size-xxs
+    font-family Helvetica, Arial, sans-serif
+
+.demo-toolbar
+  padding-top 25px
+
+.demo-toolbar-buttons
+  float left
+
+.demo-toolbar-credits
+  float right
+
++breakpoint('xs')
+  .demo-toolbar
+    padding-top 0
+    .demo-toolbar-buttons,
+    .demo-toolbar-credits
+      float none
+      text-align center

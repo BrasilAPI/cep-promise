@@ -1,0 +1,12 @@
+@require '_mixins'
+@require 'row-item'
+
+.row
+  margin 0 $row-item-padding * -1
+  clearfix()
+  & + .row
+    margin-top 15px
+
+for $size in (1..5)
+  .row-vertical-offset-{$size}
+    margin-top $size * 10px

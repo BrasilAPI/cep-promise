@@ -39,5 +39,6 @@ dist/*
 #Yarn
 yarn.lock
 
-# Intelij IDE stuff
-.idea/
+
+# Website
+website/dist

@@ -1,0 +1,56 @@
+@require '_variables'
+@require '_mixins'
+
+$sandobox-content-min-height = 300px
+$sandobox-content-min-height-mobile = 150px
+
+.sandbox
+  input
+    display block
+    margin 0 auto
+    max-width 400px
+    text-align center
+  .btn
+    position relative
+    left 50%
+    transform('translateX(-50%)')
+  .code-sample
+    min-height $sandobox-content-min-height
+
+.sandbox-content-container
+  margin-top 60px
+
+.sandbox-content
+  position relative
+  min-height $sandobox-content-min-height
+  background-color $color-grey-light
+  &:before
+    position absolute
+    top -10px
+    left 50%
+    padding 2px 6px
+    color $color-grey
+    background-color $color-lightest
+    border 1px solid $color-grey
+    border-radius(3px)
+    transform('translateX(-50%)')
+  &.sandbox-content-code
+    &:before
+      content 'code'
+  &.sandbox-content-response
+    &:before
+      content 'logger'
+    .loader
+      position absolute
+      top 50px
+      left 50%
+      transform('translateX(-50%)')
+
++breakpoint('xs')
+  .sandbox
+    .code-sample
+      min-height $sandobox-content-min-height-mobile
+  .sandbox-content
+    min-height $sandobox-content-min-height-mobile
+    &.sandbox-content-response
+      margin-top 30px
