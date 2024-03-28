@@ -58,7 +58,7 @@ describe('[unit] cep-promise for browser', () => {
 
   describe('when invoked without arguments', () => {
     it('should reject with "validation_error"', () => {
-      return cep().catch(error => {
+      return cep().catch((error) => {
         return expect(error)
           .to.be.an.instanceOf(CepPromiseError)
           .and.containSubset({
@@ -69,9 +69,9 @@ describe('[unit] cep-promise for browser', () => {
               {
                 message:
                   'Você deve chamar o construtor utilizando uma String ou um Number.',
-                service: 'cep_validation'
-              }
-            ]
+                service: 'cep_validation',
+              },
+            ],
           })
       })
     })
@@ -79,7 +79,7 @@ describe('[unit] cep-promise for browser', () => {
 
   describe('when invoked with an Array', () => {
     it('should reject with "validation_error"', () => {
-      return cep([1, 2, 3]).catch(error => {
+      return cep([1, 2, 3]).catch((error) => {
         return expect(error)
           .to.be.an.instanceOf(CepPromiseError)
           .and.containSubset({
@@ -90,9 +90,9 @@ describe('[unit] cep-promise for browser', () => {
               {
                 message:
                   'Você deve chamar o construtor utilizando uma String ou um Number.',
-                service: 'cep_validation'
-              }
-            ]
+                service: 'cep_validation',
+              },
+            ],
           })
       })
     })
@@ -100,7 +100,7 @@ describe('[unit] cep-promise for browser', () => {
 
   describe('when invoked with an Object', () => {
     it('should reject with "validation_error"', () => {
-      return cep({ nintendo: true, ps: false, xbox: false }).catch(error => {
+      return cep({ nintendo: true, ps: false, xbox: false }).catch((error) => {
         return expect(error)
           .to.be.an.instanceOf(CepPromiseError)
           .and.containSubset({
@@ -111,9 +111,9 @@ describe('[unit] cep-promise for browser', () => {
               {
                 message:
                   'Você deve chamar o construtor utilizando uma String ou um Number.',
-                service: 'cep_validation'
-              }
-            ]
+                service: 'cep_validation',
+              },
+            ],
           })
       })
     })
@@ -123,7 +123,7 @@ describe('[unit] cep-promise for browser', () => {
     it('should reject with "validation_error"', () => {
       return cep(function zelda() {
         return 'link'
-      }).catch(error => {
+      }).catch((error) => {
         return expect(error)
           .to.be.an.instanceOf(CepPromiseError)
           .and.containSubset({
@@ -134,9 +134,9 @@ describe('[unit] cep-promise for browser', () => {
               {
                 message:
                   'Você deve chamar o construtor utilizando uma String ou um Number.',
-                service: 'cep_validation'
-              }
-            ]
+                service: 'cep_validation',
+              },
+            ],
           })
       })
     })
@@ -165,16 +165,16 @@ describe('[unit] cep-promise for browser', () => {
           path.join(__dirname, '/fixtures/brasilapi-cep-05010000-found.json')
         )
 
-      return cep('05010000')
-        .then(address => expect(address).to.deep.equal({
+      return cep('05010000').then((address) =>
+        expect(address).to.deep.equal({
           cep: '05010000',
           state: 'SP',
           city: 'São Paulo',
           neighborhood: 'Perdizes',
           street: 'Rua Caiubi',
-          service: address.service
+          service: address.service,
         })
-        )
+      )
     })
   })
 
@@ -201,16 +201,16 @@ describe('[unit] cep-promise for browser', () => {
           path.join(__dirname, '/fixtures/brasilapi-cep-05010000-found.json')
         )
 
-      return cep(5010000)
-        .then(address => expect(address).to.deep.equal({
+      return cep(5010000).then((address) =>
+        expect(address).to.deep.equal({
           cep: '05010000',
           state: 'SP',
           city: 'São Paulo',
           neighborhood: 'Perdizes',
           street: 'Rua Caiubi',
-          service: address.service
+          service: address.service,
         })
-        )
+      )
     })
   })
 
@@ -237,16 +237,16 @@ describe('[unit] cep-promise for browser', () => {
           path.join(__dirname, '/fixtures/brasilapi-cep-99999999-error.json')
         )
 
-      return cep('05010000')
-        .then(address => expect(address).to.deep.equal({
+      return cep('05010000').then((address) =>
+        expect(address).to.deep.equal({
           cep: '05010000',
           state: 'SP',
           city: 'São Paulo',
           neighborhood: 'Perdizes',
           street: 'Rua Caiubi',
-          service: 'viacep'
+          service: 'viacep',
         })
-        )
+      )
     })
   })
 
@@ -273,15 +273,16 @@ describe('[unit] cep-promise for browser', () => {
           path.join(__dirname, '/fixtures/brasilapi-cep-99999999-error.json')
         )
 
-      return cep('5010000')
-        .then(address => expect(address).to.deep.equal({
+      return cep('5010000').then((address) =>
+        expect(address).to.deep.equal({
           cep: '05010000',
           state: 'SP',
           city: 'São Paulo',
           neighborhood: 'Perdizes',
           street: 'Rua Caiubi',
-          service: 'widenet'
-        }))
+          service: 'widenet',
+        })
+      )
     })
   })
 
@@ -308,15 +309,16 @@ describe('[unit] cep-promise for browser', () => {
           path.join(__dirname, '/fixtures/brasilapi-cep-05010000-found.json')
         )
 
-      return cep('5010000')
-        .then(address => expect(address).to.deep.equal({
+      return cep('5010000').then((address) =>
+        expect(address).to.deep.equal({
           cep: '05010000',
           state: 'SP',
           city: 'São Paulo',
           neighborhood: 'Perdizes',
           street: 'Rua Caiubi',
-          service: 'brasilapi'
-        }))
+          service: 'brasilapi',
+        })
+      )
     })
   })
 
@@ -342,8 +344,14 @@ describe('[unit] cep-promise for browser', () => {
           404,
           path.join(__dirname, '/fixtures/brasilapi-cep-99999999-error.json')
         )
+      nock('https://api.postmon.com.br')
+        .get('/v1/cep/99999999')
+        .replyWithFile(
+          404,
+          path.join(__dirname, '/fixtures/postmon-cep-99999999-error.json')
+        )
 
-      return cep('99999999').catch(error => {
+      return cep('99999999').catch((error) => {
         return expect(error)
           .to.be.an.instanceOf(CepPromiseError)
           .and.containSubset({
@@ -353,13 +361,17 @@ describe('[unit] cep-promise for browser', () => {
             errors: [
               {
                 message: 'CEP não encontrado na base do ViaCEP.',
-                service: 'viacep'
+                service: 'viacep',
               },
               {
                 message: 'CEP não encontrado na base do WideNet.',
-                service: 'widenet'
-              }
-            ]
+                service: 'widenet',
+              },
+              {
+                message: 'CEP não encontrado na base do Postmon.',
+                service: 'postmon',
+              },
+            ],
           })
       })
     })
@@ -367,7 +379,7 @@ describe('[unit] cep-promise for browser', () => {
 
   describe('when invoked with an invalid "123456789" CEP', () => {
     it('should reject with "validation_error"', () => {
-      return cep('123456789').catch(error => {
+      return cep('123456789').catch((error) => {
         return expect(error)
           .to.be.an.instanceOf(CepPromiseError)
           .and.containSubset({
@@ -377,9 +389,9 @@ describe('[unit] cep-promise for browser', () => {
             errors: [
               {
                 service: 'cep_validation',
-                message: 'CEP informado possui mais do que 8 caracteres.'
-              }
-            ]
+                message: 'CEP informado possui mais do que 8 caracteres.',
+              },
+            ],
           })
       })
     })
@@ -398,8 +410,11 @@ describe('[unit] cep-promise for browser', () => {
       nock('https://brasilapi.com.br/')
         .get('/api/cep/v1/05010000')
         .reply(400, '<h2>Bad Request (400)</h2>')
+        nock('https://api.postmon.com.br')
+        .get('/v1/cep/05010000')
+        .reply(400, '<h2>Bad Request (400)</h2>')
 
-      return cep('05010000').catch(error => {
+      return cep('05010000').catch((error) => {
         return expect(error)
           .to.be.an.instanceOf(CepPromiseError)
           .and.containSubset({
@@ -409,18 +424,22 @@ describe('[unit] cep-promise for browser', () => {
             errors: [
               {
                 message: 'Erro ao se conectar com o serviço ViaCEP.',
-                service: 'viacep'
+                service: 'viacep',
               },
               {
                 message: 'Erro ao se conectar com o serviço WideNet.',
-                service: 'widenet'
+                service: 'widenet',
+              },
+              {
+                message: 'Erro ao se conectar com o serviço Postmon.',
+                service: 'postmon',
               },
               {
                 name: 'ServiceError',
                 message: 'CEP não encontrado na base do BrasilAPI.',
-                service: 'brasilapi'
-              }
-            ]
+                service: 'brasilapi',
+              },
+            ],
           })
       })
     })

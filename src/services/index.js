@@ -1,6 +1,7 @@
 import Correios from './correios'
 import CorreiosAlt from './correios-alt'
 import ViaCep from './viacep'
+import Postmon from './postmon'
 import WideNet from './widenet'
 import BrasilAPI from './brasilapi.js'
 
@@ -11,6 +12,7 @@ export function getAvailableServices () {
     return {
       viacep: ViaCep,
       widenet: WideNet,
+      postmon: Postmon,
       brasilapi: BrasilAPI
     }
   }
@@ -20,6 +22,7 @@ export function getAvailableServices () {
     'correios-alt': CorreiosAlt,
     viacep: ViaCep,
     widenet: WideNet,
+    postmon: Postmon,
     brasilapi: BrasilAPI
   }
 }

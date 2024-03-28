@@ -19,17 +19,17 @@ describe('[e2e] cep-promise', () => {
   })
 
   describe('when invoked with a valid "05010000" string', () => {
-    it('should fulfill with correct address', () => cep('05010000')
-        .then(address => {
-          expect(address).to.deep.equal({
-            cep: '05010000',
-            state: 'SP',
-            city: 'São Paulo',
-            neighborhood: 'Perdizes',
-            street: 'Rua Caiubi',
-            service: address.service
-        })})
-    )
+    it('should fulfill with correct address', () =>
+      cep('05010000').then((address) => {
+        expect(address).to.deep.equal({
+          cep: '05010000',
+          state: 'SP',
+          city: 'São Paulo',
+          neighborhood: 'Perdizes',
+          street: 'Rua Caiubi',
+          service: address.service,
+        })
+      }))
   })
 
   describe('when invoked with a valid 05010000 number', () => {
@@ -37,19 +37,19 @@ describe('[e2e] cep-promise', () => {
       const address = await cep(5010000)
 
       expect(address).to.deep.equal({
-            cep: '05010000',
-            state: 'SP',
-            city: 'São Paulo',
-            neighborhood: 'Perdizes',
-            street: 'Rua Caiubi',
-            service: address.service
-          })
+        cep: '05010000',
+        state: 'SP',
+        city: 'São Paulo',
+        neighborhood: 'Perdizes',
+        street: 'Rua Caiubi',
+        service: address.service,
+      })
     })
   })
 
   describe('when invoked with an inexistent "99999999" CEP', () => {
     it('should reject with "service_error"', () => {
-      return cep('99999999').catch(error => {
+      return cep('99999999').catch((error) => {
         return expect(error)
           .to.be.an.instanceOf(CepPromiseError)
           .and.containSubset({
@@ -59,25 +59,29 @@ describe('[e2e] cep-promise', () => {
             errors: [
               {
                 message: 'CEP INVÁLIDO',
-                service: 'correios'
+                service: 'correios',
               },
               {
                 message: 'Erro ao se conectar com o serviço dos Correios Alt.',
-                service: 'correios-alt'
+                service: 'correios-alt',
               },
               {
                 message: 'CEP não encontrado na base do ViaCEP.',
-                service: 'viacep'
+                service: 'viacep',
               },
               {
-                service: 'widenet'
+                service: 'widenet',
+              },
+              {
+                message: 'CEP não encontrado na base do Postmon.',
+                service: 'postmon',
               },
               {
                 name: 'ServiceError',
                 message: 'CEP não encontrado na base do BrasilAPI.',
-                service: 'brasilapi'
-              }
-            ]
+                service: 'brasilapi',
+              },
+            ],
           })
       })
     })
@@ -85,7 +89,7 @@ describe('[e2e] cep-promise', () => {
 
   describe('when invoked with an invalid "123456789" CEP', () => {
     it('should reject with "validation_error"', () => {
-      return cep('123456789').catch(error => {
+      return cep('123456789').catch((error) => {
         return expect(error)
           .to.be.an.instanceOf(CepPromiseError)
           .and.containSubset({
@@ -95,9 +99,9 @@ describe('[e2e] cep-promise', () => {
             errors: [
               {
                 service: 'cep_validation',
-                message: 'CEP informado possui mais do que 8 caracteres.'
-              }
-            ]
+                message: 'CEP informado possui mais do que 8 caracteres.',
+              },
+            ],
           })
       })
     })

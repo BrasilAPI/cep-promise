@@ -20,7 +20,7 @@ describe('when invoked with providers parameter', () => {
 
   describe('and the providers param is a string', () => {
     it('should reject with "validation_error"', () => {
-      return cep('05010000', { providers: 'viacep' }).catch(error => {
+      return cep('05010000', { providers: 'viacep' }).catch((error) => {
         return expect(error)
           .to.be.an.instanceOf(CepPromiseError)
           .and.containSubset({
@@ -30,9 +30,9 @@ describe('when invoked with providers parameter', () => {
             errors: [
               {
                 service: 'providers_validation',
-                message: 'O parâmetro providers deve ser uma lista.'
-              }
-            ]
+                message: 'O parâmetro providers deve ser uma lista.',
+              },
+            ],
           })
       })
     })
@@ -40,7 +40,7 @@ describe('when invoked with providers parameter', () => {
 
   describe('and the providers param is a integer', () => {
     it('should reject with "validation_error"', () => {
-      return cep('05010000', { providers: 123 }).catch(error => {
+      return cep('05010000', { providers: 123 }).catch((error) => {
         return expect(error)
           .to.be.an.instanceOf(CepPromiseError)
           .and.containSubset({
@@ -50,9 +50,9 @@ describe('when invoked with providers parameter', () => {
             errors: [
               {
                 service: 'providers_validation',
-                message: 'O parâmetro providers deve ser uma lista.'
-              }
-            ]
+                message: 'O parâmetro providers deve ser uma lista.',
+              },
+            ],
           })
       })
     })
@@ -60,7 +60,7 @@ describe('when invoked with providers parameter', () => {
 
   describe('and the providers param is a object', () => {
     it('should reject with "validation_error"', () => {
-      return cep('05010000', { providers: {} }).catch(error => {
+      return cep('05010000', { providers: {} }).catch((error) => {
         return expect(error)
           .to.be.an.instanceOf(CepPromiseError)
           .and.containSubset({
@@ -70,9 +70,9 @@ describe('when invoked with providers parameter', () => {
             errors: [
               {
                 service: 'providers_validation',
-                message: 'O parâmetro providers deve ser uma lista.'
-              }
-            ]
+                message: 'O parâmetro providers deve ser uma lista.',
+              },
+            ],
           })
       })
     })
@@ -80,7 +80,7 @@ describe('when invoked with providers parameter', () => {
 
   describe('and the providers param is a function', () => {
     it('should reject with "validation_error"', () => {
-      return cep('05010000', { providers: () => () => { } }).catch(error => {
+      return cep('05010000', { providers: () => () => {} }).catch((error) => {
         return expect(error)
           .to.be.an.instanceOf(CepPromiseError)
           .and.containSubset({
@@ -90,9 +90,9 @@ describe('when invoked with providers parameter', () => {
             errors: [
               {
                 service: 'providers_validation',
-                message: 'O parâmetro providers deve ser uma lista.'
-              }
-            ]
+                message: 'O parâmetro providers deve ser uma lista.',
+              },
+            ],
           })
       })
     })
@@ -102,7 +102,7 @@ describe('when invoked with providers parameter', () => {
     it('should reject with "validation_error"', () => {
       const availableProviders = Object.keys(getAvailableServices())
 
-      return cep('05010000', { providers: [123, 'viacep'] }).catch(error => {
+      return cep('05010000', { providers: [123, 'viacep'] }).catch((error) => {
         return expect(error)
           .to.be.an.instanceOf(CepPromiseError)
           .and.containSubset({
@@ -110,17 +110,18 @@ describe('when invoked with providers parameter', () => {
             type: 'validation_error',
             errors: [
               {
-                message:
-                `O provider "123" é inválido. Os providers disponíveis são: ["${availableProviders.join('", "')}"].`,
-                service: 'providers_validation'
-              }
-            ]
+                message: `O provider "123" é inválido. Os providers disponíveis são: ["${availableProviders.join(
+                  '", "'
+                )}"].`,
+                service: 'providers_validation',
+              },
+            ],
           })
       })
     })
   })
 
-  describe('and the providers param is [\'viacep\']', () => {
+  describe('and the providers param is ["viacep"]', () => {
     it('should call only viacep service', () => {
       const correiosMock = nock('https://apps.correios.com.br')
         .post('/SigepMasterJPA/AtendeClienteService/AtendeCliente')
@@ -142,6 +143,12 @@ describe('when invoked with providers parameter', () => {
           200,
           path.join(__dirname, '/fixtures/viacep-cep-05010000-found.json')
         )
+      const postmonMock = nock('https://api.postmon.com.br')
+        .get('/v1/cep/05010000')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/postmon-cep-05010000-found.json')
+        )
 
       const wideNetMock = nock('https://cdn.apicep.com')
         .get('/file/apicep/05010-000.json')
@@ -150,26 +157,81 @@ describe('when invoked with providers parameter', () => {
           path.join(__dirname, '/fixtures/widenet-cep-05010000-found.json')
         )
 
-      return cep('05010000', { providers: ['viacep'] })
-        .then(address => {
-          expect(address).to.deep.equal({
-            cep: '05010000',
-            state: 'SP',
-            city: 'São Paulo',
-            neighborhood: 'Perdizes',
-            street: 'Rua Caiubi',
-            service: 'viacep'
-          })
-
-          expect(viaCepMock.isDone()).to.be.equal(true)
-          expect(correiosMock.isDone()).to.be.equal(false)
-          expect(correiosAltMock.isDone()).to.be.equal(false)
-          expect(wideNetMock.isDone()).to.be.equal(false)
+      return cep('05010000', { providers: ['viacep'] }).then((address) => {
+        expect(address).to.deep.equal({
+          cep: '05010000',
+          state: 'SP',
+          city: 'São Paulo',
+          neighborhood: 'Perdizes',
+          street: 'Rua Caiubi',
+          service: 'viacep',
         })
+
+        expect(viaCepMock.isDone()).to.be.equal(true)
+        expect(correiosMock.isDone()).to.be.equal(false)
+        expect(correiosAltMock.isDone()).to.be.equal(false)
+        expect(wideNetMock.isDone()).to.be.equal(false)
+        expect(postmonMock.isDone()).to.be.equal(false)
+      })
     })
   })
 
-  describe('and the providers param is [\'widenet\']', () => {
+  describe('and the providers param is ["postmon"]', () => {
+    it('should call only postmon service', () => {
+      const correiosMock = nock('https://apps.correios.com.br')
+        .post('/SigepMasterJPA/AtendeClienteService/AtendeCliente')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/response-cep-05010000-found.xml')
+        )
+
+      const correiosAltMock = nock('https://buscacepinter.correios.com.br')
+        .post('/app/cep/carrega-cep.php')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/correios-alt-cep-05010000-found.json')
+        )
+
+      const viaCepMock = nock('https://viacep.com.br')
+        .get('/ws/05010000/json/')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/viacep-cep-05010000-found.json')
+        )
+      const postmonMock = nock('https://api.postmon.com.br')
+        .get('/v1/cep/05010000')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/postmon-cep-05010000-found.json')
+        )
+
+      const wideNetMock = nock('https://cdn.apicep.com')
+        .get('/file/apicep/05010-000.json')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/widenet-cep-05010000-found.json')
+        )
+
+      return cep('05010000', { providers: ['postmon'] }).then((address) => {
+        expect(address).to.deep.equal({
+          cep: '05010000',
+          state: 'SP',
+          city: 'São Paulo',
+          neighborhood: 'Perdizes',
+          street: 'Rua Caiubi',
+          service: 'postmon',
+        })
+
+        expect(viaCepMock.isDone()).to.be.equal(false)
+        expect(correiosMock.isDone()).to.be.equal(false)
+        expect(correiosAltMock.isDone()).to.be.equal(false)
+        expect(wideNetMock.isDone()).to.be.equal(false)
+        expect(postmonMock.isDone()).to.be.equal(true)
+      })
+    })
+  })
+
+  describe('and the providers param is ["widenet"]', () => {
     it('should call only widenet service', () => {
       const correiosMock = nock('https://apps.correios.com.br')
         .post('/SigepMasterJPA/AtendeClienteService/AtendeCliente')
@@ -198,33 +260,45 @@ describe('when invoked with providers parameter', () => {
           200,
           path.join(__dirname, '/fixtures/widenet-cep-05010000-found.json')
         )
+      const postmonMock = nock('https://api.postmon.com.br')
+        .get('/v1/cep/05010000')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/postmon-cep-05010000-found.json')
+        )
 
-      return cep('05010000', { providers: ['widenet'] })
-        .then(address => {
-          expect(address).to.deep.equal({
-            cep: '05010000',
-            state: 'SP',
-            city: 'São Paulo',
-            neighborhood: 'Perdizes',
-            street: 'Rua Caiubi',
-            service: 'widenet'
-          })
+      return cep('05010000', { providers: ['widenet'] }).then((address) => {
+        expect(address).to.deep.equal({
+          cep: '05010000',
+          state: 'SP',
+          city: 'São Paulo',
+          neighborhood: 'Perdizes',
+          street: 'Rua Caiubi',
+          service: 'widenet',
+        })
 
-          expect(wideNetMock.isDone()).to.be.equal(true)
-          expect(viaCepMock.isDone()).to.be.equal(false)
-          expect(correiosMock.isDone()).to.be.equal(false)
-          expect(correiosAltMock.isDone()).to.be.equal(false)
+        expect(wideNetMock.isDone()).to.be.equal(true)
+        expect(viaCepMock.isDone()).to.be.equal(false)
+        expect(correiosMock.isDone()).to.be.equal(false)
+        expect(correiosAltMock.isDone()).to.be.equal(false)
+        expect(postmonMock.isDone()).to.be.equal(false)
       })
     })
   })
 
-  describe('and the providers param is [\'correios\']', () => {
+  describe('and the providers param is ["correios"]', () => {
     it('should call only correios service', () => {
       const correiosMock = nock('https://apps.correios.com.br')
         .post('/SigepMasterJPA/AtendeClienteService/AtendeCliente')
         .replyWithFile(
           200,
           path.join(__dirname, '/fixtures/response-cep-05010000-found.xml')
+        )
+      const postmonMock = nock('https://api.postmon.com.br')
+        .get('/v1/cep/05010000')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/postmon-cep-05010000-found.json')
         )
 
       const correiosAltMock = nock('https://buscacepinter.correios.com.br')
@@ -248,32 +322,38 @@ describe('when invoked with providers parameter', () => {
           path.join(__dirname, '/fixtures/widenet-cep-05010000-found.json')
         )
 
-      return cep('05010000', { providers: ['correios'] })
-        .then(address => {
-          expect(address).to.deep.equal({
-            cep: '05010000',
-            state: 'SP',
-            city: 'São Paulo',
-            neighborhood: 'Perdizes',
-            street: 'Rua Caiubi',
-            service: 'correios'
-          })
+      return cep('05010000', { providers: ['correios'] }).then((address) => {
+        expect(address).to.deep.equal({
+          cep: '05010000',
+          state: 'SP',
+          city: 'São Paulo',
+          neighborhood: 'Perdizes',
+          street: 'Rua Caiubi',
+          service: 'correios',
+        })
 
-          expect(correiosMock.isDone()).to.be.equal(true)
-          expect(correiosAltMock.isDone()).to.be.equal(false)
-          expect(viaCepMock.isDone()).to.be.equal(false)
-          expect(wideNetMock.isDone()).to.be.equal(false)
+        expect(correiosMock.isDone()).to.be.equal(true)
+        expect(correiosAltMock.isDone()).to.be.equal(false)
+        expect(viaCepMock.isDone()).to.be.equal(false)
+        expect(wideNetMock.isDone()).to.be.equal(false)
+        expect(postmonMock.isDone()).to.be.equal(false)
       })
     })
   })
 
-  describe('and the providers param is [\'correios-alt\']', () => {
-    it('should call only correios service', () => {
+  describe('and the providers param is ["correios-alt"]', () => {
+    it('should call only correios alt service', () => {
       const correiosMock = nock('https://apps.correios.com.br')
         .post('/SigepMasterJPA/AtendeClienteService/AtendeCliente')
         .replyWithFile(
           200,
           path.join(__dirname, '/fixtures/response-cep-05010000-found.xml')
+        )
+      const postmonMock = nock('https://api.postmon.com.br')
+        .get('/v1/cep/05010000')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/postmon-cep-05010000-found.json')
         )
 
       const correiosAltMock = nock('https://buscacepinter.correios.com.br')
@@ -297,26 +377,28 @@ describe('when invoked with providers parameter', () => {
           path.join(__dirname, '/fixtures/widenet-cep-05010000-found.json')
         )
 
-      return cep('05010000', { providers: ['correios-alt']})
-        .then(address => {
+      return cep('05010000', { providers: ['correios-alt'] }).then(
+        (address) => {
           expect(address).to.deep.equal({
             cep: '05010000',
             state: 'SP',
             city: 'São Paulo',
             neighborhood: 'Perdizes',
             street: 'Rua Caiubi',
-            service: 'correios-alt'
+            service: 'correios-alt',
           })
 
           expect(correiosMock.isDone()).to.be.equal(false)
           expect(correiosAltMock.isDone()).to.be.equal(true)
           expect(viaCepMock.isDone()).to.be.equal(false)
           expect(wideNetMock.isDone()).to.be.equal(false)
-        })
+          expect(postmonMock.isDone()).to.be.equal(false)
+        }
+      )
     })
   })
 
-  describe('and the providers param is [\'brasilapi\']', () => {
+  describe('and the providers param is ["brasilapi"]', () => {
     it('should call only brasilapi service', () => {
       const correiosMock = nock('https://apps.correios.com.br')
         .post('/SigepMasterJPA/AtendeClienteService/AtendeCliente')
@@ -330,6 +412,13 @@ describe('when invoked with providers parameter', () => {
         .replyWithFile(
           200,
           path.join(__dirname, '/fixtures/correios-alt-cep-05010000-found.json')
+        )
+
+      const postmonMock = nock('https://api.postmon.com.br')
+        .get('/v1/cep/05010000')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/postmon-cep-05010000-found.json')
         )
 
       const viaCepMock = nock('https://viacep.com.br')
@@ -353,27 +442,27 @@ describe('when invoked with providers parameter', () => {
           path.join(__dirname, '/fixtures/brasilapi-cep-05010000-found.json')
         )
 
-      return cep('05010000', { providers: ['brasilapi'] })
-        .then(address => {
-          expect(address).to.deep.equal({
-            cep: '05010000',
-            state: 'SP',
-            city: 'São Paulo',
-            neighborhood: 'Perdizes',
-            street: 'Rua Caiubi',
-            service: 'brasilapi'
-          })
-
-          expect(correiosMock.isDone()).to.be.equal(false)
-          expect(correiosAltMock.isDone()).to.be.equal(false)
-          expect(viaCepMock.isDone()).to.be.equal(false)
-          expect(wideNetMock.isDone()).to.be.equal(false)
-          expect(brasilAPIMock.isDone()).to.be.equal(true)
+      return cep('05010000', { providers: ['brasilapi'] }).then((address) => {
+        expect(address).to.deep.equal({
+          cep: '05010000',
+          state: 'SP',
+          city: 'São Paulo',
+          neighborhood: 'Perdizes',
+          street: 'Rua Caiubi',
+          service: 'brasilapi',
         })
+
+        expect(correiosMock.isDone()).to.be.equal(false)
+        expect(correiosAltMock.isDone()).to.be.equal(false)
+        expect(viaCepMock.isDone()).to.be.equal(false)
+        expect(wideNetMock.isDone()).to.be.equal(false)
+        expect(postmonMock.isDone()).to.be.equal(false)
+        expect(brasilAPIMock.isDone()).to.be.equal(true)
+      })
     })
   })
 
-  describe('and the providers param is [\'correios, viacep\']', () => {
+  describe('and the providers param is ["correios, viacep"]', () => {
     it('should call only correios and viacep services', () => {
       const correiosMock = nock('https://apps.correios.com.br')
         .post('/SigepMasterJPA/AtendeClienteService/AtendeCliente')
@@ -403,22 +492,31 @@ describe('when invoked with providers parameter', () => {
           path.join(__dirname, '/fixtures/widenet-cep-05010000-found.json')
         )
 
-      return cep('05010000', { providers: ['correios', 'viacep'] })
-        .then(address => {
+      const postmonMock = nock('https://api.postmon.com.br')
+        .get('/v1/cep/05010000')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/postmon-cep-05010000-found.json')
+        )
+
+      return cep('05010000', { providers: ['correios', 'viacep'] }).then(
+        (address) => {
           expect(address).to.deep.equal({
             cep: '05010000',
             state: 'SP',
             city: 'São Paulo',
             neighborhood: 'Perdizes',
             street: 'Rua Caiubi',
-            service: address.service
+            service: address.service,
           })
 
           expect(viaCepMock.isDone()).to.be.equal(true)
           expect(correiosMock.isDone()).to.be.equal(true)
           expect(correiosAltMock.isDone()).to.be.equal(false)
           expect(wideNetMock.isDone()).to.be.equal(false)
-        })
+          expect(postmonMock.isDone()).to.be.equal(false)
+        }
+      )
     })
   })
 
@@ -438,6 +536,13 @@ describe('when invoked with providers parameter', () => {
           path.join(__dirname, '/fixtures/correios-alt-cep-05010000-found.json')
         )
 
+      const postmonMock = nock('https://api.postmon.com.br')
+        .get('/v1/cep/05010000')
+        .replyWithFile(
+          200,
+          path.join(__dirname, '/fixtures/postmon-cep-05010000-found.json')
+        )
+
       const viaCepMock = nock('https://viacep.com.br')
         .get('/ws/05010000/json/')
         .replyWithFile(
@@ -452,22 +557,22 @@ describe('when invoked with providers parameter', () => {
           path.join(__dirname, '/fixtures/widenet-cep-05010000-found.json')
         )
 
-      return cep('05010000', { providers: [] })
-        .then(address => {
-          expect(address).to.deep.equal({
-            cep: '05010000',
-            state: 'SP',
-            city: 'São Paulo',
-            neighborhood: 'Perdizes',
-            street: 'Rua Caiubi',
-            service: address.service
-          })
-
-          expect(viaCepMock.isDone()).to.be.equal(true)
-          expect(correiosMock.isDone()).to.be.equal(true)
-          expect(correiosAltMock.isDone()).to.be.equal(true)
-          expect(wideNetMock.isDone()).to.be.equal(true)
+      return cep('05010000', { providers: [] }).then((address) => {
+        expect(address).to.deep.equal({
+          cep: '05010000',
+          state: 'SP',
+          city: 'São Paulo',
+          neighborhood: 'Perdizes',
+          street: 'Rua Caiubi',
+          service: address.service,
         })
+
+        expect(viaCepMock.isDone()).to.be.equal(true)
+        expect(correiosMock.isDone()).to.be.equal(true)
+        expect(correiosAltMock.isDone()).to.be.equal(true)
+        expect(wideNetMock.isDone()).to.be.equal(true)
+        expect(postmonMock.isDone()).to.be.equal(true)
+      })
     })
   })
 
