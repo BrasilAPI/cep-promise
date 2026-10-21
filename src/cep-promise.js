@@ -62,7 +62,7 @@ function validateProviders (providers) {
 function validateInputType (cepRawValue) {
   const cepTypeOf = typeof cepRawValue
 
-  if (cepTypeOf === 'number' || cepTypeOf === 'string') {
+  if (cepTypeOf === 'string' || (cepTypeOf === 'number' && isFinite(cepRawValue))) {
     return cepRawValue
   }
 
